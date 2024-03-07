@@ -1,4 +1,10 @@
+const MAX_WIDTH = 800
+const MAX_HEIGHT = 800
+
+const body = document.getElementsByTagName("body")[0];
 const canvas = document.getElementById("canvas");
+canvas.width = Math.min(body.clientWidth, MAX_WIDTH);
+canvas.height = Math.min(body.clientHeight, MAX_HEIGHT);
 const ctx = canvas.getContext("2d");
 
 // Set when the WebAssembly.instantiateStreaming resolves.
@@ -38,7 +44,7 @@ const importedByWasm = {
     logFromNBytesOfMemory(nBytes) {
         const latin1Bytes = new Uint8Array(
             wasmInstance.exports.memory.buffer,
-            0, nBytes
+            wasmInstance.export.memoryRegionLogBytesOffset, nBytes
         );
         const chars = [];
         for (let i = 0; i < nBytes; ++i) {

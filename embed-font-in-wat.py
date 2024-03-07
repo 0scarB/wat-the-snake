@@ -81,7 +81,7 @@ def parse_font_bits_line(font_file_handle, font_file_line):
             if char_code == ord(UNSET_BIT_CHAR):
                 i64_value >>= 1
             elif char_code == ord(SET_BIT_CHAR):
-                i64_value = (i64_value >> 1) | (1 << 64)
+                i64_value = (i64_value >> 1) | (1 << 63)
             else:
                 assert False, \
                         f"{FONT_FILE}:{font_file_line}:{col} " \
@@ -102,6 +102,8 @@ def gen_wat_code_from_char_to_i64_dict(char_to_i64_dict):
         wat_global_name = f"$FONT_{char}"
         if char == ' ':
             wat_global_name = f"$FONT_SPACE"
+        elif char == '!':
+            wat_global_name = f"$FONT_EXCLAIMATION"
         lines.append(f"    (global {wat_global_name} i64 (i64.const {i64}))")
 
     return "\n".join(lines) + "\n"
