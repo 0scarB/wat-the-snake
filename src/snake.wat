@@ -682,9 +682,10 @@
     ;; Game Logic
     ;; ----------------------------------------------------------------------
 
-    (global $TARGET_FPS i32 (i32.const 30))
+    (global $TARGET_FPS              i32 (i32.const 30))
     (global $SNAKE_MOVEMENT_PX_PER_S f32 (f32.const 100))
-    (global $SNAKE_WIDTH f32 (f32.const 50))
+    (global $SNAKE_WIDTH             f32 (f32.const 50))
+    (global $ORB_WIDTH               f32 (f32.const 25))
 
     (global $GAME_STATE_FIRST_UPDATE i32 (i32.const 0))
     (global $GAME_STATE_START_SCREEN i32 (i32.const 1))
@@ -706,6 +707,8 @@
     (global $score_100s_digit        (mut i32) (i32.const  0))
     (global $score_10s_digit         (mut i32) (i32.const  0))
     (global $score_1s_digit          (mut i32) (i32.const  0))
+    (global $orb_x                   (mut f32) (f32.const -1))
+    (global $orb_y                   (mut f32) (f32.const -1))
 
     (func (export "update")
         ;; Calculated and set memory region size of RGBA canvas bytes
@@ -730,6 +733,7 @@
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING))
         (if (then
             call $snake_move
+            call $orb_draw
             call $snake_draw
             call $score_draw
 
@@ -751,6 +755,8 @@
     )
 
     (func $reset_game
+        (global.set $frame_timestamp (call $extern_get_unix_timestamp))
+
         (global.set $snake_circle_tail_x_ptr
             (global.get $memory_region_snake_circles_xs_bytes_offset))
         (global.set $snake_circle_tail_y_ptr
@@ -759,11 +765,14 @@
             (global.get $memory_region_snake_circles_xs_bytes_offset))
         (global.set $snake_circle_head_y_ptr
             (global.get $memory_region_snake_circles_ys_bytes_offset))
-        (global.set $frame_timestamp (call $extern_get_unix_timestamp))
+
         (global.set $snake_length (f32.const 0))
-        (global.set $snake_target_length (f32.const 6000))
+        (global.set $snake_target_length (f32.const 20))
         (global.set $snake_direction_x (f32.const 1))
         (global.set $snake_direction_y (f32.const 0))
+
+        (call $orb_prng_seed (i32.const 0))
+        call $orb_spawn
     )
 
     (func (export "shouldUpdate") (result i32)
@@ -829,6 +838,13 @@
         (if (then
             (global.set $snake_direction_x (f32.const  1))
             (global.set $snake_direction_y (f32.const  0))
+            return
+        ))
+        ;; Just for testing
+        ;; TODO: Remove later
+        (i32.eq (local.get $key) (global.get $CHAR_SPACE))
+        (if (then
+            (call $orb_eat)
             return
         ))
     )
@@ -1026,6 +1042,110 @@
         return
     )
 
+    (func $orb_spawn
+        (global.set $orb_x (call $orb_prng_gen_x))
+        (global.set $orb_y (call $orb_prng_gen_y))
+    )
+
+    (func $orb_eat
+        call $score_inc
+        call $orb_spawn
+    )
+
+    (func $orb_draw
+        ;; Draw orb
+        (call $fill_circle_f32
+            (global.get $orb_x) (global.get $orb_y)
+            (f32.div (global.get $ORB_WIDTH) (f32.const 2))
+            (i32.const 255) (i32.const 0) (i32.const 255) (i32.const 255))
+        ;; Draw specular highlight
+        (call $fill_circle_f32
+            (f32.add
+                (global.get $orb_x)
+                (f32.mul (f32.const  0.1) (global.get $ORB_WIDTH)))
+            (f32.add
+                (global.get $orb_y)
+                (f32.mul (f32.const -0.1) (global.get $ORB_WIDTH)))
+            (f32.mul (f32.const 0.2) (global.get $ORB_WIDTH))
+            (i32.const 255) (i32.const 255) (i32.const 255) (i32.const 255))
+    )
+
+    ;; We use a "multiplicative congruential generator" (MCG) to randomly
+    ;; generating the x and y-coordinates of of the orbs. The MCG uses
+    ;; m = 2^32 (and c = 0) where "mod m" implicitly implemented using the
+    ;; wrapping behaviour of i32 integers. Additionally we only use the 16
+    ;; most significant bits of the random value "$orb_mcg_r" because
+    ;; less significant bits have a low period.
+
+    ;; Value from "Steele GL, Vigna S. Computationally easy, spectrally good multipliers for congruential pseudorandom number generators. Softw Pract Exper. 2022; 52(2): 443–458. doi:10.1002/spe.3030", Table 4, 24-Bit value.
+    (global $ORB_MCG_A i32 (i32.const 14971189))
+    (global $ORB_SEED_PRIME i32 (i32.const 7919))
+
+    (global $orb_mcg_r (mut i32) (i32.const 0))
+
+    (func $orb_prng_seed (param $seed i32)
+        ;; Avoid seed having bad entropy by multiplying by a
+        ;; largish prime.
+        (local.set $seed (i32.mul (local.get $seed) (global.get $ORB_SEED_PRIME)))
+        ;; Avoid $seed being 0
+        (i32.eq (local.get $seed) (i32.const 0))
+        (if (then
+            (local.set $seed (global.get $ORB_SEED_PRIME))
+        ))
+
+        (global.set $orb_mcg_r (local.get $seed))
+    )
+
+    (func $orb_prng_gen_x (result f32)
+        (global.set $orb_mcg_r
+            (i32.mul (global.get $orb_mcg_r) (global.get $ORB_MCG_A)))
+        (f32.convert_i32_u
+            (i32.rem_u
+                (i32.shr_u (global.get $orb_mcg_r) (i32.const 16))
+                (global.get $canvas_width)))
+    )
+
+    (func $orb_prng_gen_y (result f32)
+        (global.set $orb_mcg_r
+            (i32.mul (global.get $orb_mcg_r) (global.get $ORB_MCG_A)))
+        (f32.convert_i32_u
+            (i32.rem_u
+                (i32.shr_u (global.get $orb_mcg_r) (i32.const 16))
+                (global.get $canvas_height)))
+    )
+
+    (func $score_inc
+        (global.set $score_1s_digit
+            (i32.add (global.get $score_1s_digit) (i32.const 1)))
+
+        (i32.eq (global.get $score_1s_digit) (i32.const 10))
+        (if (then
+            (global.set $score_1s_digit (i32.const 0))
+            (global.set $score_10s_digit
+                (i32.add (global.get $score_10s_digit) (i32.const 1)))
+
+            (i32.eq (global.get $score_10s_digit) (i32.const 10))
+            (if (then
+                (global.set $score_10s_digit (i32.const 0))
+                (global.set $score_100s_digit
+                    (i32.add (global.get $score_100s_digit) (i32.const 1)))
+            ))
+        ))
+    )
+
+    (func $score_draw
+        (call $text_draw_start (f32.const 16) (f32.const 16) (f32.const 16))
+        global.get $FONT_S           call $text_draw_char
+        global.get $FONT_C           call $text_draw_char
+        global.get $FONT_O           call $text_draw_char
+        global.get $FONT_R           call $text_draw_char
+        global.get $FONT_E           call $text_draw_char
+        global.get $FONT_SPACE       call $text_draw_char
+        global.get $score_100s_digit call $text_draw_digit
+        global.get $score_10s_digit  call $text_draw_digit
+        global.get $score_1s_digit   call $text_draw_digit
+    )
+
     (func $draw_start_screen_text
         (local $msg_len f32)
         (local $font_size f32)
@@ -1119,19 +1239,6 @@
         global.get $FONT_A           call $text_draw_char
         global.get $FONT_L           call $text_draw_char
         global.get $FONT_SPACE       call $text_draw_char
-        global.get $FONT_S           call $text_draw_char
-        global.get $FONT_C           call $text_draw_char
-        global.get $FONT_O           call $text_draw_char
-        global.get $FONT_R           call $text_draw_char
-        global.get $FONT_E           call $text_draw_char
-        global.get $FONT_SPACE       call $text_draw_char
-        global.get $score_100s_digit call $text_draw_digit
-        global.get $score_10s_digit  call $text_draw_digit
-        global.get $score_1s_digit   call $text_draw_digit
-    )
-
-    (func $score_draw
-        (call $text_draw_start (f32.const 16) (f32.const 16) (f32.const 16))
         global.get $FONT_S           call $text_draw_char
         global.get $FONT_C           call $text_draw_char
         global.get $FONT_O           call $text_draw_char
