@@ -219,27 +219,6 @@
         return
     )
 
-    (func $dist
-            (param $x1 f32) (param $y1 f32)
-            (param $x2 f32) (param $y2 f32)
-            (result f32)
-        ;; TODO Use sqrt distance instead of Manhattan
-        (local $x_dist f32)
-        (local $y_dist f32)
-
-        (local.set $x_dist
-            (call $mod_f32
-                (f32.abs (f32.sub (local.get $x2) (local.get $x1)))
-                (f32.convert_i32_s (global.get $canvas_width))))
-
-        (local.set $y_dist
-            (call $mod_f32
-                (f32.abs (f32.sub (local.get $y2) (local.get $y1)))
-                (f32.convert_i32_s (global.get $canvas_height))))
-
-        (f32.add (local.get $x_dist) (local.get $y_dist))
-    )
-
 
     ;; Canvas Implementation
     ;; ----------------------------------------------------------------------
@@ -683,7 +662,7 @@
     ;; ----------------------------------------------------------------------
 
     (global $TARGET_FPS              i32 (i32.const 30))
-    (global $SNAKE_MOVEMENT_PX_PER_S f32 (f32.const 100))
+    (global $SNAKE_MOVEMENT_PX_PER_S f32 (f32.const 200))
     (global $SNAKE_WIDTH             f32 (f32.const 50))
     (global $ORB_WIDTH               f32 (f32.const 25))
 
@@ -767,7 +746,7 @@
             (global.get $memory_region_snake_circles_ys_bytes_offset))
 
         (global.set $snake_length (f32.const 0))
-        (global.set $snake_target_length (f32.const 20))
+        (global.set $snake_target_length (f32.const 600))
         (global.set $snake_direction_x (f32.const 1))
         (global.set $snake_direction_y (f32.const 0))
 
@@ -942,7 +921,7 @@
                 (f32.load (local.get $circle_x_ptr))
                 (f32.load (local.get $circle_y_ptr))
                 (f32.div (global.get $SNAKE_WIDTH) (f32.const 2))
-                (i32.const 0) (i32.const 192) (i32.const 32) (i32.const 255))
+                (i32.const 0) (i32.const 100) (i32.const 32) (i32.const 255))
 
             (local.set $circle_x_ptr
                 (call $snake_inc_circle_x_ptr (local.get $circle_x_ptr)))
@@ -951,28 +930,20 @@
 
             br $lp
         ))
+
+        ;; Redraw snake head in brighter color so collisions are obvious
+        (call $fill_circle_f32
+            (f32.load (local.get $circle_x_ptr))
+            (f32.load (local.get $circle_y_ptr))
+            (f32.div (global.get $SNAKE_WIDTH) (f32.const 2))
+            (i32.const 0) (i32.const 192) (i32.const 32) (i32.const 255))
     )
 
     (func $snake_check_collision (result i32)
-        (local $collision_head_x f32)
-        (local $collision_head_y f32)
         (local $circle_x_ptr i32)
         (local $circle_y_ptr i32)
         (local $circle_x f32)
         (local $circle_y f32)
-
-        (local.set $collision_head_x
-            (f32.add
-                (global.get $snake_head_x)
-                (f32.mul
-                    (global.get $SNAKE_WIDTH)
-                    (f32.mul (f32.const 0.5) (global.get $snake_direction_x)))))
-        (local.set $collision_head_y
-            (f32.add
-                (global.get $snake_head_y)
-                (f32.mul
-                    (global.get $SNAKE_WIDTH)
-                    (f32.mul (f32.const 0.5) (global.get $snake_direction_y)))))
 
         (local.set $circle_x_ptr (global.get $snake_circle_tail_x_ptr))
         (local.set $circle_y_ptr (global.get $snake_circle_tail_y_ptr))
@@ -986,11 +957,9 @@
             (local.set $circle_x (f32.load (local.get $circle_x_ptr)))
             (local.set $circle_y (f32.load (local.get $circle_y_ptr)))
 
-            (f32.lt
-                (call $dist
-                    (local.get $circle_x) (local.get $circle_y)
-                    (local.get $collision_head_x) (local.get $collision_head_y))
-                (f32.div (global.get $SNAKE_WIDTH) (f32.const 2)))
+            (call $snake_check_circle_collides_with_head
+                (local.get $circle_x) (local.get $circle_y)
+                (f32.mul (global.get $SNAKE_WIDTH) (f32.const 0.5)))
             (if (then
                 (i32.const 1)
                 return
@@ -1006,6 +975,61 @@
 
         (i32.const 0)
         return
+    )
+
+    (func $snake_check_circle_collides_with_head
+            (param $cx f32) (param $cy f32)
+            (param $r f32)
+            (result i32)
+        (i32.and
+            (call $check_point_is_infront
+                (global.get $snake_head_x) (global.get $snake_head_y)
+                (local.get $cx) (local.get $cy)
+                (global.get $snake_direction_x) (global.get $snake_direction_y))
+            (call $check_circles_collide
+                (global.get $snake_head_x) (global.get $snake_head_y)
+                (f32.mul (global.get $SNAKE_WIDTH) (f32.const 0.5))
+                (local.get $cx) (local.get $cy)
+                (local.get $r)))
+    )
+
+    (func $check_circles_collide
+            (param $cx1 f32) (param $cy1 f32) (param $r1 f32)
+            (param $cx2 f32) (param $cy2 f32) (param $r2 f32)
+            (result i32)
+        (local $delta_cx f32)
+        (local $delta_cy f32)
+        (local $sum_r f32)
+        
+        (local.set $delta_cx (f32.abs (f32.sub (local.get $cx2) (local.get $cx1))))
+        (local.set $delta_cy (f32.abs (f32.sub (local.get $cy2) (local.get $cy1))))
+
+        (local.set $sum_r (f32.add (local.get $r1) (local.get $r2)))
+
+        (f32.lt
+            (f32.add
+                (f32.mul (local.get $delta_cx) (local.get $delta_cx))
+                (f32.mul (local.get $delta_cy) (local.get $delta_cy)))
+            (f32.mul (local.get $sum_r) (local.get $sum_r)))
+    )
+
+    (func $check_point_is_infront
+            (param $origin_x f32) (param $origin_y f32)
+            (param $px f32) (param $py f32)
+            (param $direction_x f32) (param $direction_y f32)
+            (result i32)
+        (local $delta_x f32)
+        (local $delta_y f32)
+
+        (local.set $delta_x (f32.sub (local.get $px) (local.get $origin_x)))
+        (local.set $delta_y (f32.sub (local.get $py) (local.get $origin_y)))
+
+        ;; We just check that the scalar product is greater than 0
+        (f32.gt
+            (f32.add
+                (f32.mul (local.get $direction_x) (local.get $delta_x))
+                (f32.mul (local.get $direction_y) (local.get $delta_y)))
+            (f32.const 0))
     )
 
     (func $snake_inc_circle_x_ptr (param $ptr i32) (result i32)
