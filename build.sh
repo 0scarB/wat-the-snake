@@ -27,6 +27,6 @@ echo "Copied static files."
 
 # Compile .wat file to .wasm file
 echo "Compiling '$src_dir/snake.wat' to '$build_dir/snake.wasm'..."
-wat2wasm "$src_dir/snake.wat" -o "$build_dir/snake.wasm"
+wat2wasm "$src_dir/snake.wat" -o "$build_dir/snake.wasm" --enable-threads
 echo "Compiled .wasm file."
 
