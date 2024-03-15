@@ -222,8 +222,8 @@
     )
 
     (func $fill_rect_i32
-            (param $x       i32) (param $y      i32)
-            (param $width   i32) (param $height i32)
+            (param $x     i32) (param $y      i32)
+            (param $width i32) (param $height i32)
             (param $color i32)
         (local $byte_address i32)
 
@@ -423,6 +423,13 @@
             (local.get $color))
     )
 
+    (func $clear_canvas
+        (call $fill_rect_i32
+            (i32.const 0) (i32.const 0)
+            (global.get $canvas_width) (global.get $canvas_height)
+            (global.get $BACKGROUND_COLOR))
+    )
+
 
     ;; Text Drawing
     ;; ----------------------------------------------------------------------
@@ -430,11 +437,17 @@
     (global $text_char_x (mut f32) (f32.const 0))
     (global $text_char_y (mut f32) (f32.const 0))
     (global $text_size   (mut f32) (f32.const 0))
+    (global $text_color  (mut i32) (i32.const 0))
 
-    (func $text_draw_start (param $x f32) (param $y f32) (param $text_size f32)
+    (func $text_draw_start
+            (param $x f32)
+            (param $y f32)
+            (param $size f32)
+            (param $color i32)
         (global.set $text_char_x (local.get $x))
         (global.set $text_char_y (local.get $y))
-        (global.set $text_size   (local.get $text_size))
+        (global.set $text_size   (local.get $size))
+        (global.set $text_color  (local.get $color))
     )
 
     (func $text_draw_char (param $font_embedding i64)
@@ -455,7 +468,7 @@
             (local.get $font_embedding)
             (local.get $pixel_size)
             (f32.const 1)
-            (global.get $TEXT_COLOR))
+            (global.get $text_color))
 
         (global.set $text_char_x
             (f32.add (global.get $text_char_x)
@@ -500,7 +513,9 @@
                     (local.get $color))
             end
 
-            (local.set $font_embedding (i64.shr_u (local.get $font_embedding) (i64.const 1)))
+            (local.set $font_embedding
+                (i64.shr_u (local.get $font_embedding)
+                (i64.const 1)))
 
             (f32.lt (local.get $col) (f32.const 6.5))
             if
@@ -754,6 +769,38 @@
         local.get $result
     )
 
+    (func $snake_buf_read_tail_cx (result f32)
+        ;; Record old read pointer position
+        (local $old_read_ptr i32)
+        (local $result f32)
+        (local.set $old_read_ptr (global.get $snake_buf_read_ptr))
+
+        ;; Set read pointer to head
+        (call $snake_buf_read_ptr_point_to_tail)
+        (local.set $result (call $snake_buf_read_cx))
+
+        ;; Restore old read pointer
+        (global.set $snake_buf_read_ptr (local.get $old_read_ptr))
+
+        local.get $result
+    )
+
+    (func $snake_buf_read_tail_cy (result f32)
+        ;; Record old read pointer position
+        (local $old_read_ptr i32)
+        (local $result f32)
+        (local.set $old_read_ptr (global.get $snake_buf_read_ptr))
+
+        ;; Set read pointer to head
+        (call $snake_buf_read_ptr_point_to_tail)
+        (local.set $result (call $snake_buf_read_cy))
+
+        ;; Restore old read pointer
+        (global.set $snake_buf_read_ptr (local.get $old_read_ptr))
+
+        local.get $result
+    )
+
     (func $snake_buf_read_tail_length_delta (result f32)
         ;; Record old read pointer position
         (local $old_read_ptr i32)
@@ -775,12 +822,13 @@
     ;; ----------------------------------------------------------------------
 
     (global $SNAKE_MOVEMENT_PX_PER_S  f32 (f32.const 300))
-    (global $SNAKE_RADIUS             f32 (f32.const 24))
-    (global $ORB_RADIUS               f32 (f32.const 12))
+    (global $SNAKE_RADIUS             f32 (f32.const 12))
+    (global $ORB_RADIUS               f32 (f32.const 8))
 
-    (global $GAME_STATE_START_SCREEN i32 (i32.const 0))
-    (global $GAME_STATE_PLAYING      i32 (i32.const 1))
-    (global $GAME_STATE_END_SCREEN   i32 (i32.const 2))
+    (global $GAME_STATE_FIRST_UPDATE i32 (i32.const 0))
+    (global $GAME_STATE_START_SCREEN i32 (i32.const 1))
+    (global $GAME_STATE_PLAYING      i32 (i32.const 2))
+    (global $GAME_STATE_END_SCREEN   i32 (i32.const 3))
 
     ;; Read right to left because little edian :(
     (global $SNAKE_HEAD_COLOR    i32 (i32.const 0xFF11DD11))
@@ -791,58 +839,49 @@
     (global $BACKGROUND_COLOR    i32 (i32.const 0xFF000000))
 
     ;; Values are initialized in the "$reset_game" function
-    (global $game_state              (mut i32) (i32.const  0))
-    (global $timestamp_update_call   (mut f32) (f32.const -1))
+    (global $game_state                 (mut i32) (i32.const  0))
+    (global $timestamp_update_call      (mut f32) (f32.const -1))
     (global $timestamp_last_update_call (mut f32) (f32.const -1))
-    (global $snake_direction_x       (mut f32) (f32.const  1))
-    (global $snake_direction_y       (mut f32) (f32.const  0))
-    (global $snake_length            (mut f32) (f32.const  0))
-    (global $snake_target_length     (mut f32) (f32.const -1))
-    (global $score_100s_digit        (mut i32) (i32.const  0))
-    (global $score_10s_digit         (mut i32) (i32.const  0))
-    (global $score_1s_digit          (mut i32) (i32.const  0))
-    (global $orb_x                   (mut f32) (f32.const -1))
-    (global $orb_y                   (mut f32) (f32.const -1))
+    (global $snake_direction_x          (mut f32) (f32.const  1))
+    (global $snake_direction_y          (mut f32) (f32.const  0))
+    (global $snake_length               (mut f32) (f32.const  0))
+    (global $snake_target_length        (mut f32) (f32.const -1))
+    (global $score_100s_digit           (mut i32) (i32.const  0))
+    (global $score_10s_digit            (mut i32) (i32.const  0))
+    (global $score_1s_digit             (mut i32) (i32.const  0))
+    (global $orb_x                      (mut f32) (f32.const -1))
+    (global $orb_y                      (mut f32) (f32.const -1))
 
     (func (export "update") (param $timestamp f32)
+        (i32.eq (global.get $game_state) (global.get $GAME_STATE_FIRST_UPDATE))
+        (if (then
+            call $reset_game
+            (global.set $game_state (global.get $GAME_STATE_START_SCREEN))
+            return
+        ))
+
         (global.set $timestamp_last_update_call (global.get $timestamp_update_call))
         (global.set $timestamp_update_call (local.get $timestamp))
 
-        ;; Clear the screen by filling the canvas with black
-        (memory.fill
-            (global.get $memory_region_canvas_bytes_offset)
-            (i32.const 0)
-            (global.get $memory_region_canvas_bytes_n))
-
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
         (if (then
-            (call $reset_game)
-
             call $draw_start_screen_text
-
             return
         ))
 
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING))
         (if (then
-            call $snake_move
+            call $snake_update
 
             (call $snake_check_circle_collides_with_head
                 (global.get $orb_x) (global.get $orb_y)
-                ;; Only count collisions with an orb if more than half of the
-                ;; orb is covered by the snake's head
-                (f32.const 0))
+                (global.get $ORB_RADIUS))
             (if (then
                 call $score_inc
-                call $orb_spawn
-                (global.set $snake_target_length
-                    (f32.add
-                        (global.get $snake_target_length)
-                        (f32.mul (global.get $SNAKE_RADIUS) (f32.const 2))))
+                call $orb_update
+                call $snake_target_length_inc
             ))
 
-            call $orb_draw
-            call $snake_draw
             call $score_draw
 
             call $snake_check_collision
@@ -855,11 +894,7 @@
 
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
         (if (then
-            call $orb_draw
-            call $snake_draw
-            call $snake_draw
             call $draw_end_screen_text
-
             return
         ))
     )
@@ -884,9 +919,9 @@
         (call $snake_buf_reset)
 
         (global.set $snake_length (f32.const 0))
-        (global.set $snake_target_length
-            (f32.mul (global.get $SNAKE_RADIUS) (f32.const 6)))
-        (call $snake_buf_head_set 
+        (global.set $snake_target_length (f32.const 0))
+        call $snake_target_length_inc
+        (call $snake_buf_head_set
             (f32.div 
                 (f32.convert_i32_s (global.get $canvas_width))
                 (f32.const 2))
@@ -901,15 +936,21 @@
         (global.set $score_10s_digit (i32.const 0))
         (global.set $score_1s_digit (i32.const 0))
 
+        (global.set $orb_x (f32.const -1))
+        (global.set $orb_y (f32.const -1))
         (call $orb_prng_seed (i32.const 0))
 
-        call $orb_spawn
+        (call $clear_canvas)
     )
 
     (func (export "handleKeyDown") (param $key i32)
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
         (if (then
+            (call $reset_game)
+
             (global.set $game_state (global.get $GAME_STATE_PLAYING))
+
+            call $orb_update
         ))
 
         (i32.eq (local.get $key) (global.get $CHAR_w))
@@ -942,12 +983,15 @@
             (i32.eq (local.get $key) (global.get $CHAR_SPACE)))
         (if (then
             (call $reset_game)
+
             (global.set $game_state (global.get $GAME_STATE_PLAYING))
+
+            call $orb_update
         ))
 
     )
 
-    (func $snake_move
+    (func $snake_update
         (local $length_delta f32)
         (local $snake_head_x f32)
         (local $snake_head_y f32)
@@ -992,41 +1036,48 @@
                 (global.get $snake_length)
                 (call $snake_buf_read_tail_length_delta)))
 
+            ;; Overdraw old tail circle with background color to visually
+            ;; remove it from the canvas
+            (call $fill_circle_f32
+                (call $snake_buf_read_tail_cx)
+                (call $snake_buf_read_tail_cy)
+                (global.get $SNAKE_RADIUS)
+                (global.get $BACKGROUND_COLOR))
+
             (call $snake_buf_tail_drop)
         ))
+
+        ;; Redraw the new last tail circle in the snake tail color, to
+        ;; avoid a cutout in the snake left by the overdrawing during the
+        ;; above loop
+        (call $fill_circle_f32
+            (call $snake_buf_read_tail_cx)
+            (call $snake_buf_read_tail_cy)
+            (global.get $SNAKE_RADIUS)
+            (global.get $SNAKE_TAIL_COLOR))
+
         ;; Add movement delta to length
         (global.set $snake_length
             (f32.add (global.get $snake_length) (local.get $length_delta)))
+
+        ;; Overdraw the old snake head circle in the snake tail color, to
+        ;; replace the snake head color for the last update call
+        (call $fill_circle_f32
+            (call $snake_buf_read_head_cx)
+            (call $snake_buf_read_head_cy)
+            (global.get $SNAKE_RADIUS)
+            (global.get $SNAKE_TAIL_COLOR))
+        ;; Draw the new snake head in brighter color so collisions are obvious
+        (call $fill_circle_f32
+            (local.get $snake_head_x)
+            (local.get $snake_head_y)
+            (global.get $SNAKE_RADIUS)
+            (global.get $SNAKE_HEAD_COLOR))
 
         (call $snake_buf_head_push
             (local.get $snake_head_x)
             (local.get $snake_head_y)
             (local.get $length_delta))
-    )
-
-    (func $snake_draw
-        (call $snake_buf_read_ptr_point_to_tail)
-
-        (loop $lp
-            (call $fill_circle_f32
-                (call $snake_buf_read_cx)
-                (call $snake_buf_read_cy)
-                (global.get $SNAKE_RADIUS)
-                (global.get $SNAKE_TAIL_COLOR))
-
-            (call $snake_buf_read_ptr_inc)
-
-            (i32.eq (call $snake_buf_read_ptr_is_at_head) (i32.const 0))
-            br_if $lp
-        )
-
-        ;; Redraw snake head in brighter color so collisions are obvious
-        (call $snake_buf_read_ptr_dec)
-        (call $fill_circle_f32
-            (call $snake_buf_read_cx)
-            (call $snake_buf_read_cy)
-            (global.get $SNAKE_RADIUS)
-            (global.get $SNAKE_HEAD_COLOR))
     )
 
     (func $snake_check_collision (result i32)
@@ -1112,11 +1163,28 @@
             (f32.const 0))
     )
 
-    (func $orb_spawn
+    (func $snake_target_length_inc
+        (global.set $snake_target_length
+            (f32.add
+                (global.get $snake_target_length)
+                (f32.mul
+                    (f32.const 0.05)
+                    (f32.convert_i32_s
+                        (i32.add
+                            (global.get $canvas_width)
+                            (global.get $canvas_height))))))
+    )
+
+    (func $orb_update
+        (local $old_orb_x f32)
+        (local $old_orb_y f32)
         (local $snake_circle_x_ptr i32)
         (local $snake_circle_y_ptr i32)
         (local $snake_circle_x f32)
         (local $snake_circle_y f32)
+
+        (local.set $old_orb_x (global.get $orb_x))
+        (local.set $old_orb_y (global.get $orb_y))
 
         ;; Loop until orb spawned at a coordinate that is NOT inside the snake
         (loop $outer_lp
@@ -1125,7 +1193,7 @@
 
             (call $snake_buf_read_ptr_point_to_tail)
 
-            (loop $inner_lp
+            (block $until (loop $inner_lp
                 (local.set $snake_circle_x (call $snake_buf_read_cx))
                 (local.set $snake_circle_y (call $snake_buf_read_cy))
 
@@ -1139,12 +1207,22 @@
                 (call $snake_buf_read_ptr_inc)
 
                 (call $snake_buf_read_ptr_is_at_head)
-                br_if $inner_lp
-            )
-        )
-    )
+                br_if $until
 
-    (func $orb_draw
+                br $inner_lp
+            ))
+        )
+
+        ;; Over draw old orb with the background color if it existed,
+        ;; removing the orb.
+        ;; Non-existent orbs have coord values of -1
+        (f32.ne (local.get $old_orb_x) (f32.const -1))
+        (if (then
+            (call $fill_circle_f32
+                (local.get $old_orb_x) (local.get $old_orb_y)
+                (global.get $ORB_RADIUS)
+                (global.get $BACKGROUND_COLOR))
+        ))
         ;; Draw orb
         (call $fill_circle_f32
             (global.get $orb_x) (global.get $orb_y)
@@ -1207,6 +1285,9 @@
     )
 
     (func $score_inc
+        ;; Overdraw the old score with the background color, removing it
+        (call $score_draw_colored (global.get $BACKGROUND_COLOR))
+
         (global.set $score_1s_digit
             (i32.add (global.get $score_1s_digit) (i32.const 1)))
 
@@ -1223,10 +1304,21 @@
                     (i32.add (global.get $score_100s_digit) (i32.const 1)))
             ))
         ))
+
+        ;; Draw the new, updated score
+        (call $score_draw_colored (global.get $TEXT_COLOR))
     )
 
     (func $score_draw
-        (call $text_draw_start (f32.const 16) (f32.const 16) (f32.const 16))
+        (call $score_draw_colored (global.get $TEXT_COLOR))
+    )
+
+    (func $score_draw_colored (param $color i32)
+        (call $text_draw_start
+            (f32.const 16)
+            (f32.const 16)
+            (f32.const 16)
+            (local.get $color))
         global.get $FONT_S           call $text_draw_char
         global.get $FONT_C           call $text_draw_char
         global.get $FONT_O           call $text_draw_char
@@ -1254,7 +1346,8 @@
             (f32.sub
                 (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
                 (f32.div (local.get $font_size) (f32.const 2)))
-            (local.get $font_size))
+            (local.get $font_size)
+            (global.get $TEXT_COLOR))
         global.get $FONT_P     call $text_draw_char
         global.get $FONT_R     call $text_draw_char
         global.get $FONT_E     call $text_draw_char
@@ -1301,7 +1394,8 @@
             (f32.sub
                 (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
                 (f32.mul (local.get $font_size) (f32.const 4)))
-            (local.get $font_size))
+            (local.get $font_size)
+            (global.get $TEXT_COLOR))
         global.get $FONT_G           call $text_draw_char
         global.get $FONT_A           call $text_draw_char
         global.get $FONT_M           call $text_draw_char
@@ -1324,7 +1418,8 @@
             (f32.add
                 (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
                 (f32.mul (local.get $font_size) (f32.const 0)))
-            (local.get $font_size))
+            (local.get $font_size)
+            (global.get $TEXT_COLOR))
         global.get $FONT_F           call $text_draw_char
         global.get $FONT_I           call $text_draw_char
         global.get $FONT_N           call $text_draw_char
@@ -1352,7 +1447,8 @@
             (f32.sub
                 (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
                 (f32.mul (local.get $font_size) (f32.const -4)))
-            (local.get $font_size))
+            (local.get $font_size)
+            (global.get $TEXT_COLOR))
         global.get $FONT_P           call $text_draw_char
         global.get $FONT_R           call $text_draw_char
         global.get $FONT_E           call $text_draw_char
