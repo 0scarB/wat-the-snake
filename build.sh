@@ -4,29 +4,45 @@ set -eu
 
 project_dir="$( dirname "$0" )"
 src_dir="$project_dir/src"
-build_dir="$project_dir/build"
+build_dir_web="$project_dir/snake-web"
+native_exe="$project_dir/snake-native.exe"
+
+
+# Web
+# ----------------------------------------------------------------------
 
 # Remove build directory if it already exists
-if [ -d "$project_dir/build" ]; then
-    echo "Old build directory '$build_dir' already exists. Removing..."
-    rm -rf "$build_dir"
-    echo "Removed directory."
+if [ -d "$build_dir_web" ]; then
+    echo "[Web] Old build directory '$build_dir_web' already exists. Removing..."
+    rm -rf "$build_dir_web"
+    echo "[Web] Removed directory."
 fi
 
 # Create the build directory
-echo "Creating the build directory '$build_dir'..."
-mkdir "$build_dir"
-echo "Created directory."
+echo "[Web] Creating the build directory '$build_dir_web'..."
+mkdir "$build_dir_web"
+echo "[Web] Created directory."
 
 # Copy static files to the build directory
-echo "Copying static files from the source directory \
-'$src_dir' to the build directory '$build_dir'..."
-cp "$src_dir/index.html" "$build_dir/index.html"
-cp "$src_dir/index.js" "$build_dir/index.js"
-echo "Copied static files."
+echo "[Web] Copying static files from the source directory \
+'$src_dir' to the build directory '$build_dir_web'..."
+cp "$src_dir/index.html" "$build_dir_web/index.html"
+cp "$src_dir/index.js" "$build_dir_web/index.js"
+echo "[Web] Copied static files."
 
 # Compile .wat file to .wasm file
-echo "Compiling '$src_dir/snake.wat' to '$build_dir/snake.wasm'..."
-wat2wasm "$src_dir/snake.wat" -o "$build_dir/snake.wasm" --enable-threads
-echo "Compiled .wasm file."
+echo "[Web] Compiling '$src_dir/snake.wat' to '$build_dir_web/snake.wasm'..."
+wat2wasm "$src_dir/snake.wat" -o "$build_dir_web/snake.wasm" --enable-threads
+echo "[Web] Compiled .wasm file."
+
+
+# Native
+# ----------------------------------------------------------------------
+
+echo "[Native] Building executable with GLFW and OpenGl..."
+cc \
+    $(pkg-config --with-path="$( pwd )" --cflags glfw3 gl) \
+    -o "$native_exe" src/snake.c \
+    $(pkg-config --with-path="$( pwd )" --static --libs glfw3 gl)
+echo "[Native] Built native executable."
 
