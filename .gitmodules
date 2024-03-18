@@ -2,3 +2,7 @@
 	path = glfw
 	url = git@github.com:glfw/glfw.git
 	branch = 3.3-stable
+[submodule "wabt"]
+	path = wabt
+	url = git@github.com:WebAssembly/wabt.git
+	branch = v1.0.34
