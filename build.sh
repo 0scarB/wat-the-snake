@@ -8,6 +8,28 @@ build_dir_web="$project_dir/snake-web"
 native_exe="$project_dir/snake-native.exe"
 
 
+_wat2wasm() {
+    local wabt_build_dir="$project_dir/wabt-build"
+    local local_wat2wasm_file="$wabt_build_dir/wat2wasm"
+    if [ -f "$local_wat2wasm_file" ]; then
+        eval "$local_wat2wasm_file $@"
+    else
+        if command -v 'wat2wasm' 1>/dev/null; then
+            echo "[WARNING] Did not find the local executable \
+'$local_wat2wasm_file'. This should be created by running './setup.sh'. \
+Run './setup.sh' if you haven't already! Found '$( command -v 'wat2wasm' )' \
+command already installed... Attempting to use."
+            wat2wasm $@
+        else
+            echo "[ERROR] Did not find the local executable \
+'$local_wat2wasm_file'. This should be created by running './setup.sh'. \
+Run './setup.sh' if you haven't already!" 1>&2
+            exit 1
+        fi
+    fi
+}
+
+
 # Web
 # ----------------------------------------------------------------------
 
@@ -32,7 +54,7 @@ echo "[Web] Copied static files."
 
 # Compile .wat file to .wasm file
 echo "[Web] Compiling '$src_dir/snake.wat' to '$build_dir_web/snake.wasm'..."
-wat2wasm "$src_dir/snake.wat" -o "$build_dir_web/snake.wasm" --enable-threads
+_wat2wasm "$src_dir/snake.wat" -o "$build_dir_web/snake.wasm" --enable-threads
 echo "[Web] Compiled .wasm file."
 
 
