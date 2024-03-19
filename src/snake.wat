@@ -855,6 +855,12 @@
     (func (export "update") (param $timestamp f32)
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_FIRST_UPDATE))
         (if (then
+            global.get $CHAR_t call $log_char
+            global.get $CHAR_e call $log_char
+            global.get $CHAR_s call $log_char
+            global.get $CHAR_t call $log_char
+            call $log_flush
+
             call $reset_game
             (global.set $game_state (global.get $GAME_STATE_START_SCREEN))
             return
