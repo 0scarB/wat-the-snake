@@ -25,21 +25,17 @@ extern "C" {
 #endif
 
 struct w2c_imports;
-extern u32* w2c_imports_canvasHeight(struct w2c_imports*);
-extern u32* w2c_imports_canvasWidth(struct w2c_imports*);
 
 typedef struct w2c_snake {
   struct w2c_imports* w2c_imports_instance;
-  /* import: 'imports' 'canvasHeight' */
-  u32 *w2c_imports_canvasHeight;
-  /* import: 'imports' 'canvasWidth' */
-  u32 *w2c_imports_canvasWidth;
   u32 w2c_memoryRegionLogBytesOffset;
   u32 w2c_memoryRegionLogBytesN;
-  u32 w2c_g4;
-  u32 w2c_g5;
+  u32 w2c_g2;
+  u32 w2c_g3;
   u32 w2c_memoryRegionCanvasBytesOffset;
   u32 w2c_memoryRegionCanvasBytesN;
+  u32 w2c_g6;
+  u32 w2c_g7;
   u32 w2c_g8;
   u32 w2c_g9;
   u32 w2c_g10;
@@ -79,8 +75,8 @@ typedef struct w2c_snake {
   u32 w2c_g44;
   u32 w2c_g45;
   u32 w2c_g46;
-  u64 w2c_g47;
-  u64 w2c_g48;
+  u32 w2c_g47;
+  u32 w2c_g48;
   u64 w2c_g49;
   u64 w2c_g50;
   u64 w2c_g51;
@@ -111,20 +107,20 @@ typedef struct w2c_snake {
   u64 w2c_g76;
   u64 w2c_g77;
   u64 w2c_g78;
-  u32 w2c_g79;
-  f32 w2c_g80;
-  f32 w2c_g81;
+  u64 w2c_g79;
+  u64 w2c_g80;
+  u32 w2c_g81;
   f32 w2c_g82;
-  u32 w2c_g83;
-  u32 w2c_g84;
+  f32 w2c_g83;
+  f32 w2c_g84;
   u32 w2c_g85;
   u32 w2c_g86;
   u32 w2c_g87;
-  f32 w2c_g88;
-  f32 w2c_g89;
+  u32 w2c_g88;
+  u32 w2c_g89;
   f32 w2c_g90;
-  u32 w2c_g91;
-  u32 w2c_g92;
+  f32 w2c_g91;
+  f32 w2c_g92;
   u32 w2c_g93;
   u32 w2c_g94;
   u32 w2c_g95;
@@ -134,20 +130,24 @@ typedef struct w2c_snake {
   u32 w2c_g99;
   u32 w2c_g100;
   u32 w2c_g101;
-  f32 w2c_g102;
-  f32 w2c_g103;
-  f32 w2c_g104;
-  f32 w2c_g105;
+  u32 w2c_g102;
+  u32 w2c_g103;
+  u32 w2c_g104;
+  u32 w2c_g105;
   f32 w2c_g106;
   f32 w2c_g107;
-  u32 w2c_g108;
-  u32 w2c_g109;
-  u32 w2c_g110;
+  f32 w2c_g108;
+  f32 w2c_g109;
+  f32 w2c_g110;
   f32 w2c_g111;
-  f32 w2c_g112;
+  u32 w2c_g112;
   u32 w2c_g113;
   u32 w2c_g114;
-  u32 w2c_g115;
+  f32 w2c_g115;
+  f32 w2c_g116;
+  u32 w2c_g117;
+  u32 w2c_g118;
+  u32 w2c_g119;
   wasm_rt_memory_t w2c_memory;
 } w2c_snake;
 
@@ -178,6 +178,9 @@ void w2c_snake_update(w2c_snake*, f32);
 
 /* export: 'handleKeyDown' */
 void w2c_snake_handleKeyDown(w2c_snake*, u32);
+
+/* export: 'resize' */
+void w2c_snake_resize(w2c_snake*, u32, u32);
 
 #ifdef __cplusplus
 }

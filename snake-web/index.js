@@ -1,6 +1,6 @@
 const MAX_WIDTH = 960;
 const MAX_HEIGHT = 1024;
-const PREFER_CANVAS_CTX = "webgl2";
+const PREFER_CANVAS_CTX = "webgl";
 let IS_DEV = undefined;
 //IS_DEV = true;   // Uncomment to explicitly enable dev mode
 //IS_DEV = false;  // Uncomment to explicitly disable dev mode
@@ -11,8 +11,6 @@ const DEV_EVENT_SET_CANVAS_CTX = 1;
 
 const body = document.getElementsByTagName("body")[0];
 let canvas = document.getElementById("canvas");
-canvas.width = Math.min(body.clientWidth, MAX_WIDTH);
-canvas.height = Math.min(body.clientHeight, MAX_HEIGHT);
 
 let wasmInstance,
     drawFunction,
@@ -23,6 +21,8 @@ function main() {
     setupDevModeIfDev();
 
     drawFunction = setupCanvasForDrawing(PREFER_CANVAS_CTX);
+
+    resize();
 
     let t0 = t1 = performance.now();
     function gameLoop() {
@@ -47,12 +47,20 @@ function main() {
         });
     }
 
-    document.addEventListener(
+    window.addEventListener(
         "keydown", 
         (e) => wasmInstance.exports.handleKeyDown(e.key.charCodeAt(0)),
     );
+    window.addEventListener("resize", resize);
 
     requestAnimationFrame(gameLoop);
+}
+
+function resize() {
+    canvas.width = Math.min(body.clientWidth, MAX_WIDTH);
+    canvas.height = Math.min(body.clientHeight, MAX_HEIGHT);
+    wasmInstance.exports.resize(canvas.width, canvas.height);
+    wasmInstance.exports.update(performance.now());
 }
 
 function setupCanvasForDrawing(canvasCtxType) {
@@ -69,6 +77,11 @@ function setupCanvasForDrawing(canvasCtxType) {
             antialias: false,
             preserveDrawingBuffer: true,
         });
+
+        // NOTE: This code is really slow and overcomplicated in comparison
+        //       to the c implementation `src/platform_native__main.c`
+        //       because WebGl does not support a glDrawPixels() equivalent
+        //       because "ohh scary, manual memory addressing" which sucks.
 
         if (!gl) {
             if (canvasCtxType === "webgl2") {
@@ -99,14 +112,8 @@ function setupCanvasForDrawing(canvasCtxType) {
                 // Calculate the texture coordinate that will be used in the
                 // fragments shader.
             "    texCoord = (vertCoord"
-                // WebGL clipspace coordinates range from -1 to 1
-                // with the y-axis pointing downward.
-                // The texture coordinates range from 0 to 1 with the
-                // y-axis flipped. We need to do some transformations to
-                // account for these discrepencies:
-                + " * vec2(1.0, -1.0)" // Flip y-axis of texture to point down
-                + " + 1.0)"            // Center texture
-                + " * 0.5;",           // Scale texture x2
+                + " + 1.0)"  // Center texture
+                + " * 0.5;", // Scale texture x2
             "}",
         ].join("\n")));
         gl.attachShader(glProgram, createWebGlShader(gl, gl.FRAGMENT_SHADER, [
@@ -127,8 +134,6 @@ function setupCanvasForDrawing(canvasCtxType) {
             );
         }
         gl.useProgram(glProgram);
-
-        gl.viewport(0, 0, canvas.width, canvas.height);
 
         // Draw a rectangle from 2 triangles
         const vertCoordAttributeLocation = gl.getAttribLocation(glProgram, "vertCoord");
@@ -171,6 +176,7 @@ function setupCanvasForDrawing(canvasCtxType) {
                 wasmInstance.exports.memoryRegionCanvasBytesOffset,
                 wasmInstance.exports.memoryRegionCanvasBytesN,
             );
+            gl.viewport(0, 0, canvas.width, canvas.height);
             gl.texImage2D(
                 gl.TEXTURE_2D,
                 0,
@@ -187,6 +193,9 @@ function setupCanvasForDrawing(canvasCtxType) {
 
         break;
     case "2d":
+        // Flip y-axis because we default to Web/OpenGl's y-axis' orientation
+        canvas.style.transform = "scaleY(-1)";
+
         const ctx = canvas.getContext(canvasCtxType, {
             alpha: false,
             desynchronized: true,
@@ -211,7 +220,9 @@ function setupCanvasForDrawing(canvasCtxType) {
                     wasmInstance.exports.memoryRegionCanvasBytesOffset,
                     wasmInstance.exports.memoryRegionCanvasBytesN,
                 ), canvas.width, canvas.height), 
-                0, 0
+                0, 0,
+                0, 0,
+                canvas.width, canvas.height,
             );
         }
         break;
@@ -350,9 +361,6 @@ function setupDevModeIfDev() {
 }
 
 const importedByWasm = {
-    canvasWidth : canvas.width,
-    canvasHeight: canvas.height,
-
     logFromNBytesOfMemory(nBytes) {
         const latin1Bytes = new Uint8Array(
             wasmInstance.exports.memory.buffer,

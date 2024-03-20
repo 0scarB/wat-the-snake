@@ -2,9 +2,6 @@
     ;; Imports
     ;; ----------------------------------------------------------------------
 
-    (global $canvas_width     (import "imports" "canvasWidth" ) i32)
-    (global $canvas_height    (import "imports" "canvasHeight") i32)
-
     (func $extern_log
         (import "imports" "logFromNBytesOfMemory") (param i32))
 
@@ -42,6 +39,10 @@
     (global $CHAR_8 i32 (i32.const 56))
     (global $CHAR_9 i32 (i32.const 57))
     (global $CHAR_COLON i32 (i32.const 58))
+    (global $CHAR_A i32 (i32.const 65))
+    (global $CHAR_D i32 (i32.const 68))
+    (global $CHAR_S i32 (i32.const 83))
+    (global $CHAR_W i32 (i32.const 87))
     (global $CHAR_a i32 (i32.const 97))
     (global $CHAR_b i32 (i32.const 98))
     (global $CHAR_c i32 (i32.const 99))
@@ -269,12 +270,14 @@
             (local.set $x (local.get $min_x))
             (local.set $byte_address 
                 (i32.add
+                    (global.get $memory_region_canvas_bytes_offset)
                     (i32.mul
                         (i32.add
-                            (i32.mul (local.get $y) (global.get $canvas_width))
+                            (i32.mul
+                                (i32.sub (global.get $canvas_height) (local.get $y))
+                                (global.get $canvas_width))
                             (local.get $x))
-                        (i32.const 4))
-                    (global.get $memory_region_canvas_bytes_offset)))
+                        (i32.const 4))))
             (loop $x_lp
                 (i32.store (local.get $byte_address) (local.get $color))
                 (local.set $byte_address
@@ -368,12 +371,14 @@
             (local.set $x (local.get $min_x))
             (local.set $byte_address 
                 (i32.add
+                    (global.get $memory_region_canvas_bytes_offset)
                     (i32.mul
                         (i32.add
-                            (i32.mul (local.get $y) (global.get $canvas_width))
+                            (i32.mul
+                                (i32.sub (global.get $canvas_height) (local.get $y))
+                                (global.get $canvas_width))
                             (local.get $x))
-                        (i32.const 4))
-                    (global.get $memory_region_canvas_bytes_offset)))
+                        (i32.const 4))))
             (loop $x_lp
                 ;; Only fill pixel if [(x - cx)^2 + (y - cy)^2] <= radius^2
                 (local.set $dx (i32.sub (local.get $x) (local.get $cx)))
@@ -839,6 +844,8 @@
     (global $BACKGROUND_COLOR    i32 (i32.const 0xFF000000))
 
     ;; Values are initialized in the "$reset_game" function
+    (global $canvas_width               (mut i32) (i32.const  0))
+    (global $canvas_height              (mut i32) (i32.const  0))
     (global $game_state                 (mut i32) (i32.const  0))
     (global $timestamp_update_call      (mut f32) (f32.const -1))
     (global $timestamp_last_update_call (mut f32) (f32.const -1))
@@ -855,12 +862,6 @@
     (func (export "update") (param $timestamp f32)
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_FIRST_UPDATE))
         (if (then
-            global.get $CHAR_t call $log_char
-            global.get $CHAR_e call $log_char
-            global.get $CHAR_s call $log_char
-            global.get $CHAR_t call $log_char
-            call $log_flush
-
             call $reset_game
             (global.set $game_state (global.get $GAME_STATE_START_SCREEN))
             return
@@ -905,22 +906,98 @@
         ))
     )
 
-    (func $reset_game
+    (func (export "handleKeyDown") (param $key i32)
+        (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
+        (if (then
+            (call $reset_game)
+
+            (global.set $game_state (global.get $GAME_STATE_PLAYING))
+
+            call $orb_update
+        ))
+
+        (i32.or
+            (i32.eq (local.get $key) (global.get $CHAR_w))
+            (i32.eq (local.get $key) (global.get $CHAR_W)))
+        (if (then
+            (global.set $snake_direction_x (f32.const  0))
+            (global.set $snake_direction_y (f32.const -1))
+            return
+        ))
+        (i32.or
+            (i32.eq (local.get $key) (global.get $CHAR_s))
+            (i32.eq (local.get $key) (global.get $CHAR_S)))
+        (if (then
+            (global.set $snake_direction_x (f32.const  0))
+            (global.set $snake_direction_y (f32.const  1))
+            return
+        ))
+        (i32.or
+            (i32.eq (local.get $key) (global.get $CHAR_a))
+            (i32.eq (local.get $key) (global.get $CHAR_A)))
+        (if (then
+            (global.set $snake_direction_x (f32.const -1))
+            (global.set $snake_direction_y (f32.const  0))
+            return
+        ))
+        (i32.or
+            (i32.eq (local.get $key) (global.get $CHAR_d))
+            (i32.eq (local.get $key) (global.get $CHAR_D)))
+        (if (then
+            (global.set $snake_direction_x (f32.const  1))
+            (global.set $snake_direction_y (f32.const  0))
+            return
+        ))
+
+        (i32.and
+            (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
+            (i32.eq (local.get $key) (global.get $CHAR_SPACE)))
+        (if (then
+            (call $reset_game)
+
+            (global.set $game_state (global.get $GAME_STATE_PLAYING))
+
+            call $orb_update
+        ))
+    )
+
+    (func $resize_canvas (export "resize") (param $width i32) (param $height i32)
+        (local $pages_n i32)
+
+        (global.set $canvas_width (local.get $width))
+        (global.set $canvas_height (local.get $height))
+
         ;; Calculate the number of bytes required to store the canvas RGBA data
         (global.set $memory_region_canvas_bytes_n
             (i32.mul
-                (i32.mul (global.get $canvas_width) (global.get $canvas_height))
+                (i32.mul (local.get $width) (local.get $height))
                 (i32.const 4)))
 
-        ;; Grow the linear memory to fit the RGBA data
-        (memory.grow
+        (local.set $pages_n
             (i32.sub
                 (i32.add
                     (i32.div_u
                         (global.get $memory_region_canvas_bytes_n)
                         (i32.const 65536))
                     (i32.const 2))
-                (memory.size))) drop
+                (memory.size)))
+
+        (i32.gt_s (local.get $pages_n) (i32.const 0))
+        (if (then
+            ;; Grow the linear memory to fit the RGBA data
+            (memory.grow (local.get $pages_n)) drop
+        ))
+
+        (call $clear_canvas)
+
+        (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING))
+        (if (then
+            call $orb_draw
+        ))
+    )
+
+    (func $reset_game
+        (call $resize_canvas (global.get $canvas_width) (global.get $canvas_height))
 
         (call $snake_buf_reset)
 
@@ -945,56 +1022,6 @@
         (global.set $orb_x (f32.const -1))
         (global.set $orb_y (f32.const -1))
         (call $orb_prng_seed (i32.const 0))
-
-        (call $clear_canvas)
-    )
-
-    (func (export "handleKeyDown") (param $key i32)
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
-        (if (then
-            (call $reset_game)
-
-            (global.set $game_state (global.get $GAME_STATE_PLAYING))
-
-            call $orb_update
-        ))
-
-        (i32.eq (local.get $key) (global.get $CHAR_w))
-        (if (then
-            (global.set $snake_direction_x (f32.const  0))
-            (global.set $snake_direction_y (f32.const -1))
-            return
-        ))
-        (i32.eq (local.get $key) (global.get $CHAR_s))
-        (if (then
-            (global.set $snake_direction_x (f32.const  0))
-            (global.set $snake_direction_y (f32.const  1))
-            return
-        ))
-        (i32.eq (local.get $key) (global.get $CHAR_a))
-        (if (then
-            (global.set $snake_direction_x (f32.const -1))
-            (global.set $snake_direction_y (f32.const  0))
-            return
-        ))
-        (i32.eq (local.get $key) (global.get $CHAR_d))
-        (if (then
-            (global.set $snake_direction_x (f32.const  1))
-            (global.set $snake_direction_y (f32.const  0))
-            return
-        ))
-
-        (i32.and
-            (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
-            (i32.eq (local.get $key) (global.get $CHAR_SPACE)))
-        (if (then
-            (call $reset_game)
-
-            (global.set $game_state (global.get $GAME_STATE_PLAYING))
-
-            call $orb_update
-        ))
-
     )
 
     (func $snake_update
@@ -1229,6 +1256,11 @@
                 (global.get $ORB_RADIUS)
                 (global.get $BACKGROUND_COLOR))
         ))
+
+        call $orb_draw
+    )
+
+    (func $orb_draw
         ;; Draw orb
         (call $fill_circle_f32
             (global.get $orb_x) (global.get $orb_y)
