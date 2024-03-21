@@ -844,20 +844,20 @@
     (global $BACKGROUND_COLOR    i32 (i32.const 0xFF000000))
 
     ;; Values are initialized in the "$reset_game" function
-    (global $canvas_width               (mut i32) (i32.const  0))
-    (global $canvas_height              (mut i32) (i32.const  0))
-    (global $game_state                 (mut i32) (i32.const  0))
-    (global $timestamp_update_call      (mut f32) (f32.const -1))
-    (global $timestamp_last_update_call (mut f32) (f32.const -1))
-    (global $snake_direction_x          (mut f32) (f32.const  1))
-    (global $snake_direction_y          (mut f32) (f32.const  0))
-    (global $snake_length               (mut f32) (f32.const  0))
-    (global $snake_target_length        (mut f32) (f32.const -1))
-    (global $score_100s_digit           (mut i32) (i32.const  0))
-    (global $score_10s_digit            (mut i32) (i32.const  0))
-    (global $score_1s_digit             (mut i32) (i32.const  0))
-    (global $orb_x                      (mut f32) (f32.const -1))
-    (global $orb_y                      (mut f32) (f32.const -1))
+    (global $canvas_width                (mut i32) (i32.const  0))
+    (global $canvas_height               (mut i32) (i32.const  0))
+    (global $game_state                  (mut i32) (i32.const  0))
+    (global $timestamp_update_call       (mut f32) (f32.const -1))
+    (global $timestamp_last_update_call  (mut f32) (f32.const -1))
+    (global $snake_direction_x           (mut f32) (f32.const  1))
+    (global $snake_direction_y           (mut f32) (f32.const  0))
+    (global $snake_length                (mut f32) (f32.const  0))
+    (global $snake_target_length         (mut f32) (f32.const -1))
+    (global $score_100s_digit            (mut i32) (i32.const  0))
+    (global $score_10s_digit             (mut i32) (i32.const  0))
+    (global $score_1s_digit              (mut i32) (i32.const  0))
+    (global $orb_x_as_canvas_width_frac  (mut f32) (f32.const -1))
+    (global $orb_y_as_canvas_height_frac (mut f32) (f32.const -1))
 
     (func (export "update") (param $timestamp f32)
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_FIRST_UPDATE))
@@ -881,7 +881,7 @@
             call $snake_update
 
             (call $snake_check_circle_collides_with_head
-                (global.get $orb_x) (global.get $orb_y)
+                (call $orb_calc_x) (call $orb_calc_y)
                 (global.get $ORB_RADIUS))
             (if (then
                 call $score_inc
@@ -1016,11 +1016,11 @@
         (global.set $snake_direction_y (f32.const 0))
 
         (global.set $score_100s_digit (i32.const 0))
-        (global.set $score_10s_digit (i32.const 0))
-        (global.set $score_1s_digit (i32.const 0))
+        (global.set $score_10s_digit  (i32.const 0))
+        (global.set $score_1s_digit   (i32.const 0))
 
-        (global.set $orb_x (f32.const -1))
-        (global.set $orb_y (f32.const -1))
+        (global.set $orb_x_as_canvas_width_frac  (f32.const -1))
+        (global.set $orb_y_as_canvas_height_frac (f32.const -1))
         (call $orb_prng_seed (i32.const 0))
     )
 
@@ -1209,20 +1209,22 @@
     )
 
     (func $orb_update
+        (local $orb_x f32)
+        (local $orb_y f32)
         (local $old_orb_x f32)
         (local $old_orb_y f32)
-        (local $snake_circle_x_ptr i32)
-        (local $snake_circle_y_ptr i32)
         (local $snake_circle_x f32)
         (local $snake_circle_y f32)
 
-        (local.set $old_orb_x (global.get $orb_x))
-        (local.set $old_orb_y (global.get $orb_y))
+        (local.set $old_orb_x (call $orb_calc_x))
+        (local.set $old_orb_y (call $orb_calc_y))
 
         ;; Loop until orb spawned at a coordinate that is NOT inside the snake
         (loop $outer_lp
-            (global.set $orb_x (call $orb_prng_gen_x))
-            (global.set $orb_y (call $orb_prng_gen_y))
+            (global.set $orb_x_as_canvas_width_frac  (call $orb_prng_gen_0_to_1))
+            (global.set $orb_y_as_canvas_height_frac (call $orb_prng_gen_0_to_1))
+            (local.set $orb_x (call $orb_calc_x))
+            (local.set $orb_y (call $orb_calc_y))
 
             (call $snake_buf_read_ptr_point_to_tail)
 
@@ -1231,7 +1233,7 @@
                 (local.set $snake_circle_y (call $snake_buf_read_cy))
 
                 (call $check_circles_collide
-                    (global.get $orb_x) (global.get $orb_y)
+                    (local.get $orb_x) (local.get $orb_y)
                     (global.get $ORB_RADIUS)
                     (local.get $snake_circle_x) (local.get $snake_circle_y)
                     (global.get $SNAKE_RADIUS))
@@ -1260,19 +1262,31 @@
         call $orb_draw
     )
 
+    (func $orb_calc_x (result f32)
+        (f32.mul
+            (global.get $orb_x_as_canvas_width_frac)
+            (f32.convert_i32_u (global.get $canvas_width)))
+    )
+
+    (func $orb_calc_y (result f32)
+        (f32.mul
+            (global.get $orb_y_as_canvas_height_frac)
+            (f32.convert_i32_u (global.get $canvas_height)))
+    )
+
     (func $orb_draw
         ;; Draw orb
         (call $fill_circle_f32
-            (global.get $orb_x) (global.get $orb_y)
+            (call $orb_calc_x) (call $orb_calc_y)
             (global.get $ORB_RADIUS)
             (global.get $ORB_COLOR))
         ;; Draw specular highlight
         (call $fill_circle_f32
             (f32.add
-                (global.get $orb_x)
+                (call $orb_calc_x)
                 (f32.mul (f32.const  0.2) (global.get $ORB_RADIUS)))
             (f32.add
-                (global.get $orb_y)
+                (call $orb_calc_y)
                 (f32.mul (f32.const -0.2) (global.get $ORB_RADIUS)))
             (f32.mul (f32.const 0.4) (global.get $ORB_RADIUS))
             (global.get $ORB_HIGHLIGHT_COLOR))
@@ -1304,22 +1318,23 @@
         (global.set $orb_mcg_r (local.get $seed))
     )
 
-    (func $orb_prng_gen_x (result f32)
+    (func $orb_prng_gen_0_to_1 (result f32)
         (global.set $orb_mcg_r
             (i32.mul (global.get $orb_mcg_r) (global.get $ORB_MCG_A)))
-        (f32.convert_i32_u
-            (i32.rem_u
-                (i32.shr_u (global.get $orb_mcg_r) (i32.const 16))
-                (global.get $canvas_width)))
-    )
-
-    (func $orb_prng_gen_y (result f32)
-        (global.set $orb_mcg_r
-            (i32.mul (global.get $orb_mcg_r) (global.get $ORB_MCG_A)))
-        (f32.convert_i32_u
-            (i32.rem_u
-                (i32.shr_u (global.get $orb_mcg_r) (i32.const 16))
-                (global.get $canvas_height)))
+        (f32.sub 
+            (f32.reinterpret_i32
+                (i32.or
+                    ;; `0x3f800000` sets the f32 exponent bits to 127,
+                    ;; producing an exponent of 2^0=1
+                    (i32.const 0x3f800000)
+                    ;; We set the f32 mantissa bits to the most significant
+                    ;; bits from the psuedorandom i32 number `$orb_mcg_r`.
+                    ;; We shift right by 9 because:
+                    ;;      1 sign bit + 8 exponent bits = 9 bits
+                    (i32.shr_u (global.get $orb_mcg_r) (i32.const 9))))
+            ;; The ored bits produces an f32 number between 1.0 and 2.0
+            ;; so we need to subtract 1 to get a number between 0.0 and 1.0
+            (f32.const 1))
     )
 
     (func $score_inc
