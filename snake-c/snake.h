@@ -35,22 +35,22 @@ typedef struct w2c_snake {
   u32 w2c_memoryRegionCanvasBytesOffset;
   u32 w2c_memoryRegionCanvasBytesN;
   u32 w2c_g6;
-  u32 w2c_g7;
-  u32 w2c_g8;
-  u32 w2c_g9;
-  u32 w2c_g10;
-  u32 w2c_g11;
-  u32 w2c_g12;
-  u32 w2c_g13;
-  u32 w2c_g14;
-  u32 w2c_g15;
-  u32 w2c_g16;
-  u32 w2c_g17;
-  u32 w2c_g18;
-  u32 w2c_g19;
-  u32 w2c_g20;
-  u32 w2c_g21;
-  u32 w2c_g22;
+  u32 w2c_KEY_SPACE;
+  u32 w2c_KEY_W;
+  u32 w2c_KEY_w;
+  u32 w2c_ARROW_UP;
+  u32 w2c_KEY_A;
+  u32 w2c_KEY_a;
+  u32 w2c_ARROW_LEFT;
+  u32 w2c_KEY_S;
+  u32 w2c_KEY_s;
+  u32 w2c_ARROW_DOWN;
+  u32 w2c_KEY_D;
+  u32 w2c_KEY_d;
+  u32 w2c_ARROW_RIGHT;
+  f32 w2c_g20;
+  f32 w2c_g21;
+  f32 w2c_g22;
   u32 w2c_g23;
   u32 w2c_g24;
   u32 w2c_g25;
@@ -64,63 +64,63 @@ typedef struct w2c_snake {
   u32 w2c_g33;
   u32 w2c_g34;
   u32 w2c_g35;
-  u32 w2c_g36;
-  u32 w2c_g37;
-  u32 w2c_g38;
-  u32 w2c_g39;
-  u32 w2c_g40;
-  u32 w2c_g41;
+  f32 w2c_g36;
+  f32 w2c_g37;
+  f32 w2c_g38;
+  f32 w2c_g39;
+  f32 w2c_g40;
+  f32 w2c_g41;
   u32 w2c_g42;
   u32 w2c_g43;
   u32 w2c_g44;
-  u32 w2c_g45;
-  u32 w2c_g46;
+  f32 w2c_g45;
+  f32 w2c_g46;
   u32 w2c_g47;
   u32 w2c_g48;
-  u64 w2c_g49;
-  u64 w2c_g50;
-  u64 w2c_g51;
-  u64 w2c_g52;
-  u64 w2c_g53;
-  u64 w2c_g54;
-  u64 w2c_g55;
-  u64 w2c_g56;
-  u64 w2c_g57;
-  u64 w2c_g58;
-  u64 w2c_g59;
-  u64 w2c_g60;
-  u64 w2c_g61;
-  u64 w2c_g62;
-  u64 w2c_g63;
-  u64 w2c_g64;
-  u64 w2c_g65;
-  u64 w2c_g66;
-  u64 w2c_g67;
-  u64 w2c_g68;
-  u64 w2c_g69;
-  u64 w2c_g70;
-  u64 w2c_g71;
-  u64 w2c_g72;
-  u64 w2c_g73;
-  u64 w2c_g74;
-  u64 w2c_g75;
-  u64 w2c_g76;
-  u64 w2c_g77;
-  u64 w2c_g78;
-  u64 w2c_g79;
-  u64 w2c_g80;
+  u32 w2c_g49;
+  u32 w2c_g50;
+  u32 w2c_g51;
+  u32 w2c_g52;
+  u32 w2c_g53;
+  f32 w2c_g54;
+  f32 w2c_g55;
+  f32 w2c_g56;
+  u32 w2c_g57;
+  u32 w2c_g58;
+  u32 w2c_g59;
+  u32 w2c_g60;
+  u32 w2c_g61;
+  u32 w2c_g62;
+  u32 w2c_g63;
+  u32 w2c_g64;
+  u32 w2c_g65;
+  u32 w2c_g66;
+  u32 w2c_g67;
+  u32 w2c_g68;
+  u32 w2c_g69;
+  u32 w2c_g70;
+  u32 w2c_g71;
+  u32 w2c_g72;
+  u32 w2c_g73;
+  u32 w2c_g74;
+  u32 w2c_g75;
+  u32 w2c_g76;
+  u32 w2c_g77;
+  u32 w2c_g78;
+  u32 w2c_g79;
+  u32 w2c_g80;
   u32 w2c_g81;
-  f32 w2c_g82;
-  f32 w2c_g83;
-  f32 w2c_g84;
+  u32 w2c_g82;
+  u32 w2c_g83;
+  u32 w2c_g84;
   u32 w2c_g85;
   u32 w2c_g86;
   u32 w2c_g87;
   u32 w2c_g88;
   u32 w2c_g89;
-  f32 w2c_g90;
-  f32 w2c_g91;
-  f32 w2c_g92;
+  u32 w2c_g90;
+  u32 w2c_g91;
+  u32 w2c_g92;
   u32 w2c_g93;
   u32 w2c_g94;
   u32 w2c_g95;
@@ -128,26 +128,39 @@ typedef struct w2c_snake {
   u32 w2c_g97;
   u32 w2c_g98;
   u32 w2c_g99;
-  u32 w2c_g100;
-  u32 w2c_g101;
-  u32 w2c_g102;
-  u32 w2c_g103;
-  u32 w2c_g104;
-  u32 w2c_g105;
-  f32 w2c_g106;
-  f32 w2c_g107;
-  f32 w2c_g108;
-  f32 w2c_g109;
-  f32 w2c_g110;
-  f32 w2c_g111;
-  u32 w2c_g112;
-  u32 w2c_g113;
-  u32 w2c_g114;
-  f32 w2c_g115;
-  f32 w2c_g116;
-  u32 w2c_g117;
-  u32 w2c_g118;
-  u32 w2c_g119;
+  u64 w2c_g100;
+  u64 w2c_g101;
+  u64 w2c_g102;
+  u64 w2c_g103;
+  u64 w2c_g104;
+  u64 w2c_g105;
+  u64 w2c_g106;
+  u64 w2c_g107;
+  u64 w2c_g108;
+  u64 w2c_g109;
+  u64 w2c_g110;
+  u64 w2c_g111;
+  u64 w2c_g112;
+  u64 w2c_g113;
+  u64 w2c_g114;
+  u64 w2c_g115;
+  u64 w2c_g116;
+  u64 w2c_g117;
+  u64 w2c_g118;
+  u64 w2c_g119;
+  u64 w2c_g120;
+  u64 w2c_g121;
+  u64 w2c_g122;
+  u64 w2c_g123;
+  u64 w2c_g124;
+  u64 w2c_g125;
+  u64 w2c_g126;
+  u64 w2c_g127;
+  u64 w2c_g128;
+  u64 w2c_g129;
+  u64 w2c_g130;
+  u64 w2c_g131;
+  u32 w2c_g132;
   wasm_rt_memory_t w2c_memory;
 } w2c_snake;
 
@@ -172,6 +185,45 @@ u32* w2c_snake_memoryRegionCanvasBytesOffset(w2c_snake* instance);
 
 /* export: 'memoryRegionCanvasBytesN' */
 u32* w2c_snake_memoryRegionCanvasBytesN(w2c_snake* instance);
+
+/* export: 'KEY_SPACE' */
+u32* w2c_snake_KEY_SPACE(w2c_snake* instance);
+
+/* export: 'KEY_W' */
+u32* w2c_snake_KEY_W(w2c_snake* instance);
+
+/* export: 'KEY_w' */
+u32* w2c_snake_KEY_w(w2c_snake* instance);
+
+/* export: 'ARROW_UP' */
+u32* w2c_snake_ARROW_UP(w2c_snake* instance);
+
+/* export: 'KEY_A' */
+u32* w2c_snake_KEY_A(w2c_snake* instance);
+
+/* export: 'KEY_a' */
+u32* w2c_snake_KEY_a(w2c_snake* instance);
+
+/* export: 'ARROW_LEFT' */
+u32* w2c_snake_ARROW_LEFT(w2c_snake* instance);
+
+/* export: 'KEY_S' */
+u32* w2c_snake_KEY_S(w2c_snake* instance);
+
+/* export: 'KEY_s' */
+u32* w2c_snake_KEY_s(w2c_snake* instance);
+
+/* export: 'ARROW_DOWN' */
+u32* w2c_snake_ARROW_DOWN(w2c_snake* instance);
+
+/* export: 'KEY_D' */
+u32* w2c_snake_KEY_D(w2c_snake* instance);
+
+/* export: 'KEY_d' */
+u32* w2c_snake_KEY_d(w2c_snake* instance);
+
+/* export: 'ARROW_RIGHT' */
+u32* w2c_snake_ARROW_RIGHT(w2c_snake* instance);
 
 /* export: 'update' */
 void w2c_snake_update(w2c_snake*, f32);

@@ -47,9 +47,16 @@ function main() {
         });
     }
 
+    const keyToCode = {
+        "ArrowUp"   : wasmInstance.exports.ARROW_UP   ,
+        "ArrowLeft" : wasmInstance.exports.ARROW_LEFT ,
+        "ArrowDown" : wasmInstance.exports.ARROW_DOWN ,
+        "ArrowRight": wasmInstance.exports.ARROW_RIGHT,
+    };
     window.addEventListener(
         "keydown", 
-        (e) => wasmInstance.exports.handleKeyDown(e.key.charCodeAt(0)),
+        (e) => wasmInstance.exports.handleKeyDown(
+                keyToCode[e.key] || e.keyCode),
     );
     window.addEventListener("resize", resize);
 

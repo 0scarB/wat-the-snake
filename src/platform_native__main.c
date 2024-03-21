@@ -33,6 +33,25 @@ static void handle_key_action(
         int key, int scancode, int action, int mods
 ) {
     if (action == GLFW_PRESS) {
+        switch (key) {
+            case GLFW_KEY_UP:
+                w2c_snake_handleKeyDown(
+                        &wasm_module, *w2c_snake_ARROW_UP(&wasm_module));
+                return;
+            case GLFW_KEY_LEFT:
+                w2c_snake_handleKeyDown(
+                        &wasm_module, *w2c_snake_ARROW_LEFT(&wasm_module));
+                return;
+            case GLFW_KEY_DOWN:
+                w2c_snake_handleKeyDown(
+                        &wasm_module, *w2c_snake_ARROW_DOWN(&wasm_module));
+                return;
+            case GLFW_KEY_RIGHT:
+                w2c_snake_handleKeyDown(
+                        &wasm_module, *w2c_snake_ARROW_RIGHT(&wasm_module));
+                return;
+        }
+
         w2c_snake_handleKeyDown(&wasm_module, (uint32_t) key);
     }
 }
