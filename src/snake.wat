@@ -25,6 +25,10 @@
     ;; Game Logic
     ;; ----------------------------------------------------------------------
 
+    (global $KEY_ACTION_PRESS (export "KEY_ACTION_PRESS") i32 (i32.const 0))
+    (global $KEY_ACTION_UP    (export "KEY_ACTION_UP"  ) i32 (i32.const 1))
+    (global $KEY_ACTION_DOWN  (export "KEY_ACTION_DOWN") i32 (i32.const 2))
+
     ;; We export the character codes (integers) that can be used as inputs to
     ;; change the snake's heading (direction). Letter keys are assigned to their
     ;; ASCII character codes, making it easier to implement platform specific
@@ -48,6 +52,13 @@
     (global $KEY_d       (export "KEY_d"      ) i32 (i32.const 0x64)) ;;--/
     (global $ARROW_RIGHT (export "ARROW_RIGHT") i32 (i32.const 0x84)) ;;-/
 
+    (global $KEY_IS_DOWN_RIGHT  i32 (i32.const 1))
+    (global $KEY_IS_DOWN_LEFT   i32 (i32.const 2))
+    (global $KEY_IS_DOWN_UP     i32 (i32.const 4))
+    (global $KEY_IS_DOWN_DOWN   i32 (i32.const 8))
+    (global $KEYS_ARE_DOWN_LEFT_RIGHT_MASK i32 (i32.const  3))
+    (global $KEYS_ARE_DOWN_UP_DOWN_MASK    i32 (i32.const 12))
+
     (global $SNAKE_MOVEMENT_PX_PER_S  f32 (f32.const 300))
     (global $SNAKE_RADIUS             f32 (f32.const 12))
     (global $ORB_RADIUS               f32 (f32.const 8))
@@ -65,12 +76,15 @@
     (global $TEXT_COLOR          i32 (i32.const 0xFFFFAAFF))
     (global $BACKGROUND_COLOR    i32 (i32.const 0xFF000000))
 
+    (global $INVERSE_SQRT_2 f32 (f32.const 0.7071067811865475))
+
     ;; Values are initialized in the "$reset_game" function
     (global $canvas_width                (mut i32) (i32.const  0))
     (global $canvas_height               (mut i32) (i32.const  0))
     (global $game_state                  (mut i32) (i32.const  0))
     (global $timestamp_update_call       (mut f32) (f32.const -1))
     (global $timestamp_last_update_call  (mut f32) (f32.const -1))
+    (global $keys_are_down_mask          (mut i32) (i32.const  0))
     (global $snake_unit_heading_x        (mut f32) (f32.const  1))
     (global $snake_unit_heading_y        (mut f32) (f32.const  0))
     (global $snake_length                (mut f32) (f32.const  0))
@@ -128,9 +142,10 @@
         ))
     )
 
-    (func (export "handleKeyDown") (param $key i32)
+    (func (export "handleKeyAction") (param $action i32) (param $key i32)
         (local $latin1_32_byte_range_idx i32)
         (local $arrow_key i32)
+        (local $key_down_mask i32)
 
         ;; Special handling of key presses while in the start and end screen
         (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
@@ -177,25 +192,127 @@
                 (i32.and (local.get $key) (i32.const 0x1F))
                 (i32.const 0x80)))
 
+        ;; Determine the bit mask that signifies that a key is pressed down
         (i32.eq (local.get $arrow_key) (global.get $ARROW_UP))
         (if (then
+            (local.set $key_down_mask (global.get $KEY_IS_DOWN_UP))
+        ))
+        (i32.eq (local.get $arrow_key) (global.get $ARROW_LEFT))
+        (if (then
+            (local.set $key_down_mask (global.get $KEY_IS_DOWN_LEFT))
+        ))
+        (i32.eq (local.get $arrow_key) (global.get $ARROW_DOWN))
+        (if (then
+            (local.set $key_down_mask (global.get $KEY_IS_DOWN_DOWN))
+        ))
+        (i32.eq (local.get $arrow_key) (global.get $ARROW_RIGHT))
+        (if (then
+            (local.set $key_down_mask (global.get $KEY_IS_DOWN_RIGHT))
+        ))
+
+        ;; Update the `$keys_are_down_mask` based on the bit mask for the key
+        (i32.eq (local.get $action) (global.get $KEY_ACTION_PRESS))
+        (if (then
+            ;; If the action is a key press action the we can just directly
+            ;; set the aggregate bit mask to that of the individual key
+            (global.set $keys_are_down_mask (local.get $key_down_mask))
+        ))
+        (i32.eq (local.get $action) (global.get $KEY_ACTION_DOWN))
+        (if (then
+            ;; If the action is a key down action then we
+            ;; a) set the "left" and "right" bits to 0 if left or right are down
+            ;;    OR the "up" and "down" bits to 0 if up or down are down,
+            ;;    to make sure that the opposite key's bit is set to 0,
+            ;;    meaning that left will be registered even if right is down, etc.
+            (i32.and
+                (global.get $KEYS_ARE_DOWN_LEFT_RIGHT_MASK)
+                (local.get $key_down_mask))
+            (if (then
+                (global.set $keys_are_down_mask
+                    (i32.and
+                        (global.get $keys_are_down_mask)
+                        (global.get $KEYS_ARE_DOWN_UP_DOWN_MASK)))
+            ))
+            (i32.and
+                (global.get $KEYS_ARE_DOWN_UP_DOWN_MASK)
+                (local.get $key_down_mask))
+            (if (then
+                (global.set $keys_are_down_mask
+                    (i32.and
+                        (global.get $keys_are_down_mask)
+                        (global.get $KEYS_ARE_DOWN_LEFT_RIGHT_MASK)))
+            ))
+            ;; a) add the bit mask of the new key to the aggregate bit mask
+            (global.set $keys_are_down_mask
+                (i32.or 
+                    (global.get $keys_are_down_mask)
+                    (local.get $key_down_mask)))
+        ))
+        (i32.eq (local.get $action) (global.get $KEY_ACTION_UP))
+        (if (then
+            ;; If the action is a key up action then we set unset the key's
+            ;; bit in the aggregate bit mask
+            (global.set $keys_are_down_mask
+                (i32.and
+                    (global.get $keys_are_down_mask)
+                    (i32.xor
+                        (i32.const 0xF)
+                        (local.get $key_down_mask))))
+        ))
+
+        ;; Update the coordinates of the snake's heading unit vector, based on the
+        ;; aggregate bit mask
+        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_UP))
+        (if (then
+            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_LEFT))
+            (if (then
+                (global.set $snake_unit_heading_x
+                    (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
+                (global.set $snake_unit_heading_y
+                    (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
+                return
+            ))
+            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_RIGHT))
+            (if (then
+                (global.set $snake_unit_heading_x
+                    (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
+                (global.set $snake_unit_heading_y
+                    (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
+                return
+            ))
             (global.set $snake_unit_heading_x (f32.const  0))
             (global.set $snake_unit_heading_y (f32.const -1))
             return
         ))
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_LEFT))
+        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_DOWN))
+        (if (then
+            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_LEFT))
+            (if (then
+                (global.set $snake_unit_heading_x
+                    (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
+                (global.set $snake_unit_heading_y
+                    (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
+                return
+            ))
+            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_RIGHT))
+            (if (then
+                (global.set $snake_unit_heading_x
+                    (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
+                (global.set $snake_unit_heading_y
+                    (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
+                return
+            ))
+            (global.set $snake_unit_heading_x (f32.const  0))
+            (global.set $snake_unit_heading_y (f32.const  1))
+            return
+        ))
+        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_LEFT))
         (if (then
             (global.set $snake_unit_heading_x (f32.const -1))
             (global.set $snake_unit_heading_y (f32.const  0))
             return
         ))
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_DOWN))
-        (if (then
-            (global.set $snake_unit_heading_x (f32.const  0))
-            (global.set $snake_unit_heading_y (f32.const  1))
-            return
-        ))
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_RIGHT))
+        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_RIGHT))
         (if (then
             (global.set $snake_unit_heading_x (f32.const  1))
             (global.set $snake_unit_heading_y (f32.const  0))

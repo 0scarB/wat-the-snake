@@ -55,7 +55,14 @@ function main() {
     };
     window.addEventListener(
         "keydown", 
-        (e) => wasmInstance.exports.handleKeyDown(
+        (e) => wasmInstance.exports.handleKeyAction(
+                wasmInstance.exports.KEY_ACTION_DOWN,
+                keyToCode[e.key] || e.keyCode),
+    );
+    window.addEventListener(
+        "keyup", 
+        (e) => wasmInstance.exports.handleKeyAction(
+                wasmInstance.exports.KEY_ACTION_UP,
                 keyToCode[e.key] || e.keyCode),
     );
     window.addEventListener("resize", resize);

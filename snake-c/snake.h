@@ -35,6 +35,9 @@ typedef struct w2c_snake {
   u32 w2c_memoryRegionCanvasBytesOffset;
   u32 w2c_memoryRegionCanvasBytesN;
   u32 w2c_g6;
+  u32 w2c_KEY_ACTION_PRESS;
+  u32 w2c_KEY_ACTION_UP;
+  u32 w2c_KEY_ACTION_DOWN;
   u32 w2c_KEY_SPACE;
   u32 w2c_KEY_W;
   u32 w2c_KEY_w;
@@ -48,44 +51,41 @@ typedef struct w2c_snake {
   u32 w2c_KEY_D;
   u32 w2c_KEY_d;
   u32 w2c_ARROW_RIGHT;
-  f32 w2c_g20;
-  f32 w2c_g21;
-  f32 w2c_g22;
   u32 w2c_g23;
   u32 w2c_g24;
   u32 w2c_g25;
   u32 w2c_g26;
   u32 w2c_g27;
   u32 w2c_g28;
-  u32 w2c_g29;
-  u32 w2c_g30;
-  u32 w2c_g31;
+  f32 w2c_g29;
+  f32 w2c_g30;
+  f32 w2c_g31;
   u32 w2c_g32;
   u32 w2c_g33;
   u32 w2c_g34;
   u32 w2c_g35;
-  f32 w2c_g36;
-  f32 w2c_g37;
-  f32 w2c_g38;
-  f32 w2c_g39;
-  f32 w2c_g40;
-  f32 w2c_g41;
-  u32 w2c_g42;
+  u32 w2c_g36;
+  u32 w2c_g37;
+  u32 w2c_g38;
+  u32 w2c_g39;
+  u32 w2c_g40;
+  u32 w2c_g41;
+  f32 w2c_g42;
   u32 w2c_g43;
   u32 w2c_g44;
-  f32 w2c_g45;
+  u32 w2c_g45;
   f32 w2c_g46;
-  u32 w2c_g47;
+  f32 w2c_g47;
   u32 w2c_g48;
-  u32 w2c_g49;
-  u32 w2c_g50;
-  u32 w2c_g51;
-  u32 w2c_g52;
+  f32 w2c_g49;
+  f32 w2c_g50;
+  f32 w2c_g51;
+  f32 w2c_g52;
   u32 w2c_g53;
-  f32 w2c_g54;
-  f32 w2c_g55;
+  u32 w2c_g54;
+  u32 w2c_g55;
   f32 w2c_g56;
-  u32 w2c_g57;
+  f32 w2c_g57;
   u32 w2c_g58;
   u32 w2c_g59;
   u32 w2c_g60;
@@ -93,9 +93,9 @@ typedef struct w2c_snake {
   u32 w2c_g62;
   u32 w2c_g63;
   u32 w2c_g64;
-  u32 w2c_g65;
-  u32 w2c_g66;
-  u32 w2c_g67;
+  f32 w2c_g65;
+  f32 w2c_g66;
+  f32 w2c_g67;
   u32 w2c_g68;
   u32 w2c_g69;
   u32 w2c_g70;
@@ -128,17 +128,17 @@ typedef struct w2c_snake {
   u32 w2c_g97;
   u32 w2c_g98;
   u32 w2c_g99;
-  u64 w2c_g100;
-  u64 w2c_g101;
-  u64 w2c_g102;
-  u64 w2c_g103;
-  u64 w2c_g104;
-  u64 w2c_g105;
-  u64 w2c_g106;
-  u64 w2c_g107;
-  u64 w2c_g108;
-  u64 w2c_g109;
-  u64 w2c_g110;
+  u32 w2c_g100;
+  u32 w2c_g101;
+  u32 w2c_g102;
+  u32 w2c_g103;
+  u32 w2c_g104;
+  u32 w2c_g105;
+  u32 w2c_g106;
+  u32 w2c_g107;
+  u32 w2c_g108;
+  u32 w2c_g109;
+  u32 w2c_g110;
   u64 w2c_g111;
   u64 w2c_g112;
   u64 w2c_g113;
@@ -160,7 +160,18 @@ typedef struct w2c_snake {
   u64 w2c_g129;
   u64 w2c_g130;
   u64 w2c_g131;
-  u32 w2c_g132;
+  u64 w2c_g132;
+  u64 w2c_g133;
+  u64 w2c_g134;
+  u64 w2c_g135;
+  u64 w2c_g136;
+  u64 w2c_g137;
+  u64 w2c_g138;
+  u64 w2c_g139;
+  u64 w2c_g140;
+  u64 w2c_g141;
+  u64 w2c_g142;
+  u32 w2c_g143;
   wasm_rt_memory_t w2c_memory;
 } w2c_snake;
 
@@ -185,6 +196,15 @@ u32* w2c_snake_memoryRegionCanvasBytesOffset(w2c_snake* instance);
 
 /* export: 'memoryRegionCanvasBytesN' */
 u32* w2c_snake_memoryRegionCanvasBytesN(w2c_snake* instance);
+
+/* export: 'KEY_ACTION_PRESS' */
+u32* w2c_snake_KEY_ACTION_PRESS(w2c_snake* instance);
+
+/* export: 'KEY_ACTION_UP' */
+u32* w2c_snake_KEY_ACTION_UP(w2c_snake* instance);
+
+/* export: 'KEY_ACTION_DOWN' */
+u32* w2c_snake_KEY_ACTION_DOWN(w2c_snake* instance);
 
 /* export: 'KEY_SPACE' */
 u32* w2c_snake_KEY_SPACE(w2c_snake* instance);
@@ -228,8 +248,8 @@ u32* w2c_snake_ARROW_RIGHT(w2c_snake* instance);
 /* export: 'update' */
 void w2c_snake_update(w2c_snake*, f32);
 
-/* export: 'handleKeyDown' */
-void w2c_snake_handleKeyDown(w2c_snake*, u32);
+/* export: 'handleKeyAction' */
+void w2c_snake_handleKeyAction(w2c_snake*, u32, u32);
 
 /* export: 'resize' */
 void w2c_snake_resize(w2c_snake*, u32, u32);

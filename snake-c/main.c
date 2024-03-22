@@ -32,28 +32,35 @@ static void handle_key_action(
         GLFWwindow* window, 
         int key, int scancode, int action, int mods
 ) {
-    if (action == GLFW_PRESS) {
-        switch (key) {
-            case GLFW_KEY_UP:
-                w2c_snake_handleKeyDown(
-                        &wasm_module, *w2c_snake_ARROW_UP(&wasm_module));
-                return;
-            case GLFW_KEY_LEFT:
-                w2c_snake_handleKeyDown(
-                        &wasm_module, *w2c_snake_ARROW_LEFT(&wasm_module));
-                return;
-            case GLFW_KEY_DOWN:
-                w2c_snake_handleKeyDown(
-                        &wasm_module, *w2c_snake_ARROW_DOWN(&wasm_module));
-                return;
-            case GLFW_KEY_RIGHT:
-                w2c_snake_handleKeyDown(
-                        &wasm_module, *w2c_snake_ARROW_RIGHT(&wasm_module));
-                return;
-        }
-
-        w2c_snake_handleKeyDown(&wasm_module, (uint32_t) key);
+    u32 wasm_action;
+    switch (action) {
+        case GLFW_PRESS:
+            wasm_action = *w2c_snake_KEY_ACTION_DOWN(&wasm_module);
+            break;
+        case GLFW_RELEASE:
+            wasm_action = *w2c_snake_KEY_ACTION_UP(&wasm_module);
+            break;
+        default:
+            return;
     }
+
+    u32 wasm_key = key;
+    switch (key) {
+        case GLFW_KEY_UP:
+            wasm_key = *w2c_snake_ARROW_UP(&wasm_module);
+            break;
+        case GLFW_KEY_LEFT:
+            wasm_key = *w2c_snake_ARROW_LEFT(&wasm_module);
+            break;
+        case GLFW_KEY_DOWN:
+            wasm_key = *w2c_snake_ARROW_DOWN(&wasm_module);
+            break;
+        case GLFW_KEY_RIGHT:
+            wasm_key = *w2c_snake_ARROW_RIGHT(&wasm_module);
+            break;
+    }
+
+    w2c_snake_handleKeyAction(&wasm_module, wasm_action, wasm_key);
 }
 
 static void resize(GLFWwindow* window, int width, int height) {
