@@ -4,9 +4,10 @@ set -eu
 
 project_dir="$( dirname "$0" )"
 src_dir="$project_dir/src"
-build_dir_web="$project_dir/snake-web"
 c_dir="$project_dir/snake-c"
+wasm_file="$project_dir/snake.wasm"
 native_exe="$project_dir/snake-native.exe"
+html_file="$project_dir/snake-web.html"
 
 wabt_cmd() {
     local cmd_name="$1"
@@ -39,33 +40,22 @@ _wasm2c() {
     wabt_cmd 'wasm2c' $@
 }
 
+# Compile .wat file to .wasm file
+echo "Compiling .wasm file from .wat: '$src_dir/snake.wat' -> '$wasm_file'..."
+_wat2wasm "$src_dir/snake.wat" -o "$wasm_file" --enable-threads
+echo "Compiled .wasm file."
+
 
 # Web
 # ----------------------------------------------------------------------
 
-# Remove build directory if it already exists
-if [ -d "$build_dir_web" ]; then
-    echo "[Web] Old web-app directory '$build_dir_web' already exists. \
-Removing..."
-    rm -rf "$build_dir_web"
-    echo "[Web] Removed directory."
-fi
-
-# Create the build directory
-echo "[Web] Creating web-app '$build_dir_web'..."
-mkdir "$build_dir_web"
-echo "[Web] Created directory."
-
-# Copy static files to the build directory
-echo "[Web] Copy web platform files from '$src_dir' to '$build_dir_web'..."
-cp "$src_dir/platform_web__index.html" "$build_dir_web/index.html"
-cp "$src_dir/platform_web__index.js" "$build_dir_web/index.js"
-echo "[Web] Copied files."
-
-# Compile .wat file to .wasm file
-echo "[Web] Compiling '$src_dir/snake.wat' to '$build_dir_web/snake.wasm'..."
-_wat2wasm "$src_dir/snake.wat" -o "$build_dir_web/snake.wasm" --enable-threads
-echo "[Web] Compiled .wasm file."
+echo "[Web] Embedding WASM binary as base64 encoding string in \
+.html and copying .html: $src_dir/web.html -> $html_file..."
+wasm_binary_base64="$( base64 --wrap=0 "$wasm_file" )"
+wasm_binary_base64_slashes_escaped="$( echo "$wasm_binary_base64" | sed 's/\//\\\//g' )"
+sed "s/\\/\\*embed_wasm_base64\\*\\//\"${wasm_binary_base64_slashes_escaped}\"/g" \
+    "$src_dir/web.html" > "$html_file"
+echo "[Web] Embeded WASM binary and copied .html."
 
 
 # Native
@@ -82,19 +72,18 @@ echo "[Native] Creating c-files directory '$c_dir'..."
 mkdir "$c_dir"
 echo "[Native] Created directory."
 
-echo "[Native] Copy native platform c-files from \
-'$src_dir' to '$c_dir'..."
-cp "$src_dir/platform_native__main.c" "$c_dir/main.c"
+echo "[Native] Copy native c source file from '$src_dir/native.c' to '$c_dir'..."
+cp "$src_dir/native.c" "$c_dir/main.c"
 echo "[Native] Copied files."
 
-echo "[Native] Transpiling WASM-file '$build_dir_web/snake.wasm' \
+echo "[Native] Transpiling WASM-file "$wasm_file" \
 to c-files '$c_dir/snake.c' and '$c_dir/snake.h'"
-_wasm2c --enable-exceptions "$build_dir_web/snake.wasm" -o "$c_dir/snake.c"
+_wasm2c --enable-exceptions './snake.wasm' -o "$c_dir/snake.c"
 echo "[Native] Transpiled WASM-file."
 
 echo "[Native] Building executable with GLFW and OpenGl from c-files..."
 compile_cmd="cc \
--ggdb \
+-O3 \
 $(pkg-config --with-path="$project_dir" --cflags glfw3 gl) \
 -I$project_dir/wabt/wasm2c \
 -I$c_dir \

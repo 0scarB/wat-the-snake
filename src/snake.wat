@@ -96,8 +96,7 @@
     (global $orb_y_as_canvas_height_frac (mut f32) (f32.const -1))
 
     (func (export "update") (param $timestamp f32)
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_FIRST_UPDATE))
-        (if (then
+        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_FIRST_UPDATE)) (then
             call $reset_game
             (global.set $game_state (global.get $GAME_STATE_START_SCREEN))
             return
@@ -106,20 +105,18 @@
         (global.set $timestamp_last_update_call (global.get $timestamp_update_call))
         (global.set $timestamp_update_call (local.get $timestamp))
 
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
-        (if (then
-            call $draw_start_screen_text
+        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN)) (then
+            (call $draw_start_screen_text)
             return
         ))
 
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING))
-        (if (then
+        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING)) (then
             call $snake_update
 
-            (call $snake_check_circle_collides_with_head
-                (call $orb_calc_x) (call $orb_calc_y)
-                (global.get $ORB_RADIUS))
-            (if (then
+            (if (call $snake_check_circle_collides_with_head
+                    (call $orb_calc_x) (call $orb_calc_y)
+                    (global.get $ORB_RADIUS)
+            ) (then
                 call $score_inc
                 call $orb_update
                 call $snake_target_length_inc
@@ -127,16 +124,14 @@
 
             call $score_draw
 
-            call $snake_check_collision
-            (if (then
+            (if (call $snake_check_collision) (then
                 (global.set $game_state (global.get $GAME_STATE_END_SCREEN))
             ))
 
             return
         ))
 
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
-        (if (then
+        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN)) (then
             call $draw_end_screen_text
             return
         ))
@@ -148,8 +143,7 @@
         (local $key_down_mask i32)
 
         ;; Special handling of key presses while in the start and end screen
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN))
-        (if (then
+        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN)) (then
             (call $reset_game)
 
             (global.set $game_state (global.get $GAME_STATE_PLAYING))
@@ -157,10 +151,10 @@
             call $orb_update
             return
         ))
-        (i32.and
-            (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
-            (i32.eq (local.get $key) (global.get $CHAR_SPACE)))
-        (if (then
+        (if (i32.and
+                (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
+                (i32.eq (local.get $key) (global.get $CHAR_SPACE))
+        ) (then
             (call $reset_game)
 
             (global.set $game_state (global.get $GAME_STATE_PLAYING))
@@ -177,10 +171,10 @@
         ;;   4 (0x80-0x9F) for latin1 control codes -- we're using the for arrow keys
         (local.set $latin1_32_byte_range_idx
             (i32.shr_u (local.get $key) (i32.const 5)))
-        (i32.or
-            (i32.lt_u (local.get $latin1_32_byte_range_idx) (i32.const 2))
-            (i32.gt_u (local.get $latin1_32_byte_range_idx) (i32.const 4)))
-        (if (then
+        (if (i32.lt_u (local.get $latin1_32_byte_range_idx) (i32.const 2)) (then
+            return
+        ))
+        (if (i32.gt_u (local.get $latin1_32_byte_range_idx) (i32.const 4)) (then
             return
         ))
 
@@ -193,50 +187,44 @@
                 (i32.const 0x80)))
 
         ;; Determine the bit mask that signifies that a key is pressed down
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_UP))
-        (if (then
+        (if (i32.eq (local.get $arrow_key) (global.get $ARROW_UP)) (then
             (local.set $key_down_mask (global.get $KEY_IS_DOWN_UP))
         ))
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_LEFT))
-        (if (then
+        (if (i32.eq (local.get $arrow_key) (global.get $ARROW_LEFT)) (then
             (local.set $key_down_mask (global.get $KEY_IS_DOWN_LEFT))
         ))
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_DOWN))
-        (if (then
+        (if (i32.eq (local.get $arrow_key) (global.get $ARROW_DOWN)) (then
             (local.set $key_down_mask (global.get $KEY_IS_DOWN_DOWN))
         ))
-        (i32.eq (local.get $arrow_key) (global.get $ARROW_RIGHT))
-        (if (then
+        (if (i32.eq (local.get $arrow_key) (global.get $ARROW_RIGHT)) (then
             (local.set $key_down_mask (global.get $KEY_IS_DOWN_RIGHT))
         ))
 
         ;; Update the `$keys_are_down_mask` based on the bit mask for the key
-        (i32.eq (local.get $action) (global.get $KEY_ACTION_PRESS))
-        (if (then
+        (if (i32.eq (local.get $action) (global.get $KEY_ACTION_PRESS)) (then
             ;; If the action is a key press action the we can just directly
             ;; set the aggregate bit mask to that of the individual key
             (global.set $keys_are_down_mask (local.get $key_down_mask))
         ))
-        (i32.eq (local.get $action) (global.get $KEY_ACTION_DOWN))
-        (if (then
+        (if (i32.eq (local.get $action) (global.get $KEY_ACTION_DOWN)) (then
             ;; If the action is a key down action then we
             ;; a) set the "left" and "right" bits to 0 if left or right are down
             ;;    OR the "up" and "down" bits to 0 if up or down are down,
             ;;    to make sure that the opposite key's bit is set to 0,
             ;;    meaning that left will be registered even if right is down, etc.
-            (i32.and
-                (global.get $KEYS_ARE_DOWN_LEFT_RIGHT_MASK)
-                (local.get $key_down_mask))
-            (if (then
+            (if (i32.and
+                    (global.get $KEYS_ARE_DOWN_LEFT_RIGHT_MASK)
+                    (local.get $key_down_mask)
+            )(then
                 (global.set $keys_are_down_mask
                     (i32.and
                         (global.get $keys_are_down_mask)
                         (global.get $KEYS_ARE_DOWN_UP_DOWN_MASK)))
             ))
-            (i32.and
-                (global.get $KEYS_ARE_DOWN_UP_DOWN_MASK)
-                (local.get $key_down_mask))
-            (if (then
+            (if (i32.and
+                    (global.get $KEYS_ARE_DOWN_UP_DOWN_MASK)
+                    (local.get $key_down_mask)
+            ) (then
                 (global.set $keys_are_down_mask
                     (i32.and
                         (global.get $keys_are_down_mask)
@@ -248,8 +236,7 @@
                     (global.get $keys_are_down_mask)
                     (local.get $key_down_mask)))
         ))
-        (i32.eq (local.get $action) (global.get $KEY_ACTION_UP))
-        (if (then
+        (if (i32.eq (local.get $action) (global.get $KEY_ACTION_UP)) (then
             ;; If the action is a key up action then we set unset the key's
             ;; bit in the aggregate bit mask
             (global.set $keys_are_down_mask
@@ -262,18 +249,24 @@
 
         ;; Update the coordinates of the snake's heading unit vector, based on the
         ;; aggregate bit mask
-        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_UP))
-        (if (then
-            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_LEFT))
-            (if (then
+        (if (i32.and
+                (global.get $keys_are_down_mask)
+                (global.get $KEY_IS_DOWN_UP)
+        ) (then
+            (if (i32.and
+                    (global.get $KEY_IS_DOWN_LEFT)
+                    (global.get $keys_are_down_mask)
+            ) (then
                 (global.set $snake_unit_heading_x
                     (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
                 (global.set $snake_unit_heading_y
                     (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
                 return
             ))
-            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_RIGHT))
-            (if (then
+            (if (i32.and
+                    (global.get $KEY_IS_DOWN_RIGHT)
+                    (global.get $keys_are_down_mask)
+            ) (then
                 (global.set $snake_unit_heading_x
                     (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
                 (global.set $snake_unit_heading_y
@@ -284,18 +277,24 @@
             (global.set $snake_unit_heading_y (f32.const -1))
             return
         ))
-        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_DOWN))
-        (if (then
-            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_LEFT))
-            (if (then
+        (if (i32.and
+                (global.get $KEY_IS_DOWN_DOWN)
+                (global.get $keys_are_down_mask)
+        ) (then
+            (if (i32.and
+                    (global.get $KEY_IS_DOWN_LEFT)
+                    (global.get $keys_are_down_mask)
+            ) (then
                 (global.set $snake_unit_heading_x
                     (f32.mul (f32.const -1) (global.get $INVERSE_SQRT_2)))
                 (global.set $snake_unit_heading_y
                     (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
                 return
             ))
-            (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_RIGHT))
-            (if (then
+            (if (i32.and
+                    (global.get $KEY_IS_DOWN_RIGHT)
+                    (global.get $keys_are_down_mask)
+            ) (then
                 (global.set $snake_unit_heading_x
                     (f32.mul (f32.const  1) (global.get $INVERSE_SQRT_2)))
                 (global.set $snake_unit_heading_y
@@ -306,14 +305,18 @@
             (global.set $snake_unit_heading_y (f32.const  1))
             return
         ))
-        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_LEFT))
-        (if (then
+        (if (i32.and
+                (global.get $KEY_IS_DOWN_LEFT)
+                (global.get $keys_are_down_mask)
+        ) (then
             (global.set $snake_unit_heading_x (f32.const -1))
             (global.set $snake_unit_heading_y (f32.const  0))
             return
         ))
-        (i32.and (global.get $keys_are_down_mask) (global.get $KEY_IS_DOWN_RIGHT))
-        (if (then
+        (if (i32.and
+                (global.get $KEY_IS_DOWN_RIGHT)
+                (global.get $keys_are_down_mask)
+        ) (then
             (global.set $snake_unit_heading_x (f32.const  1))
             (global.set $snake_unit_heading_y (f32.const  0))
             return
@@ -341,16 +344,14 @@
                     (i32.const 2))
                 (memory.size)))
 
-        (i32.gt_s (local.get $pages_n) (i32.const 0))
-        (if (then
+        (if (i32.gt_s (local.get $pages_n) (i32.const 0)) (then
             ;; Grow the linear memory to fit the RGBA data
             (memory.grow (local.get $pages_n)) drop
         ))
 
         (call $clear_canvas)
 
-        (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING))
-        (if (then
+        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_PLAYING)) (then
             call $orb_draw
         ))
     )
@@ -504,16 +505,21 @@
             (param $cx f32) (param $cy f32)
             (param $r f32)
             (result i32)
-        (i32.and
-            (call $check_point_is_infront
-                (call $snake_buf_read_head_cx) (call $snake_buf_read_head_cy)
-                (local.get $cx) (local.get $cy)
-                (global.get $snake_unit_heading_x) (global.get $snake_unit_heading_y))
-            (call $check_circles_collide
-                (call $snake_buf_read_head_cx) (call $snake_buf_read_head_cy)
-                (global.get $SNAKE_RADIUS)
-                (local.get $cx) (local.get $cy)
-                (local.get $r)))
+        (if (i32.eq
+                (call $check_point_is_infront
+                    (call $snake_buf_read_head_cx) (call $snake_buf_read_head_cy)
+                    (local.get $cx) (local.get $cy)
+                    (global.get $snake_unit_heading_x) (global.get $snake_unit_heading_y))
+                (i32.const 0)
+        ) (then
+            (return (i32.const 0))
+        ))
+
+        (call $check_circles_collide
+            (call $snake_buf_read_head_cx) (call $snake_buf_read_head_cy)
+            (global.get $SNAKE_RADIUS)
+            (local.get $cx) (local.get $cy)
+            (local.get $r))
     )
 
     (func $check_circles_collide
@@ -523,7 +529,7 @@
         (local $delta_cx f32)
         (local $delta_cy f32)
         (local $sum_r f32)
-        
+
         (local.set $delta_cx (f32.abs (f32.sub (local.get $cx2) (local.get $cx1))))
         (local.set $delta_cy (f32.abs (f32.sub (local.get $cy2) (local.get $cy1))))
 
@@ -610,8 +616,7 @@
         ;; Over draw old orb with the background color if it existed,
         ;; removing the orb.
         ;; Non-existent orbs have coord values of -1
-        (f32.ne (local.get $old_orb_x) (f32.const -1))
-        (if (then
+        (if (f32.ne (local.get $old_orb_x) (f32.const -1)) (then
             (call $fill_circle_f32
                 (local.get $old_orb_x) (local.get $old_orb_y)
                 (global.get $ORB_RADIUS)
@@ -703,14 +708,12 @@
         (global.set $score_1s_digit
             (i32.add (global.get $score_1s_digit) (i32.const 1)))
 
-        (i32.eq (global.get $score_1s_digit) (i32.const 10))
-        (if (then
+        (if (i32.eq (global.get $score_1s_digit) (i32.const 10)) (then
             (global.set $score_1s_digit (i32.const 0))
             (global.set $score_10s_digit
                 (i32.add (global.get $score_10s_digit) (i32.const 1)))
 
-            (i32.eq (global.get $score_10s_digit) (i32.const 10))
-            (if (then
+            (if (i32.eq (global.get $score_10s_digit) (i32.const 10)) (then
                 (global.set $score_10s_digit (i32.const 0))
                 (global.set $score_100s_digit
                     (i32.add (global.get $score_100s_digit) (i32.const 1)))
@@ -1130,6 +1133,22 @@
             (i32.const 4))
     )
 
+    (func $set_pixel (param $x i32) (param $y i32) (param $color i32)
+        (i32.store 
+            (i32.add
+                (global.get $memory_region_canvas_bytes_offset)
+                (i32.mul
+                    (i32.add
+                        (i32.mul
+                            (i32.add
+                                (i32.sub (global.get $canvas_height) (local.get $y))
+                                (i32.const -1))
+                            (global.get $canvas_width))
+                        (local.get $x))
+                    (i32.const 4)))
+            (local.get $color))
+    )
+
     (func $fill_rect_i32
             (param $x     i32) (param $y      i32)
             (param $width i32) (param $height i32)
@@ -1147,59 +1166,41 @@
         (local.set $max_y (i32.add (local.get $y) (local.get $height)))
 
         ;; Return if rect is outside of canvas
-        (i32.lt_s (local.get $max_x) (i32.const 0))
-        (if (then return))
-        (i32.lt_s (local.get $max_y) (i32.const 0))
-        (if (then return))
-        (i32.ge_s (local.get $min_x) (global.get $canvas_width))
-        (if (then return))
-        (i32.ge_s (local.get $min_y) (global.get $canvas_height))
-        (if (then return))
+        (if (call $is_outside_canvas
+                (local.get $min_x) (local.get $min_y)
+                (local.get $max_x) (local.get $max_y)
+        )(then
+            return
+        ))
 
         ;; Clamp rect bounds inside of canvas
-        (i32.lt_s (local.get $min_x) (i32.const 0))
-        (if (then
+        (if (i32.lt_s (local.get $min_x) (i32.const 0)) (then
             (local.set $min_x (i32.const 0))
         ))
-        (i32.lt_s (local.get $min_y) (i32.const 0))
-        (if (then
+        (if (i32.lt_s (local.get $min_y) (i32.const 0)) (then
             (local.set $min_y (i32.const 0))
         ))
-        (i32.ge_s (local.get $max_x) (global.get $canvas_width))
-        (if (then
+        (if (i32.gt_s (local.get $max_x) (global.get $canvas_width)) (then
             (local.set $max_x (i32.sub (global.get $canvas_width) (i32.const 1)))
         ))
-        (i32.ge_s (local.get $max_y) (global.get $canvas_height))
-        (if (then
+        (if (i32.gt_s (local.get $max_y) (global.get $canvas_height)) (then
             (local.set $max_y (i32.sub (global.get $canvas_height) (i32.const 1)))
         ))
 
         (loop $y_lp
             (local.set $x (local.get $min_x))
-            (local.set $byte_address 
-                (i32.add
-                    (global.get $memory_region_canvas_bytes_offset)
-                    (i32.mul
-                        (i32.add
-                            (i32.mul
-                                (i32.sub (global.get $canvas_height) (local.get $y))
-                                (global.get $canvas_width))
-                            (local.get $x))
-                        (i32.const 4))))
             (loop $x_lp
-                (i32.store (local.get $byte_address) (local.get $color))
-                (local.set $byte_address
-                    (i32.add (local.get $byte_address) (i32.const 4)))
+                (call $set_pixel (local.get $x) (local.get $y) (local.get $color))
 
                 (local.set $x (i32.add (local.get $x) (i32.const 1)))
 
-                (i32.ne (local.get $x) (local.get $max_x))
+                (i32.lt_s (local.get $x) (local.get $max_x))
                 br_if $x_lp
             )
 
             (local.set $y (i32.add (local.get $y) (i32.const 1)))
 
-            (i32.ne (local.get $y) (local.get $max_y))
+            (i32.lt_s (local.get $y) (local.get $max_y))
             br_if $y_lp
         )
     )
@@ -1247,72 +1248,51 @@
         (local.set $max_y (i32.add (local.get $cy) (local.get $radius)))
 
         ;; Return if circle is outside of canvas
-        (i32.lt_s (local.get $max_x) (i32.const 0))
-        (if (then return))
-        (i32.lt_s (local.get $max_y) (i32.const 0))
-        (if (then return))
-        (i32.ge_s (local.get $min_x) (global.get $canvas_width))
-        (if (then return))
-        (i32.ge_s (local.get $min_y) (global.get $canvas_height))
-        (if (then return))
+        (if (call $is_outside_canvas
+                (local.get $min_x) (local.get $min_y)
+                (local.get $max_x) (local.get $max_y)
+        ) (then
+            return
+        ))
 
         ;; Clamp circle bounds inside of canvas
-        (i32.lt_s (local.get $min_x) (i32.const 0))
-        (if (then
+        (if (i32.lt_s (local.get $min_x) (i32.const 0)) (then
             (local.set $min_x (i32.const 0))
         ))
-        (i32.lt_s (local.get $min_y) (i32.const 0))
-        (if (then
+        (if (i32.lt_s (local.get $min_y) (i32.const 0)) (then
             (local.set $min_y (i32.const 0))
         ))
-        (i32.ge_s (local.get $max_x) (global.get $canvas_width))
-        (if (then
+        (if (i32.gt_s (local.get $max_x) (global.get $canvas_width)) (then
             (local.set $max_x (i32.sub (global.get $canvas_width) (i32.const 1)))
         ))
-        (i32.ge_s (local.get $max_y) (global.get $canvas_height))
-        (if (then
+        (if (i32.gt_s (local.get $max_y) (global.get $canvas_height)) (then
             (local.set $max_y (i32.sub (global.get $canvas_height) (i32.const 1)))
         ))
 
         (local.set $y (local.get $min_y))
         (loop $y_lp
             (local.set $x (local.get $min_x))
-            (local.set $byte_address 
-                (i32.add
-                    (global.get $memory_region_canvas_bytes_offset)
-                    (i32.mul
-                        (i32.add
-                            (i32.mul
-                                (i32.sub (global.get $canvas_height) (local.get $y))
-                                (global.get $canvas_width))
-                            (local.get $x))
-                        (i32.const 4))))
             (loop $x_lp
                 ;; Only fill pixel if [(x - cx)^2 + (y - cy)^2] <= radius^2
                 (local.set $dx (i32.sub (local.get $x) (local.get $cx)))
                 (local.set $dy (i32.sub (local.get $y) (local.get $cy)))
-                (i32.le_s
-                    (i32.add
-                        (i32.mul (local.get $dx) (local.get $dx))
-                        (i32.mul (local.get $dy) (local.get $dy))
-                    )
-                    (i32.mul (local.get $radius) (local.get $radius))
-                )
-                (if (then
-                    (i32.store (local.get $byte_address) (local.get $color))
+                (if (i32.lt_s
+                        (i32.add
+                            (i32.mul (local.get $dx) (local.get $dx))
+                            (i32.mul (local.get $dy) (local.get $dy)))
+                        (i32.mul (local.get $radius) (local.get $radius))
+                ) (then
+                    (call $set_pixel (local.get $x) (local.get $y) (local.get $color))
                 ))
-
-                (local.set $byte_address
-                    (i32.add (local.get $byte_address) (i32.const 4)))
 
                 (local.set $x (i32.add (local.get $x) (i32.const 1)))
 
-                (i32.ne (local.get $x) (local.get $max_x))
+                (i32.lt_s (local.get $x) (local.get $max_x))
                 br_if $x_lp
             )
             (local.set $y (i32.add (local.get $y) (i32.const 1)))
 
-            (i32.ne (local.get $y) (local.get $max_y))
+            (i32.lt_s (local.get $y) (local.get $max_y))
             br_if $y_lp
         )
     )
@@ -1341,6 +1321,26 @@
             (i32.const 0) (i32.const 0)
             (global.get $canvas_width) (global.get $canvas_height)
             (global.get $BACKGROUND_COLOR))
+    )
+
+    (func $is_outside_canvas
+            (param $min_x i32) (param $min_y i32)
+            (param $max_x i32) (param $max_y i32)
+            (result i32)
+        (if (i32.lt_s (local.get $max_x) (i32.const 0)) (then
+            (return (i32.const 1))
+        ))
+        (if (i32.lt_s (local.get $max_y) (i32.const 0)) (then
+            (return (i32.const 1))
+        ))
+        (if (i32.ge_s (local.get $min_x) (global.get $canvas_width)) (then
+            (return (i32.const 1))
+        ))
+        (if (i32.ge_s (local.get $min_y) (global.get $canvas_height)) (then
+            (return (i32.const 1))
+        ))
+
+        (return (i32.const 0))
     )
 
 
@@ -1408,8 +1408,7 @@
         (local.set $row (f32.const 0))
         (local.set $col (f32.const 0))
         (loop $lp
-            (i32.wrap_i64 (i64.and (local.get $font_embedding) (i64.const 1)))
-            if
+            (if (i32.wrap_i64 (i64.and (local.get $font_embedding) (i64.const 1))) (then
                 (call $fill_rect_f32
                     (f32.add
                         (global.get $text_char_x)
@@ -1424,19 +1423,18 @@
                     (local.get $scaled_pixel_size)
                     (local.get $scaled_pixel_size)
                     (local.get $color))
-            end
+            ))
 
             (local.set $font_embedding
                 (i64.shr_u (local.get $font_embedding)
                 (i64.const 1)))
 
-            (f32.lt (local.get $col) (f32.const 6.5))
-            if
+            (if (f32.lt (local.get $col) (f32.const 6.5)) (then
                 (local.set $col (f32.add (local.get $col) (f32.const 1)))
-            else
+            ) (else
                 (local.set $row (f32.add (local.get $row) (f32.const 1)))
                 (local.set $col (f32.const 0))
-            end
+            ))
 
             (f32.lt (local.get $row) (f32.const 7.5))
             br_if $lp
@@ -1444,55 +1442,35 @@
     )
 
     (func $text_draw_digit (param $digit i32)
-        (i32.eq (local.get $digit) (i32.const 0))
-        (if (then
-            (call $text_draw_char (global.get $FONT_0))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 0)) (then
+            (return (call $text_draw_char (global.get $FONT_0)))
         ))
-        (i32.eq (local.get $digit) (i32.const 1))
-        (if (then
-            (call $text_draw_char (global.get $FONT_1))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 1)) (then
+            (return (call $text_draw_char (global.get $FONT_1)))
         ))
-        (i32.eq (local.get $digit) (i32.const 2))
-        (if (then
-            (call $text_draw_char (global.get $FONT_2))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 2)) (then
+            (return (call $text_draw_char (global.get $FONT_2)))
         ))
-        (i32.eq (local.get $digit) (i32.const 3))
-        (if (then
-            (call $text_draw_char (global.get $FONT_3))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 3)) (then
+            (return (call $text_draw_char (global.get $FONT_3)))
         ))
-        (i32.eq (local.get $digit) (i32.const 4))
-        (if (then
-            (call $text_draw_char (global.get $FONT_4))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 4)) (then
+            (return (call $text_draw_char (global.get $FONT_4)))
         ))
-        (i32.eq (local.get $digit) (i32.const 5))
-        (if (then
-            (call $text_draw_char (global.get $FONT_5))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 5)) (then
+            (return (call $text_draw_char (global.get $FONT_5)))
         ))
-        (i32.eq (local.get $digit) (i32.const 6))
-        (if (then
-            (call $text_draw_char (global.get $FONT_6))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 6)) (then
+            (return (call $text_draw_char (global.get $FONT_6)))
         ))
-        (i32.eq (local.get $digit) (i32.const 7))
-        (if (then
-            (call $text_draw_char (global.get $FONT_7))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 7)) (then
+            (return (call $text_draw_char (global.get $FONT_7)))
         ))
-        (i32.eq (local.get $digit) (i32.const 8))
-        (if (then
-            (call $text_draw_char (global.get $FONT_8))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 8)) (then
+            (return (call $text_draw_char (global.get $FONT_8)))
         ))
-        (i32.eq (local.get $digit) (i32.const 9))
-        (if (then
-            (call $text_draw_char (global.get $FONT_9))
-            return
+        (if (i32.eq (local.get $digit) (i32.const 9)) (then
+            (return (call $text_draw_char (global.get $FONT_9)))
         ))
     )
 
