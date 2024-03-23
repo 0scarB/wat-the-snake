@@ -771,119 +771,122 @@ static void init_globals(w2c_snake* instance) {
   instance->w2c_g28 = 12u;
   instance->w2c_g29 = 300;
   instance->w2c_g30 = 12;
-  instance->w2c_g31 = 8;
-  instance->w2c_g32 = 0u;
-  instance->w2c_g33 = 1u;
-  instance->w2c_g34 = 2u;
-  instance->w2c_g35 = 3u;
-  instance->w2c_g36 = 4279360785u;
-  instance->w2c_g37 = 4279334673u;
-  instance->w2c_g38 = 4294901998u;
-  instance->w2c_g39 = 4294967295u;
-  instance->w2c_g40 = 4294945535u;
-  instance->w2c_g41 = 4278190080u;
-  instance->w2c_g42 = 0.707106769;
-  instance->w2c_g43 = 0u;
+  instance->w2c_g31 = 1;
+  instance->w2c_g32 = 8;
+  instance->w2c_g33 = 0u;
+  instance->w2c_g34 = 1u;
+  instance->w2c_g35 = 2u;
+  instance->w2c_g36 = 3u;
+  instance->w2c_g37 = 4279360785u;
+  instance->w2c_g38 = 4279334673u;
+  instance->w2c_g39 = 4294901998u;
+  instance->w2c_g40 = 4294967295u;
+  instance->w2c_g41 = 4294945535u;
+  instance->w2c_g42 = 4278190080u;
+  instance->w2c_g43 = 0.707106769;
   instance->w2c_g44 = 0u;
   instance->w2c_g45 = 0u;
   instance->w2c_g46 = -1;
   instance->w2c_g47 = -1;
   instance->w2c_g48 = 0u;
-  instance->w2c_g49 = 1;
-  instance->w2c_g50 = 0;
-  instance->w2c_g51 = 0;
-  instance->w2c_g52 = -1;
-  instance->w2c_g53 = 0u;
-  instance->w2c_g54 = 0u;
-  instance->w2c_g55 = 0u;
-  instance->w2c_g56 = -1;
-  instance->w2c_g57 = -1;
-  instance->w2c_g58 = 14971189u;
-  instance->w2c_g59 = 7919u;
-  instance->w2c_g60 = 0u;
-  instance->w2c_g61 = 12u;
-  instance->w2c_g62 = 4294967295u;
-  instance->w2c_g63 = 4294967295u;
-  instance->w2c_g64 = 4294967295u;
-  instance->w2c_g65 = 0;
-  instance->w2c_g66 = 0;
-  instance->w2c_g67 = 0;
-  instance->w2c_g68 = 0u;
-  instance->w2c_g69 = 32u;
-  instance->w2c_g70 = 48u;
-  instance->w2c_g71 = 49u;
-  instance->w2c_g72 = 50u;
-  instance->w2c_g73 = 51u;
-  instance->w2c_g74 = 52u;
-  instance->w2c_g75 = 53u;
-  instance->w2c_g76 = 54u;
-  instance->w2c_g77 = 55u;
-  instance->w2c_g78 = 56u;
-  instance->w2c_g79 = 57u;
-  instance->w2c_g80 = 58u;
-  instance->w2c_g81 = 65u;
-  instance->w2c_g82 = 68u;
-  instance->w2c_g83 = 83u;
-  instance->w2c_g84 = 87u;
-  instance->w2c_g85 = 97u;
-  instance->w2c_g86 = 98u;
-  instance->w2c_g87 = 99u;
-  instance->w2c_g88 = 100u;
-  instance->w2c_g89 = 101u;
-  instance->w2c_g90 = 102u;
-  instance->w2c_g91 = 103u;
-  instance->w2c_g92 = 104u;
-  instance->w2c_g93 = 105u;
-  instance->w2c_g94 = 106u;
-  instance->w2c_g95 = 107u;
-  instance->w2c_g96 = 108u;
-  instance->w2c_g97 = 109u;
-  instance->w2c_g98 = 110u;
-  instance->w2c_g99 = 111u;
-  instance->w2c_g100 = 112u;
-  instance->w2c_g101 = 113u;
-  instance->w2c_g102 = 114u;
-  instance->w2c_g103 = 115u;
-  instance->w2c_g104 = 116u;
-  instance->w2c_g105 = 117u;
-  instance->w2c_g106 = 118u;
-  instance->w2c_g107 = 119u;
-  instance->w2c_g108 = 120u;
-  instance->w2c_g109 = 121u;
-  instance->w2c_g110 = 122u;
-  instance->w2c_g111 = 0ull;
-  instance->w2c_g112 = 4342110275762273280ull;
-  instance->w2c_g113 = 4039746526926868480ull;
-  instance->w2c_g114 = 9079886045385997312ull;
-  instance->w2c_g115 = 4342103601079008256ull;
-  instance->w2c_g116 = 2314988902226599936ull;
-  instance->w2c_g117 = 4342103635400998400ull;
-  instance->w2c_g118 = 4342105824827815936ull;
-  instance->w2c_g119 = 289365141412150784ull;
-  instance->w2c_g120 = 4342105817315687424ull;
-  instance->w2c_g121 = 2026690734748482560ull;
-  instance->w2c_g122 = 4774451665011096576ull;
-  instance->w2c_g123 = 4486221013981478400ull;
-  instance->w2c_g124 = 4342035198389664768ull;
-  instance->w2c_g125 = 9079822126638333440ull;
-  instance->w2c_g126 = 144680465935269376ull;
-  instance->w2c_g127 = 4342106048170179584ull;
-  instance->w2c_g128 = 4774451665011098112ull;
-  instance->w2c_g129 = 2019873263463177216ull;
-  instance->w2c_g130 = 4765391207354483200ull;
-  instance->w2c_g131 = 9079822006379217408ull;
-  instance->w2c_g132 = 4774451407718072832ull;
-  instance->w2c_g133 = 4774486660539105792ull;
-  instance->w2c_g134 = 4342105843085491200ull;
-  instance->w2c_g135 = 144680604452142592ull;
-  instance->w2c_g136 = 4765391414320315904ull;
-  instance->w2c_g137 = 4342103617214495744ull;
-  instance->w2c_g138 = 1157442765409287680ull;
-  instance->w2c_g139 = 4342105843085492736ull;
-  instance->w2c_g140 = 145815110936576512ull;
-  instance->w2c_g141 = 1157442765815316992ull;
-  instance->w2c_g142 = 144117395722732032ull;
-  instance->w2c_g143 = 0u;
+  instance->w2c_g49 = -1;
+  instance->w2c_g50 = -1;
+  instance->w2c_g51 = 0u;
+  instance->w2c_g52 = 1;
+  instance->w2c_g53 = 0;
+  instance->w2c_g54 = 0;
+  instance->w2c_g55 = -1;
+  instance->w2c_g56 = 0u;
+  instance->w2c_g57 = 0u;
+  instance->w2c_g58 = 0u;
+  instance->w2c_g59 = -1;
+  instance->w2c_g60 = -1;
+  instance->w2c_g61 = 14971189u;
+  instance->w2c_g62 = 7919u;
+  instance->w2c_g63 = 0u;
+  instance->w2c_g64 = 12u;
+  instance->w2c_g65 = 4294967295u;
+  instance->w2c_g66 = 4294967295u;
+  instance->w2c_g67 = 4294967295u;
+  instance->w2c_g68 = 0;
+  instance->w2c_g69 = 0;
+  instance->w2c_g70 = 0;
+  instance->w2c_g71 = 0u;
+  instance->w2c_g72 = 32u;
+  instance->w2c_g73 = 48u;
+  instance->w2c_g74 = 49u;
+  instance->w2c_g75 = 50u;
+  instance->w2c_g76 = 51u;
+  instance->w2c_g77 = 52u;
+  instance->w2c_g78 = 53u;
+  instance->w2c_g79 = 54u;
+  instance->w2c_g80 = 55u;
+  instance->w2c_g81 = 56u;
+  instance->w2c_g82 = 57u;
+  instance->w2c_g83 = 58u;
+  instance->w2c_g84 = 65u;
+  instance->w2c_g85 = 68u;
+  instance->w2c_g86 = 83u;
+  instance->w2c_g87 = 87u;
+  instance->w2c_g88 = 97u;
+  instance->w2c_g89 = 98u;
+  instance->w2c_g90 = 99u;
+  instance->w2c_g91 = 100u;
+  instance->w2c_g92 = 101u;
+  instance->w2c_g93 = 102u;
+  instance->w2c_g94 = 103u;
+  instance->w2c_g95 = 104u;
+  instance->w2c_g96 = 105u;
+  instance->w2c_g97 = 106u;
+  instance->w2c_g98 = 107u;
+  instance->w2c_g99 = 108u;
+  instance->w2c_g100 = 109u;
+  instance->w2c_g101 = 110u;
+  instance->w2c_g102 = 111u;
+  instance->w2c_g103 = 112u;
+  instance->w2c_g104 = 113u;
+  instance->w2c_g105 = 114u;
+  instance->w2c_g106 = 115u;
+  instance->w2c_g107 = 116u;
+  instance->w2c_g108 = 117u;
+  instance->w2c_g109 = 118u;
+  instance->w2c_g110 = 119u;
+  instance->w2c_g111 = 120u;
+  instance->w2c_g112 = 121u;
+  instance->w2c_g113 = 122u;
+  instance->w2c_g114 = 0ull;
+  instance->w2c_g115 = 4342110275762273280ull;
+  instance->w2c_g116 = 4039746526926868480ull;
+  instance->w2c_g117 = 9079886045385997312ull;
+  instance->w2c_g118 = 4342103601079008256ull;
+  instance->w2c_g119 = 2314988902226599936ull;
+  instance->w2c_g120 = 4342103635400998400ull;
+  instance->w2c_g121 = 4342105824827815936ull;
+  instance->w2c_g122 = 289365141412150784ull;
+  instance->w2c_g123 = 4342105817315687424ull;
+  instance->w2c_g124 = 2026690734748482560ull;
+  instance->w2c_g125 = 4774451665011096576ull;
+  instance->w2c_g126 = 4486221013981478400ull;
+  instance->w2c_g127 = 4342035198389664768ull;
+  instance->w2c_g128 = 9079822126638333440ull;
+  instance->w2c_g129 = 144680465935269376ull;
+  instance->w2c_g130 = 4342106048170179584ull;
+  instance->w2c_g131 = 4774451665011098112ull;
+  instance->w2c_g132 = 2019873263463177216ull;
+  instance->w2c_g133 = 4765391207354483200ull;
+  instance->w2c_g134 = 9079822006379217408ull;
+  instance->w2c_g135 = 4774451407718072832ull;
+  instance->w2c_g136 = 4774486660539105792ull;
+  instance->w2c_g137 = 4342105843085491200ull;
+  instance->w2c_g138 = 144680604452142592ull;
+  instance->w2c_g139 = 4765391414320315904ull;
+  instance->w2c_g140 = 4342103617214495744ull;
+  instance->w2c_g141 = 1157442765409287680ull;
+  instance->w2c_g142 = 4342105843085492736ull;
+  instance->w2c_g143 = 145815110936576512ull;
+  instance->w2c_g144 = 1157442765815316992ull;
+  instance->w2c_g145 = 144117395722732032ull;
+  instance->w2c_g146 = 0u;
 }
 
 static void init_memories(w2c_snake* instance) {
@@ -1220,50 +1223,51 @@ void w2c_snake_update_0(w2c_snake* instance, f32 var_p0) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   f32 var_f0, var_f1, var_f2;
-  var_i0 = instance->w2c_g45;
-  var_i1 = instance->w2c_g32;
+  var_i0 = instance->w2c_g48;
+  var_i1 = instance->w2c_g33;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     w2c_snake_f5(instance);
-    var_i0 = instance->w2c_g33;
-    instance->w2c_g45 = var_i0;
+    var_i0 = instance->w2c_g34;
+    instance->w2c_g48 = var_i0;
     goto var_Bfunc;
   }
-  var_f0 = instance->w2c_g46;
-  instance->w2c_g47 = var_f0;
+  var_f0 = instance->w2c_g49;
+  instance->w2c_g50 = var_f0;
   var_f0 = var_p0;
-  instance->w2c_g46 = var_f0;
-  var_i0 = instance->w2c_g45;
-  var_i1 = instance->w2c_g33;
+  instance->w2c_g49 = var_f0;
+  var_i0 = instance->w2c_g48;
+  var_i1 = instance->w2c_g34;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     w2c_snake_f21(instance);
     goto var_Bfunc;
   }
-  var_i0 = instance->w2c_g45;
-  var_i1 = instance->w2c_g34;
+  var_i0 = instance->w2c_g48;
+  var_i1 = instance->w2c_g35;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     w2c_snake_f6(instance);
     var_f0 = w2c_snake_f13(instance);
     var_f1 = w2c_snake_f14(instance);
-    var_f2 = instance->w2c_g31;
+    var_f2 = instance->w2c_g32;
     var_i0 = w2c_snake_f8(instance, var_f0, var_f1, var_f2);
     if (var_i0) {
       w2c_snake_f18(instance);
       w2c_snake_f12(instance);
       w2c_snake_f11(instance);
+      w2c_snake_f6(instance);
     }
     w2c_snake_f19(instance);
     var_i0 = w2c_snake_f7(instance);
     if (var_i0) {
-      var_i0 = instance->w2c_g35;
-      instance->w2c_g45 = var_i0;
+      var_i0 = instance->w2c_g36;
+      instance->w2c_g48 = var_i0;
     }
     goto var_Bfunc;
   }
-  var_i0 = instance->w2c_g45;
-  var_i1 = instance->w2c_g35;
+  var_i0 = instance->w2c_g48;
+  var_i1 = instance->w2c_g36;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     w2c_snake_f22(instance);
@@ -1278,11 +1282,11 @@ void w2c_snake_input_key_0(w2c_snake* instance, u32 var_p0, u32 var_p1) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1, var_i2, var_i3;
   f32 var_f0, var_f1;
-  var_i0 = instance->w2c_g33;
-  var_i1 = instance->w2c_g45;
+  var_i0 = instance->w2c_g34;
+  var_i1 = instance->w2c_g48;
   var_i0 = var_i0 == var_i1;
-  var_i1 = instance->w2c_g35;
-  var_i2 = instance->w2c_g45;
+  var_i1 = instance->w2c_g36;
+  var_i2 = instance->w2c_g48;
   var_i1 = var_i1 == var_i2;
   var_i2 = var_p1;
   var_i3 = instance->w2c_KEY_SPACE;
@@ -1291,8 +1295,8 @@ void w2c_snake_input_key_0(w2c_snake* instance, u32 var_p0, u32 var_p1) {
   var_i0 |= var_i1;
   if (var_i0) {
     w2c_snake_f5(instance);
-    var_i0 = instance->w2c_g34;
-    instance->w2c_g45 = var_i0;
+    var_i0 = instance->w2c_g35;
+    instance->w2c_g48 = var_i0;
     w2c_snake_f12(instance);
   }
   var_i0 = var_p1;
@@ -1350,7 +1354,7 @@ void w2c_snake_input_key_0(w2c_snake* instance, u32 var_p0, u32 var_p1) {
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     var_i0 = var_l4;
-    instance->w2c_g48 = var_i0;
+    instance->w2c_g51 = var_i0;
   }
   var_i0 = var_p0;
   var_i1 = instance->w2c_INPUT_START;
@@ -1360,130 +1364,130 @@ void w2c_snake_input_key_0(w2c_snake* instance, u32 var_p0, u32 var_p1) {
     var_i1 = var_l4;
     var_i0 &= var_i1;
     if (var_i0) {
-      var_i0 = instance->w2c_g48;
+      var_i0 = instance->w2c_g51;
       var_i1 = instance->w2c_g28;
       var_i0 &= var_i1;
-      instance->w2c_g48 = var_i0;
+      instance->w2c_g51 = var_i0;
     }
     var_i0 = instance->w2c_g28;
     var_i1 = var_l4;
     var_i0 &= var_i1;
     if (var_i0) {
-      var_i0 = instance->w2c_g48;
+      var_i0 = instance->w2c_g51;
       var_i1 = instance->w2c_g27;
       var_i0 &= var_i1;
-      instance->w2c_g48 = var_i0;
+      instance->w2c_g51 = var_i0;
     }
-    var_i0 = instance->w2c_g48;
+    var_i0 = instance->w2c_g51;
     var_i1 = var_l4;
     var_i0 |= var_i1;
-    instance->w2c_g48 = var_i0;
+    instance->w2c_g51 = var_i0;
   }
   var_i0 = var_p0;
   var_i1 = instance->w2c_INPUT_END;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_i0 = instance->w2c_g48;
+    var_i0 = instance->w2c_g51;
     var_i1 = 15u;
     var_i2 = var_l4;
     var_i1 ^= var_i2;
     var_i0 &= var_i1;
-    instance->w2c_g48 = var_i0;
+    instance->w2c_g51 = var_i0;
   }
-  var_i0 = instance->w2c_g48;
+  var_i0 = instance->w2c_g51;
   var_i1 = instance->w2c_g25;
   var_i0 &= var_i1;
   if (var_i0) {
     var_i0 = instance->w2c_g24;
-    var_i1 = instance->w2c_g48;
+    var_i1 = instance->w2c_g51;
     var_i0 &= var_i1;
     if (var_i0) {
       var_f0 = -1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g49 = var_f0;
+      instance->w2c_g52 = var_f0;
       var_f0 = -1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g50 = var_f0;
+      instance->w2c_g53 = var_f0;
       goto var_Bfunc;
     }
     var_i0 = instance->w2c_g23;
-    var_i1 = instance->w2c_g48;
+    var_i1 = instance->w2c_g51;
     var_i0 &= var_i1;
     if (var_i0) {
       var_f0 = 1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g49 = var_f0;
+      instance->w2c_g52 = var_f0;
       var_f0 = -1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g50 = var_f0;
+      instance->w2c_g53 = var_f0;
       goto var_Bfunc;
     }
     var_f0 = 0;
-    instance->w2c_g49 = var_f0;
+    instance->w2c_g52 = var_f0;
     var_f0 = -1;
-    instance->w2c_g50 = var_f0;
+    instance->w2c_g53 = var_f0;
     goto var_Bfunc;
   }
   var_i0 = instance->w2c_g26;
-  var_i1 = instance->w2c_g48;
+  var_i1 = instance->w2c_g51;
   var_i0 &= var_i1;
   if (var_i0) {
     var_i0 = instance->w2c_g24;
-    var_i1 = instance->w2c_g48;
+    var_i1 = instance->w2c_g51;
     var_i0 &= var_i1;
     if (var_i0) {
       var_f0 = -1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g49 = var_f0;
+      instance->w2c_g52 = var_f0;
       var_f0 = 1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g50 = var_f0;
+      instance->w2c_g53 = var_f0;
       goto var_Bfunc;
     }
     var_i0 = instance->w2c_g23;
-    var_i1 = instance->w2c_g48;
+    var_i1 = instance->w2c_g51;
     var_i0 &= var_i1;
     if (var_i0) {
       var_f0 = 1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g49 = var_f0;
+      instance->w2c_g52 = var_f0;
       var_f0 = 1;
-      var_f1 = instance->w2c_g42;
+      var_f1 = instance->w2c_g43;
       var_f0 *= var_f1;
-      instance->w2c_g50 = var_f0;
+      instance->w2c_g53 = var_f0;
       goto var_Bfunc;
     }
     var_f0 = 0;
-    instance->w2c_g49 = var_f0;
+    instance->w2c_g52 = var_f0;
     var_f0 = 1;
-    instance->w2c_g50 = var_f0;
+    instance->w2c_g53 = var_f0;
     goto var_Bfunc;
   }
   var_i0 = instance->w2c_g24;
-  var_i1 = instance->w2c_g48;
+  var_i1 = instance->w2c_g51;
   var_i0 &= var_i1;
   if (var_i0) {
     var_f0 = -1;
-    instance->w2c_g49 = var_f0;
+    instance->w2c_g52 = var_f0;
     var_f0 = 0;
-    instance->w2c_g50 = var_f0;
+    instance->w2c_g53 = var_f0;
     goto var_Bfunc;
   }
   var_i0 = instance->w2c_g23;
-  var_i1 = instance->w2c_g48;
+  var_i1 = instance->w2c_g51;
   var_i0 &= var_i1;
   if (var_i0) {
     var_f0 = 1;
-    instance->w2c_g49 = var_f0;
+    instance->w2c_g52 = var_f0;
     var_f0 = 0;
-    instance->w2c_g50 = var_f0;
+    instance->w2c_g53 = var_f0;
     goto var_Bfunc;
   }
   var_Bfunc:;
@@ -1498,18 +1502,18 @@ void w2c_snake_input_touch_0(w2c_snake* instance, u32 var_p0, f32 var_p1, f32 va
   var_i0 = instance->w2c_INPUT_START;
   var_i1 = var_p0;
   var_i0 = var_i0 == var_i1;
-  var_i1 = instance->w2c_g33;
-  var_i2 = instance->w2c_g45;
+  var_i1 = instance->w2c_g34;
+  var_i2 = instance->w2c_g48;
   var_i1 = var_i1 == var_i2;
-  var_i2 = instance->w2c_g35;
-  var_i3 = instance->w2c_g45;
+  var_i2 = instance->w2c_g36;
+  var_i3 = instance->w2c_g48;
   var_i2 = var_i2 == var_i3;
   var_i1 |= var_i2;
   var_i0 &= var_i1;
   if (var_i0) {
     w2c_snake_f5(instance);
-    var_i0 = instance->w2c_g34;
-    instance->w2c_g45 = var_i0;
+    var_i0 = instance->w2c_g35;
+    instance->w2c_g48 = var_i0;
     w2c_snake_f12(instance);
     goto var_Bfunc;
   }
@@ -1535,20 +1539,20 @@ void w2c_snake_input_touch_0(w2c_snake* instance, u32 var_p0, f32 var_p1, f32 va
     var_f0 = var_l3;
     var_f1 = var_l7;
     var_f0 /= var_f1;
-    instance->w2c_g49 = var_f0;
+    instance->w2c_g52 = var_f0;
     var_f0 = var_l4;
     var_f1 = var_l7;
     var_f0 /= var_f1;
-    instance->w2c_g50 = var_f0;
+    instance->w2c_g53 = var_f0;
     var_f0 = var_l7;
     var_f1 = 0.99000001;
     var_f0 *= var_f1;
     var_l7 = var_f0;
-    var_f0 = instance->w2c_g49;
-    var_f1 = instance->w2c_g49;
+    var_f0 = instance->w2c_g52;
+    var_f1 = instance->w2c_g52;
     var_f0 *= var_f1;
-    var_f1 = instance->w2c_g50;
-    var_f2 = instance->w2c_g50;
+    var_f1 = instance->w2c_g53;
+    var_f2 = instance->w2c_g53;
     var_f1 *= var_f2;
     var_f0 += var_f1;
     var_f1 = 1;
@@ -1562,10 +1566,17 @@ void w2c_snake_resize_0(w2c_snake* instance, u32 var_p0, u32 var_p1) {
   u32 var_l2 = 0;
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
+  f32 var_f0;
   var_i0 = var_p0;
-  instance->w2c_g43 = var_i0;
-  var_i0 = var_p1;
   instance->w2c_g44 = var_i0;
+  var_i0 = var_p1;
+  instance->w2c_g45 = var_i0;
+  var_i0 = var_p0;
+  var_f0 = (f32)(s32)(var_i0);
+  instance->w2c_g46 = var_f0;
+  var_i0 = var_p1;
+  var_f0 = (f32)(s32)(var_i0);
+  instance->w2c_g47 = var_f0;
   var_i0 = var_p0;
   var_i1 = var_p1;
   var_i0 *= var_i1;
@@ -1588,8 +1599,8 @@ void w2c_snake_resize_0(w2c_snake* instance, u32 var_p0, u32 var_p1) {
     var_i0 = wasm_rt_grow_memory(&instance->w2c_memory, var_i0);
   }
   w2c_snake_f51(instance);
-  var_i0 = instance->w2c_g45;
-  var_i1 = instance->w2c_g34;
+  var_i0 = instance->w2c_g48;
+  var_i1 = instance->w2c_g35;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     w2c_snake_f15(instance);
@@ -1601,114 +1612,175 @@ void w2c_snake_f5(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   f32 var_f0, var_f1, var_f2;
-  var_i0 = instance->w2c_g43;
-  var_i1 = instance->w2c_g44;
+  var_i0 = instance->w2c_g44;
+  var_i1 = instance->w2c_g45;
   w2c_snake_resize_0(instance, var_i0, var_i1);
   w2c_snake_f23(instance);
   var_f0 = 0;
-  instance->w2c_g51 = var_f0;
+  instance->w2c_g54 = var_f0;
   var_f0 = 0;
-  instance->w2c_g52 = var_f0;
+  instance->w2c_g55 = var_f0;
   w2c_snake_f11(instance);
-  var_i0 = instance->w2c_g43;
+  var_i0 = instance->w2c_g44;
   var_f0 = (f32)(s32)(var_i0);
   var_f1 = 2;
   var_f0 /= var_f1;
-  var_i1 = instance->w2c_g44;
+  var_f0 = wasm_floorf(var_f0);
+  var_f1 = 0.5;
+  var_f0 += var_f1;
+  var_i1 = instance->w2c_g45;
   var_f1 = (f32)(s32)(var_i1);
   var_f2 = 2;
   var_f1 /= var_f2;
+  var_f1 = wasm_floorf(var_f1);
+  var_f2 = 0.5;
+  var_f1 += var_f2;
   var_f2 = 0;
   w2c_snake_f27(instance, var_f0, var_f1, var_f2);
   var_f0 = 1;
-  instance->w2c_g49 = var_f0;
+  instance->w2c_g52 = var_f0;
   var_f0 = 0;
-  instance->w2c_g50 = var_f0;
+  instance->w2c_g53 = var_f0;
   var_i0 = 0u;
-  instance->w2c_g53 = var_i0;
+  instance->w2c_g56 = var_i0;
   var_i0 = 0u;
-  instance->w2c_g54 = var_i0;
+  instance->w2c_g57 = var_i0;
   var_i0 = 0u;
-  instance->w2c_g55 = var_i0;
+  instance->w2c_g58 = var_i0;
   var_f0 = -1;
-  instance->w2c_g56 = var_f0;
+  instance->w2c_g59 = var_f0;
   var_f0 = -1;
-  instance->w2c_g57 = var_f0;
+  instance->w2c_g60 = var_f0;
   var_i0 = 0u;
   w2c_snake_f16(instance, var_i0);
   FUNC_EPILOGUE;
 }
 
 void w2c_snake_f6(w2c_snake* instance) {
-  f32 var_l0 = 0, var_l1 = 0, var_l2 = 0;
+  f32 var_l0 = 0, var_l1 = 0, var_l2 = 0, var_l3 = 0, var_l4 = 0, var_l5 = 0, var_l6 = 0, var_l7 = 0, 
+      var_l8 = 0;
   FUNC_PROLOGUE;
-  u32 var_i0, var_i1, var_i3;
-  f32 var_f0, var_f1, var_f2;
+  u32 var_i0, var_i3;
+  f32 var_f0, var_f1, var_f2, var_f3;
+  var_f0 = w2c_snake_f39(instance);
+  var_l1 = var_f0;
+  var_f0 = w2c_snake_f40(instance);
+  var_l2 = var_f0;
   var_f0 = instance->w2c_g29;
-  var_f1 = instance->w2c_g46;
-  var_f2 = instance->w2c_g47;
+  var_f1 = instance->w2c_g49;
+  var_f2 = instance->w2c_g50;
   var_f1 -= var_f2;
   var_f2 = 0.00100000005;
   var_f1 *= var_f2;
   var_f0 *= var_f1;
   var_l0 = var_f0;
-  var_f0 = w2c_snake_f39(instance);
-  var_f1 = instance->w2c_g49;
+  var_f0 = var_l1;
+  var_f1 = instance->w2c_g52;
   var_f2 = var_l0;
   var_f1 *= var_f2;
   var_f0 += var_f1;
-  var_i1 = instance->w2c_g43;
-  var_f1 = (f32)(s32)(var_i1);
-  var_f0 = w2c_snake_f60(instance, var_f0, var_f1);
-  var_l1 = var_f0;
-  var_f0 = w2c_snake_f40(instance);
-  var_f1 = instance->w2c_g50;
+  var_l3 = var_f0;
+  var_f0 = var_l2;
+  var_f1 = instance->w2c_g53;
   var_f2 = var_l0;
   var_f1 *= var_f2;
   var_f0 += var_f1;
-  var_i1 = instance->w2c_g44;
-  var_f1 = (f32)(s32)(var_i1);
-  var_f0 = w2c_snake_f60(instance, var_f0, var_f1);
-  var_l2 = var_f0;
+  var_l4 = var_f0;
   var_L1: 
-    var_f0 = instance->w2c_g51;
-    var_f1 = instance->w2c_g52;
-    var_i0 = var_f0 <= var_f1;
+    var_f0 = instance->w2c_g54;
+    var_f1 = instance->w2c_g55;
+    var_i0 = var_f0 < var_f1;
     if (var_i0) {goto var_B0;}
-    var_f0 = instance->w2c_g51;
-    var_f1 = w2c_snake_f44(instance);
-    var_f0 -= var_f1;
-    instance->w2c_g51 = var_f0;
     var_f0 = w2c_snake_f42(instance);
     var_f1 = w2c_snake_f43(instance);
     var_f2 = instance->w2c_g30;
-    var_i3 = instance->w2c_g41;
+    var_i3 = instance->w2c_g42;
     w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
     w2c_snake_f30(instance);
+    var_f0 = instance->w2c_g54;
+    var_f1 = w2c_snake_f44(instance);
+    var_f0 -= var_f1;
+    instance->w2c_g54 = var_f0;
+    goto var_L1;
   var_B0:;
   var_f0 = w2c_snake_f42(instance);
   var_f1 = w2c_snake_f43(instance);
   var_f2 = instance->w2c_g30;
-  var_i3 = instance->w2c_g37;
+  var_i3 = instance->w2c_g38;
   w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
-  var_f0 = instance->w2c_g51;
+  var_f0 = instance->w2c_g54;
   var_f1 = var_l0;
   var_f0 += var_f1;
-  instance->w2c_g51 = var_f0;
-  var_f0 = w2c_snake_f39(instance);
-  var_f1 = w2c_snake_f40(instance);
+  instance->w2c_g54 = var_f0;
+  var_f0 = 0;
+  var_l7 = var_f0;
+  var_L2: 
+    var_f0 = var_l7;
+    var_f1 = var_l0;
+    var_f0 /= var_f1;
+    var_l8 = var_f0;
+    var_f0 = var_l8;
+    var_f1 = var_l3;
+    var_f0 *= var_f1;
+    var_f1 = 1;
+    var_f2 = var_l8;
+    var_f1 -= var_f2;
+    var_f2 = var_l1;
+    var_f1 *= var_f2;
+    var_f0 += var_f1;
+    var_f1 = instance->w2c_g46;
+    var_f0 = w2c_snake_f60(instance, var_f0, var_f1);
+    var_l5 = var_f0;
+    var_f0 = var_l8;
+    var_f1 = var_l4;
+    var_f0 *= var_f1;
+    var_f1 = 1;
+    var_f2 = var_l8;
+    var_f1 -= var_f2;
+    var_f2 = var_l2;
+    var_f1 *= var_f2;
+    var_f0 += var_f1;
+    var_f1 = instance->w2c_g47;
+    var_f0 = w2c_snake_f60(instance, var_f0, var_f1);
+    var_l6 = var_f0;
+    var_f0 = var_l5;
+    var_f1 = var_l6;
+    var_f2 = instance->w2c_g31;
+    w2c_snake_f29(instance, var_f0, var_f1, var_f2);
+    var_f0 = var_l5;
+    var_f1 = var_l6;
+    var_f2 = instance->w2c_g30;
+    var_i3 = instance->w2c_g38;
+    w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
+    var_f0 = var_l7;
+    var_f1 = instance->w2c_g31;
+    var_f0 += var_f1;
+    var_l7 = var_f0;
+    var_f0 = var_l7;
+    var_f1 = instance->w2c_g31;
+    var_f0 += var_f1;
+    var_f1 = var_l0;
+    var_i0 = var_f0 < var_f1;
+    if (var_i0) {goto var_L2;}
+  var_f0 = var_l3;
+  var_f1 = instance->w2c_g46;
+  var_f0 = w2c_snake_f60(instance, var_f0, var_f1);
+  var_l3 = var_f0;
+  var_f0 = var_l4;
+  var_f1 = instance->w2c_g47;
+  var_f0 = w2c_snake_f60(instance, var_f0, var_f1);
+  var_l4 = var_f0;
+  var_f0 = var_l3;
+  var_f1 = var_l4;
+  var_f2 = var_l0;
+  var_f3 = var_l7;
+  var_f2 -= var_f3;
+  w2c_snake_f29(instance, var_f0, var_f1, var_f2);
+  var_f0 = var_l3;
+  var_f1 = var_l4;
   var_f2 = instance->w2c_g30;
   var_i3 = instance->w2c_g37;
   w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
-  var_f0 = var_l1;
-  var_f1 = var_l2;
-  var_f2 = instance->w2c_g30;
-  var_i3 = instance->w2c_g36;
-  w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
-  var_f0 = var_l1;
-  var_f1 = var_l2;
-  var_f2 = var_l0;
-  w2c_snake_f29(instance, var_f0, var_f1, var_f2);
   FUNC_EPILOGUE;
 }
 
@@ -1751,8 +1823,8 @@ u32 w2c_snake_f8(w2c_snake* instance, f32 var_p0, f32 var_p1, f32 var_p2) {
   var_f1 = w2c_snake_f40(instance);
   var_f2 = var_p0;
   var_f3 = var_p1;
-  var_f4 = instance->w2c_g49;
-  var_f5 = instance->w2c_g50;
+  var_f4 = instance->w2c_g52;
+  var_f5 = instance->w2c_g53;
   var_i0 = w2c_snake_f10(instance, var_f0, var_f1, var_f2, var_f3, var_f4, var_f5);
   var_i1 = 0u;
   var_i0 = var_i0 == var_i1;
@@ -1834,17 +1906,15 @@ u32 w2c_snake_f10(w2c_snake* instance, f32 var_p0, f32 var_p1, f32 var_p2, f32 v
 
 void w2c_snake_f11(w2c_snake* instance) {
   FUNC_PROLOGUE;
-  u32 var_i2, var_i3;
-  f32 var_f0, var_f1, var_f2;
-  var_f0 = instance->w2c_g52;
+  f32 var_f0, var_f1, var_f2, var_f3;
+  var_f0 = instance->w2c_g55;
   var_f1 = 0.0500000007;
-  var_i2 = instance->w2c_g43;
-  var_i3 = instance->w2c_g44;
-  var_i2 += var_i3;
-  var_f2 = (f32)(s32)(var_i2);
+  var_f2 = instance->w2c_g46;
+  var_f3 = instance->w2c_g47;
+  var_f2 += var_f3;
   var_f1 *= var_f2;
   var_f0 += var_f1;
-  instance->w2c_g52 = var_f0;
+  instance->w2c_g55 = var_f0;
   FUNC_EPILOGUE;
 }
 
@@ -1859,9 +1929,9 @@ void w2c_snake_f12(w2c_snake* instance) {
   var_l3 = var_f0;
   var_L0: 
     var_f0 = w2c_snake_f17(instance);
-    instance->w2c_g56 = var_f0;
+    instance->w2c_g59 = var_f0;
     var_f0 = w2c_snake_f17(instance);
-    instance->w2c_g57 = var_f0;
+    instance->w2c_g60 = var_f0;
     var_f0 = w2c_snake_f13(instance);
     var_l0 = var_f0;
     var_f0 = w2c_snake_f14(instance);
@@ -1874,7 +1944,7 @@ void w2c_snake_f12(w2c_snake* instance) {
       var_l5 = var_f0;
       var_f0 = var_l0;
       var_f1 = var_l1;
-      var_f2 = instance->w2c_g31;
+      var_f2 = instance->w2c_g32;
       var_f3 = var_l4;
       var_f4 = var_l5;
       var_f5 = instance->w2c_g30;
@@ -1891,8 +1961,8 @@ void w2c_snake_f12(w2c_snake* instance) {
   if (var_i0) {
     var_f0 = var_l2;
     var_f1 = var_l3;
-    var_f2 = instance->w2c_g31;
-    var_i3 = instance->w2c_g41;
+    var_f2 = instance->w2c_g32;
+    var_i3 = instance->w2c_g42;
     w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
   }
   w2c_snake_f15(instance);
@@ -1901,11 +1971,9 @@ void w2c_snake_f12(w2c_snake* instance) {
 
 f32 w2c_snake_f13(w2c_snake* instance) {
   FUNC_PROLOGUE;
-  u32 var_i1;
   f32 var_f0, var_f1;
-  var_f0 = instance->w2c_g56;
-  var_i1 = instance->w2c_g43;
-  var_f1 = (f32)(var_i1);
+  var_f0 = instance->w2c_g59;
+  var_f1 = instance->w2c_g46;
   var_f0 *= var_f1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -1913,11 +1981,9 @@ f32 w2c_snake_f13(w2c_snake* instance) {
 
 f32 w2c_snake_f14(w2c_snake* instance) {
   FUNC_PROLOGUE;
-  u32 var_i1;
   f32 var_f0, var_f1;
-  var_f0 = instance->w2c_g57;
-  var_i1 = instance->w2c_g44;
-  var_f1 = (f32)(var_i1);
+  var_f0 = instance->w2c_g60;
+  var_f1 = instance->w2c_g47;
   var_f0 *= var_f1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -1929,23 +1995,23 @@ void w2c_snake_f15(w2c_snake* instance) {
   f32 var_f0, var_f1, var_f2, var_f3;
   var_f0 = w2c_snake_f13(instance);
   var_f1 = w2c_snake_f14(instance);
-  var_f2 = instance->w2c_g31;
-  var_i3 = instance->w2c_g38;
+  var_f2 = instance->w2c_g32;
+  var_i3 = instance->w2c_g39;
   w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
   var_f0 = w2c_snake_f13(instance);
   var_f1 = 0.200000003;
-  var_f2 = instance->w2c_g31;
+  var_f2 = instance->w2c_g32;
   var_f1 *= var_f2;
   var_f0 += var_f1;
   var_f1 = w2c_snake_f14(instance);
   var_f2 = -0.200000003;
-  var_f3 = instance->w2c_g31;
+  var_f3 = instance->w2c_g32;
   var_f2 *= var_f3;
   var_f1 += var_f2;
   var_f2 = 0.400000006;
-  var_f3 = instance->w2c_g31;
+  var_f3 = instance->w2c_g32;
   var_f2 *= var_f3;
-  var_i3 = instance->w2c_g39;
+  var_i3 = instance->w2c_g40;
   w2c_snake_f50(instance, var_f0, var_f1, var_f2, var_i3);
   FUNC_EPILOGUE;
 }
@@ -1954,18 +2020,18 @@ void w2c_snake_f16(w2c_snake* instance, u32 var_p0) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   var_i0 = var_p0;
-  var_i1 = instance->w2c_g59;
+  var_i1 = instance->w2c_g62;
   var_i0 *= var_i1;
   var_p0 = var_i0;
   var_i0 = var_p0;
   var_i1 = 0u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_i0 = instance->w2c_g59;
+    var_i0 = instance->w2c_g62;
     var_p0 = var_i0;
   }
   var_i0 = var_p0;
-  instance->w2c_g60 = var_i0;
+  instance->w2c_g63 = var_i0;
   FUNC_EPILOGUE;
 }
 
@@ -1973,12 +2039,12 @@ f32 w2c_snake_f17(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1, var_i2;
   f32 var_f0, var_f1;
-  var_i0 = instance->w2c_g60;
-  var_i1 = instance->w2c_g58;
+  var_i0 = instance->w2c_g63;
+  var_i1 = instance->w2c_g61;
   var_i0 *= var_i1;
-  instance->w2c_g60 = var_i0;
+  instance->w2c_g63 = var_i0;
   var_i0 = 1065353216u;
-  var_i1 = instance->w2c_g60;
+  var_i1 = instance->w2c_g63;
   var_i2 = 9u;
   var_i1 >>= (var_i2 & 31);
   var_i0 |= var_i1;
@@ -1992,35 +2058,35 @@ f32 w2c_snake_f17(w2c_snake* instance) {
 void w2c_snake_f18(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
-  var_i0 = instance->w2c_g41;
+  var_i0 = instance->w2c_g42;
   w2c_snake_f20(instance, var_i0);
-  var_i0 = instance->w2c_g55;
+  var_i0 = instance->w2c_g58;
   var_i1 = 1u;
   var_i0 += var_i1;
-  instance->w2c_g55 = var_i0;
-  var_i0 = instance->w2c_g55;
+  instance->w2c_g58 = var_i0;
+  var_i0 = instance->w2c_g58;
   var_i1 = 10u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
     var_i0 = 0u;
-    instance->w2c_g55 = var_i0;
-    var_i0 = instance->w2c_g54;
+    instance->w2c_g58 = var_i0;
+    var_i0 = instance->w2c_g57;
     var_i1 = 1u;
     var_i0 += var_i1;
-    instance->w2c_g54 = var_i0;
-    var_i0 = instance->w2c_g54;
+    instance->w2c_g57 = var_i0;
+    var_i0 = instance->w2c_g57;
     var_i1 = 10u;
     var_i0 = var_i0 == var_i1;
     if (var_i0) {
       var_i0 = 0u;
-      instance->w2c_g54 = var_i0;
-      var_i0 = instance->w2c_g53;
+      instance->w2c_g57 = var_i0;
+      var_i0 = instance->w2c_g56;
       var_i1 = 1u;
       var_i0 += var_i1;
-      instance->w2c_g53 = var_i0;
+      instance->w2c_g56 = var_i0;
     }
   }
-  var_i0 = instance->w2c_g40;
+  var_i0 = instance->w2c_g41;
   w2c_snake_f20(instance, var_i0);
   FUNC_EPILOGUE;
 }
@@ -2028,7 +2094,7 @@ void w2c_snake_f18(w2c_snake* instance) {
 void w2c_snake_f19(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g40;
+  var_i0 = instance->w2c_g41;
   w2c_snake_f20(instance, var_i0);
   FUNC_EPILOGUE;
 }
@@ -2043,23 +2109,23 @@ void w2c_snake_f20(w2c_snake* instance, u32 var_p0) {
   var_f2 = 16;
   var_i3 = var_p0;
   w2c_snake_f53(instance, var_f0, var_f1, var_f2, var_i3);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g127;
+  w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g137;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g124;
+  var_j0 = instance->w2c_g139;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
+  var_j0 = instance->w2c_g128;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
+  var_j0 = instance->w2c_g114;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g125;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_i0 = instance->w2c_g53;
+  var_i0 = instance->w2c_g56;
   w2c_snake_f56(instance, var_i0);
-  var_i0 = instance->w2c_g54;
+  var_i0 = instance->w2c_g57;
   w2c_snake_f56(instance, var_i0);
-  var_i0 = instance->w2c_g55;
+  var_i0 = instance->w2c_g58;
   w2c_snake_f56(instance, var_i0);
   FUNC_EPILOGUE;
 }
@@ -2067,91 +2133,85 @@ void w2c_snake_f20(w2c_snake* instance, u32 var_p0) {
 void w2c_snake_f21(w2c_snake* instance) {
   f32 var_l0 = 0, var_l1 = 0;
   FUNC_PROLOGUE;
-  u32 var_i0, var_i1, var_i3;
+  u32 var_i3;
   u64 var_j0;
-  f32 var_f0, var_f1, var_f2, var_f3;
+  f32 var_f0, var_f1, var_f2;
   var_f0 = 29;
   var_l0 = var_f0;
   var_f0 = 16;
   var_l1 = var_f0;
-  var_i0 = instance->w2c_g43;
-  var_f0 = (f32)(s32)(var_i0);
-  var_f1 = 2;
-  var_f0 /= var_f1;
+  var_f0 = instance->w2c_g46;
   var_f1 = var_l0;
   var_f2 = var_l1;
   var_f1 *= var_f2;
-  var_f2 = 2;
-  var_f1 /= var_f2;
   var_f0 -= var_f1;
-  var_i1 = instance->w2c_g44;
-  var_f1 = (f32)(s32)(var_i1);
-  var_f2 = 2;
-  var_f1 /= var_f2;
+  var_f1 = 0.5;
+  var_f0 *= var_f1;
+  var_f1 = instance->w2c_g47;
   var_f2 = var_l1;
-  var_f3 = 2;
-  var_f2 /= var_f3;
   var_f1 -= var_f2;
+  var_f2 = 0.5;
+  var_f1 *= var_f2;
   var_f2 = var_l1;
-  var_i3 = instance->w2c_g40;
+  var_i3 = instance->w2c_g41;
   w2c_snake_f53(instance, var_f0, var_f1, var_f2, var_i3);
-  var_j0 = instance->w2c_g135;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g125;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g137;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g137;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g122;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g130;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g125;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g141;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g138;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g139;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g124;
+  var_j0 = instance->w2c_g128;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g125;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g133;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g128;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
+  var_j0 = instance->w2c_g144;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g138;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
+  var_j0 = instance->w2c_g114;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g137;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g138;
+  var_j0 = instance->w2c_g139;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g122;
+  var_j0 = instance->w2c_g114;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
+  var_j0 = instance->w2c_g141;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g138;
+  var_j0 = instance->w2c_g137;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g142;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g127;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g131;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g141;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g137;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g141;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g125;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g139;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g141;
   w2c_snake_f54(instance, var_j0);
   FUNC_EPILOGUE;
 }
@@ -2159,195 +2219,181 @@ void w2c_snake_f21(w2c_snake* instance) {
 void w2c_snake_f22(w2c_snake* instance) {
   f32 var_l0 = 0, var_l1 = 0;
   FUNC_PROLOGUE;
-  u32 var_i0, var_i1, var_i3;
+  u32 var_i0, var_i3;
   u64 var_j0;
   f32 var_f0, var_f1, var_f2, var_f3;
   var_f0 = 10;
   var_l0 = var_f0;
   var_f0 = 16;
   var_l1 = var_f0;
-  var_i0 = instance->w2c_g43;
-  var_f0 = (f32)(s32)(var_i0);
-  var_f1 = 2;
-  var_f0 /= var_f1;
+  var_f0 = instance->w2c_g46;
   var_f1 = var_l0;
   var_f2 = var_l1;
   var_f1 *= var_f2;
-  var_f2 = 2;
-  var_f1 /= var_f2;
   var_f0 -= var_f1;
-  var_i1 = instance->w2c_g44;
-  var_f1 = (f32)(s32)(var_i1);
-  var_f2 = 2;
-  var_f1 /= var_f2;
-  var_f2 = var_l1;
-  var_f3 = 4;
+  var_f1 = 0.5;
+  var_f0 *= var_f1;
+  var_f1 = instance->w2c_g47;
+  var_f2 = 8;
+  var_f3 = var_l1;
   var_f2 *= var_f3;
   var_f1 -= var_f2;
+  var_f2 = 0.5;
+  var_f1 *= var_f2;
   var_f2 = var_l1;
-  var_i3 = instance->w2c_g40;
+  var_i3 = instance->w2c_g41;
   w2c_snake_f53(instance, var_f0, var_f1, var_f2, var_i3);
-  var_j0 = instance->w2c_g127;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g122;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g132;
+  var_j0 = instance->w2c_g130;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g125;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
+  var_j0 = instance->w2c_g135;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
+  var_j0 = instance->w2c_g128;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g140;
+  var_j0 = instance->w2c_g114;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g125;
+  var_j0 = instance->w2c_g137;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
+  var_j0 = instance->w2c_g143;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g142;
+  var_j0 = instance->w2c_g128;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g139;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g145;
   w2c_snake_f54(instance, var_j0);
   var_f0 = 15;
   var_l0 = var_f0;
   var_f0 = 24;
   var_l1 = var_f0;
-  var_i0 = instance->w2c_g43;
-  var_f0 = (f32)(s32)(var_i0);
-  var_f1 = 2;
-  var_f0 /= var_f1;
+  var_f0 = instance->w2c_g46;
   var_f1 = var_l0;
   var_f2 = var_l1;
   var_f1 *= var_f2;
-  var_f2 = 2;
-  var_f1 /= var_f2;
   var_f0 -= var_f1;
-  var_i1 = instance->w2c_g44;
-  var_f1 = (f32)(s32)(var_i1);
-  var_f2 = 2;
-  var_f1 /= var_f2;
+  var_f1 = 0.5;
+  var_f0 *= var_f1;
+  var_f1 = instance->w2c_g47;
   var_f2 = var_l1;
-  var_f3 = 0;
-  var_f2 *= var_f3;
-  var_f1 += var_f2;
+  var_f1 -= var_f2;
+  var_f2 = 0.5;
+  var_f1 *= var_f2;
   var_f2 = var_l1;
-  var_i3 = instance->w2c_g40;
+  var_i3 = instance->w2c_g41;
   w2c_snake_f53(instance, var_f0, var_f1, var_f2, var_i3);
-  var_j0 = instance->w2c_g126;
-  w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g129;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g133;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g122;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g131;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g137;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g124;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
+  var_j0 = instance->w2c_g132;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g136;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g125;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
+  var_j0 = instance->w2c_g134;
   w2c_snake_f54(instance, var_j0);
-  var_i0 = instance->w2c_g53;
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g127;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g137;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g139;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g128;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_i0 = instance->w2c_g56;
   w2c_snake_f56(instance, var_i0);
-  var_i0 = instance->w2c_g54;
+  var_i0 = instance->w2c_g57;
   w2c_snake_f56(instance, var_i0);
-  var_i0 = instance->w2c_g55;
+  var_i0 = instance->w2c_g58;
   w2c_snake_f56(instance, var_i0);
   var_f0 = 31;
   var_l0 = var_f0;
   var_f0 = 16;
   var_l1 = var_f0;
-  var_i0 = instance->w2c_g43;
-  var_f0 = (f32)(s32)(var_i0);
-  var_f1 = 2;
-  var_f0 /= var_f1;
+  var_f0 = instance->w2c_g46;
   var_f1 = var_l0;
   var_f2 = var_l1;
   var_f1 *= var_f2;
-  var_f2 = 2;
-  var_f1 /= var_f2;
   var_f0 -= var_f1;
-  var_i1 = instance->w2c_g44;
-  var_f1 = (f32)(s32)(var_i1);
-  var_f2 = 2;
-  var_f1 /= var_f2;
-  var_f2 = var_l1;
-  var_f3 = -4;
+  var_f1 = 0.5;
+  var_f0 *= var_f1;
+  var_f1 = instance->w2c_g47;
+  var_f2 = 7;
+  var_f3 = var_l1;
   var_f2 *= var_f3;
-  var_f1 -= var_f2;
+  var_f1 += var_f2;
+  var_f2 = 0.5;
+  var_f1 *= var_f2;
   var_f2 = var_l1;
-  var_i3 = instance->w2c_g40;
+  var_i3 = instance->w2c_g41;
   w2c_snake_f53(instance, var_f0, var_f1, var_f2, var_i3);
-  var_j0 = instance->w2c_g135;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g125;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g137;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g137;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g137;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g135;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g122;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g124;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g125;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g138;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g139;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g124;
-  w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g128;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g138;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g134;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g111;
-  w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
   w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g125;
   w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g127;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g128;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
   var_j0 = instance->w2c_g137;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g138;
+  var_j0 = instance->w2c_g139;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g122;
+  var_j0 = instance->w2c_g114;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g136;
+  var_j0 = instance->w2c_g141;
   w2c_snake_f54(instance, var_j0);
-  var_j0 = instance->w2c_g138;
+  var_j0 = instance->w2c_g137;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g142;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g127;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g131;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g141;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g137;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g114;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g139;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g128;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g140;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g141;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g125;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g139;
+  w2c_snake_f54(instance, var_j0);
+  var_j0 = instance->w2c_g141;
   w2c_snake_f54(instance, var_j0);
   FUNC_EPILOGUE;
 }
@@ -2356,11 +2402,11 @@ void w2c_snake_f23(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   var_i0 = instance->w2c_g2;
-  instance->w2c_g62 = var_i0;
+  instance->w2c_g65 = var_i0;
   var_i0 = instance->w2c_g2;
-  instance->w2c_g63 = var_i0;
+  instance->w2c_g66 = var_i0;
   var_i0 = instance->w2c_g2;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   FUNC_EPILOGUE;
 }
 
@@ -2370,7 +2416,7 @@ u32 w2c_snake_f24(w2c_snake* instance, u32 var_p0) {
   u32 var_i0, var_i1, var_i2;
   var_i0 = instance->w2c_g3;
   var_i1 = instance->w2c_g3;
-  var_i2 = instance->w2c_g61;
+  var_i2 = instance->w2c_g64;
   var_i1 = REM_U(var_i1, var_i2);
   var_i0 -= var_i1;
   var_l1 = var_i0;
@@ -2395,7 +2441,7 @@ u32 w2c_snake_f25(w2c_snake* instance, u32 var_p0) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   var_i0 = var_p0;
-  var_i1 = instance->w2c_g61;
+  var_i1 = instance->w2c_g64;
   var_i0 += var_i1;
   var_p0 = var_i0;
   var_i0 = var_p0;
@@ -2408,7 +2454,7 @@ u32 w2c_snake_f26(w2c_snake* instance, u32 var_p0) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   var_i0 = var_p0;
-  var_i1 = instance->w2c_g61;
+  var_i1 = instance->w2c_g64;
   var_i0 -= var_i1;
   var_p0 = var_i0;
   var_i0 = var_p0;
@@ -2421,17 +2467,17 @@ void w2c_snake_f27(w2c_snake* instance, f32 var_p0, f32 var_p1, f32 var_p2) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   f32 var_f1;
-  var_i0 = instance->w2c_g62;
+  var_i0 = instance->w2c_g65;
   var_i1 = 0u;
   var_i0 += var_i1;
   var_f1 = var_p0;
   f32_store(&instance->w2c_memory, (u64)(var_i0), var_f1);
-  var_i0 = instance->w2c_g62;
+  var_i0 = instance->w2c_g65;
   var_i1 = 4u;
   var_i0 += var_i1;
   var_f1 = var_p1;
   f32_store(&instance->w2c_memory, (u64)(var_i0), var_f1);
-  var_i0 = instance->w2c_g62;
+  var_i0 = instance->w2c_g65;
   var_i1 = 8u;
   var_i0 += var_i1;
   var_f1 = var_p2;
@@ -2442,9 +2488,9 @@ void w2c_snake_f27(w2c_snake* instance, f32 var_p0, f32 var_p1, f32 var_p2) {
 void w2c_snake_f28(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g62;
+  var_i0 = instance->w2c_g65;
   var_i0 = w2c_snake_f25(instance, var_i0);
-  instance->w2c_g62 = var_i0;
+  instance->w2c_g65 = var_i0;
   FUNC_EPILOGUE;
 }
 
@@ -2462,9 +2508,9 @@ void w2c_snake_f29(w2c_snake* instance, f32 var_p0, f32 var_p1, f32 var_p2) {
 void w2c_snake_f30(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g63;
+  var_i0 = instance->w2c_g66;
   var_i0 = w2c_snake_f25(instance, var_i0);
-  instance->w2c_g63 = var_i0;
+  instance->w2c_g66 = var_i0;
   FUNC_EPILOGUE;
 }
 
@@ -2472,7 +2518,7 @@ f32 w2c_snake_f31(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_f0 = f32_load(&instance->w2c_memory, (u64)(var_i0));
   FUNC_EPILOGUE;
   return var_f0;
@@ -2482,7 +2528,7 @@ f32 w2c_snake_f32(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_i1 = 4u;
   var_i0 += var_i1;
   var_f0 = f32_load(&instance->w2c_memory, (u64)(var_i0));
@@ -2494,7 +2540,7 @@ f32 w2c_snake_f33(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_i1 = 8u;
   var_i0 += var_i1;
   var_f0 = f32_load(&instance->w2c_memory, (u64)(var_i0));
@@ -2505,42 +2551,42 @@ f32 w2c_snake_f33(w2c_snake* instance) {
 void w2c_snake_f34(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_i0 = w2c_snake_f25(instance, var_i0);
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   FUNC_EPILOGUE;
 }
 
 void w2c_snake_f35(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_i0 = w2c_snake_f26(instance, var_i0);
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   FUNC_EPILOGUE;
 }
 
 void w2c_snake_f36(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g62;
-  instance->w2c_g64 = var_i0;
+  var_i0 = instance->w2c_g65;
+  instance->w2c_g67 = var_i0;
   FUNC_EPILOGUE;
 }
 
 void w2c_snake_f37(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g63;
-  instance->w2c_g64 = var_i0;
+  var_i0 = instance->w2c_g66;
+  instance->w2c_g67 = var_i0;
   FUNC_EPILOGUE;
 }
 
 u32 w2c_snake_f38(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
-  var_i0 = instance->w2c_g64;
-  var_i1 = instance->w2c_g62;
+  var_i0 = instance->w2c_g67;
+  var_i1 = instance->w2c_g65;
   var_i0 = var_i0 == var_i1;
   FUNC_EPILOGUE;
   return var_i0;
@@ -2552,13 +2598,13 @@ f32 w2c_snake_f39(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_l0 = var_i0;
   w2c_snake_f36(instance);
   var_f0 = w2c_snake_f31(instance);
   var_l1 = var_f0;
   var_i0 = var_l0;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   var_f0 = var_l1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -2570,13 +2616,13 @@ f32 w2c_snake_f40(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_l0 = var_i0;
   w2c_snake_f36(instance);
   var_f0 = w2c_snake_f32(instance);
   var_l1 = var_f0;
   var_i0 = var_l0;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   var_f0 = var_l1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -2588,13 +2634,13 @@ f32 w2c_snake_f41(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_l0 = var_i0;
   w2c_snake_f36(instance);
   var_f0 = w2c_snake_f33(instance);
   var_l1 = var_f0;
   var_i0 = var_l0;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   var_f0 = var_l1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -2606,13 +2652,13 @@ f32 w2c_snake_f42(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_l0 = var_i0;
   w2c_snake_f37(instance);
   var_f0 = w2c_snake_f31(instance);
   var_l1 = var_f0;
   var_i0 = var_l0;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   var_f0 = var_l1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -2624,13 +2670,13 @@ f32 w2c_snake_f43(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_l0 = var_i0;
   w2c_snake_f37(instance);
   var_f0 = w2c_snake_f32(instance);
   var_l1 = var_f0;
   var_i0 = var_l0;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   var_f0 = var_l1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -2642,13 +2688,13 @@ f32 w2c_snake_f44(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
   f32 var_f0;
-  var_i0 = instance->w2c_g64;
+  var_i0 = instance->w2c_g67;
   var_l0 = var_i0;
   w2c_snake_f37(instance);
   var_f0 = w2c_snake_f33(instance);
   var_l1 = var_f0;
   var_i0 = var_l0;
-  instance->w2c_g64 = var_i0;
+  instance->w2c_g67 = var_i0;
   var_f0 = var_l1;
   FUNC_EPILOGUE;
   return var_f0;
@@ -2657,8 +2703,8 @@ f32 w2c_snake_f44(w2c_snake* instance) {
 u32 w2c_snake_f45(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
-  var_i0 = instance->w2c_g43;
-  var_i1 = instance->w2c_g44;
+  var_i0 = instance->w2c_g44;
+  var_i1 = instance->w2c_g45;
   var_i0 *= var_i1;
   var_i1 = 4u;
   var_i0 *= var_i1;
@@ -2670,12 +2716,12 @@ void w2c_snake_f46(w2c_snake* instance, u32 var_p0, u32 var_p1, u32 var_p2) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1, var_i2;
   var_i0 = instance->w2c_memoryRegionCanvasBytesOffset;
-  var_i1 = instance->w2c_g44;
+  var_i1 = instance->w2c_g45;
   var_i2 = var_p1;
   var_i1 -= var_i2;
   var_i2 = 4294967295u;
   var_i1 += var_i2;
-  var_i2 = instance->w2c_g43;
+  var_i2 = instance->w2c_g44;
   var_i1 *= var_i2;
   var_i2 = var_p0;
   var_i1 += var_i2;
@@ -2726,19 +2772,19 @@ void w2c_snake_f47(w2c_snake* instance, u32 var_p0, u32 var_p1, u32 var_p2, u32 
     var_l7 = var_i0;
   }
   var_i0 = var_l8;
-  var_i1 = instance->w2c_g43;
+  var_i1 = instance->w2c_g44;
   var_i0 = (u32)((s32)var_i0 > (s32)var_i1);
   if (var_i0) {
-    var_i0 = instance->w2c_g43;
+    var_i0 = instance->w2c_g44;
     var_i1 = 1u;
     var_i0 -= var_i1;
     var_l8 = var_i0;
   }
   var_i0 = var_l9;
-  var_i1 = instance->w2c_g44;
+  var_i1 = instance->w2c_g45;
   var_i0 = (u32)((s32)var_i0 > (s32)var_i1);
   if (var_i0) {
-    var_i0 = instance->w2c_g44;
+    var_i0 = instance->w2c_g45;
     var_i1 = 1u;
     var_i0 -= var_i1;
     var_l9 = var_i0;
@@ -2841,19 +2887,19 @@ void w2c_snake_f49(w2c_snake* instance, u32 var_p0, u32 var_p1, u32 var_p2, u32 
     var_l10 = var_i0;
   }
   var_i0 = var_l11;
-  var_i1 = instance->w2c_g43;
+  var_i1 = instance->w2c_g44;
   var_i0 = (u32)((s32)var_i0 > (s32)var_i1);
   if (var_i0) {
-    var_i0 = instance->w2c_g43;
+    var_i0 = instance->w2c_g44;
     var_i1 = 1u;
     var_i0 -= var_i1;
     var_l11 = var_i0;
   }
   var_i0 = var_l12;
-  var_i1 = instance->w2c_g44;
+  var_i1 = instance->w2c_g45;
   var_i0 = (u32)((s32)var_i0 > (s32)var_i1);
   if (var_i0) {
-    var_i0 = instance->w2c_g44;
+    var_i0 = instance->w2c_g45;
     var_i1 = 1u;
     var_i0 -= var_i1;
     var_l12 = var_i0;
@@ -2936,9 +2982,9 @@ void w2c_snake_f51(w2c_snake* instance) {
   u32 var_i0, var_i1, var_i2, var_i3, var_i4;
   var_i0 = 0u;
   var_i1 = 0u;
-  var_i2 = instance->w2c_g43;
-  var_i3 = instance->w2c_g44;
-  var_i4 = instance->w2c_g41;
+  var_i2 = instance->w2c_g44;
+  var_i3 = instance->w2c_g45;
+  var_i4 = instance->w2c_g42;
   w2c_snake_f47(instance, var_i0, var_i1, var_i2, var_i3, var_i4);
   FUNC_EPILOGUE;
 }
@@ -2961,14 +3007,14 @@ u32 w2c_snake_f52(w2c_snake* instance, u32 var_p0, u32 var_p1, u32 var_p2, u32 v
     goto var_Bfunc;
   }
   var_i0 = var_p0;
-  var_i1 = instance->w2c_g43;
+  var_i1 = instance->w2c_g44;
   var_i0 = (u32)((s32)var_i0 >= (s32)var_i1);
   if (var_i0) {
     var_i0 = 1u;
     goto var_Bfunc;
   }
   var_i0 = var_p1;
-  var_i1 = instance->w2c_g44;
+  var_i1 = instance->w2c_g45;
   var_i0 = (u32)((s32)var_i0 >= (s32)var_i1);
   if (var_i0) {
     var_i0 = 1u;
@@ -2986,13 +3032,13 @@ void w2c_snake_f53(w2c_snake* instance, f32 var_p0, f32 var_p1, f32 var_p2, u32 
   u32 var_i0;
   f32 var_f0;
   var_f0 = var_p0;
-  instance->w2c_g65 = var_f0;
+  instance->w2c_g68 = var_f0;
   var_f0 = var_p1;
-  instance->w2c_g66 = var_f0;
+  instance->w2c_g69 = var_f0;
   var_f0 = var_p2;
-  instance->w2c_g67 = var_f0;
+  instance->w2c_g70 = var_f0;
   var_i0 = var_p3;
-  instance->w2c_g68 = var_i0;
+  instance->w2c_g71 = var_i0;
   FUNC_EPILOGUE;
 }
 
@@ -3002,26 +3048,26 @@ void w2c_snake_f54(w2c_snake* instance, u64 var_p0) {
   u32 var_i3;
   u64 var_j0;
   f32 var_f0, var_f1, var_f2;
-  var_f0 = instance->w2c_g67;
+  var_f0 = instance->w2c_g70;
   var_f1 = 8;
   var_f0 /= var_f1;
   var_l1 = var_f0;
   var_j0 = var_p0;
   var_f1 = var_l1;
   var_f2 = 2;
-  var_i3 = instance->w2c_g41;
+  var_i3 = instance->w2c_g42;
   w2c_snake_f55(instance, var_j0, var_f1, var_f2, var_i3);
   var_j0 = var_p0;
   var_f1 = var_l1;
   var_f2 = 1;
-  var_i3 = instance->w2c_g68;
+  var_i3 = instance->w2c_g71;
   w2c_snake_f55(instance, var_j0, var_f1, var_f2, var_i3);
-  var_f0 = instance->w2c_g65;
+  var_f0 = instance->w2c_g68;
   var_f1 = var_l1;
   var_f2 = 8;
   var_f1 *= var_f2;
   var_f0 += var_f1;
-  instance->w2c_g65 = var_f0;
+  instance->w2c_g68 = var_f0;
   FUNC_EPILOGUE;
 }
 
@@ -3051,14 +3097,14 @@ void w2c_snake_f55(w2c_snake* instance, u64 var_p0, f32 var_p1, f32 var_p2, u32 
     var_j0 &= var_j1;
     var_i0 = (u32)(var_j0);
     if (var_i0) {
-      var_f0 = instance->w2c_g65;
+      var_f0 = instance->w2c_g68;
       var_f1 = var_l7;
       var_f2 = var_p1;
       var_f1 *= var_f2;
       var_f2 = var_l5;
       var_f1 += var_f2;
       var_f0 += var_f1;
-      var_f1 = instance->w2c_g66;
+      var_f1 = instance->w2c_g69;
       var_f2 = var_l6;
       var_f3 = var_p1;
       var_f2 *= var_f3;
@@ -3105,7 +3151,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 0u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g112;
+    var_j0 = instance->w2c_g115;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3113,7 +3159,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 1u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g113;
+    var_j0 = instance->w2c_g116;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3121,7 +3167,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 2u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g114;
+    var_j0 = instance->w2c_g117;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3129,7 +3175,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 3u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g115;
+    var_j0 = instance->w2c_g118;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3137,7 +3183,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 4u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g116;
+    var_j0 = instance->w2c_g119;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3145,7 +3191,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 5u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g117;
+    var_j0 = instance->w2c_g120;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3153,7 +3199,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 6u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g118;
+    var_j0 = instance->w2c_g121;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3161,7 +3207,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 7u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g119;
+    var_j0 = instance->w2c_g122;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3169,7 +3215,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 8u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g120;
+    var_j0 = instance->w2c_g123;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3177,7 +3223,7 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
   var_i1 = 9u;
   var_i0 = var_i0 == var_i1;
   if (var_i0) {
-    var_j0 = instance->w2c_g121;
+    var_j0 = instance->w2c_g124;
     w2c_snake_f54(instance, var_j0);
     goto var_Bfunc;
   }
@@ -3188,15 +3234,15 @@ void w2c_snake_f56(w2c_snake* instance, u32 var_p0) {
 void w2c_snake_f57(w2c_snake* instance, u32 var_p0) {
   FUNC_PROLOGUE;
   u32 var_i0, var_i1;
-  var_i0 = instance->w2c_g143;
+  var_i0 = instance->w2c_g146;
   var_i1 = instance->w2c_memoryRegionLogBytesOffset;
   var_i0 += var_i1;
   var_i1 = var_p0;
   i32_store8(&instance->w2c_memory, (u64)(var_i0), var_i1);
-  var_i0 = instance->w2c_g143;
+  var_i0 = instance->w2c_g146;
   var_i1 = 1u;
   var_i0 += var_i1;
-  instance->w2c_g143 = var_i0;
+  instance->w2c_g146 = var_i0;
   FUNC_EPILOGUE;
 }
 
@@ -3223,7 +3269,7 @@ void w2c_snake_f58(w2c_snake* instance, u32 var_p0) {
     var_i0 = I32_DIV_S(var_i0, var_i1);
     var_l2 = var_i0;
     var_i0 = var_l2;
-    var_i1 = instance->w2c_g70;
+    var_i1 = instance->w2c_g73;
     var_i0 += var_i1;
     w2c_snake_f57(instance, var_i0);
     var_i0 = var_p0;
@@ -3246,10 +3292,10 @@ void w2c_snake_f58(w2c_snake* instance, u32 var_p0) {
 void w2c_snake_f59(w2c_snake* instance) {
   FUNC_PROLOGUE;
   u32 var_i0;
-  var_i0 = instance->w2c_g143;
+  var_i0 = instance->w2c_g146;
   w2c_imports_logFromNBytesOfMemory(instance->w2c_imports_instance, var_i0);
   var_i0 = 0u;
-  instance->w2c_g143 = var_i0;
+  instance->w2c_g146 = var_i0;
   FUNC_EPILOGUE;
 }
 

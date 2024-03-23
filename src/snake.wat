@@ -61,6 +61,7 @@
 
     (global $SNAKE_MOVEMENT_PX_PER_S  f32 (f32.const 300))
     (global $SNAKE_RADIUS             f32 (f32.const 12))
+    (global $SNAKE_LERP_INC           f32 (f32.const 1.0))
     (global $ORB_RADIUS               f32 (f32.const 8))
 
     (global $GAME_STATE_FIRST_UPDATE i32 (i32.const 0))
@@ -78,9 +79,11 @@
 
     (global $INVERSE_SQRT_2 f32 (f32.const 0.7071067811865475))
 
-    ;; Values are initialized in the "$reset_game" function
+    ;; Unintialized values (-1) are initialized in `$reset_game` and `$resize_canvas`
     (global $canvas_width                (mut i32) (i32.const  0))
     (global $canvas_height               (mut i32) (i32.const  0))
+    (global $canvas_widthf               (mut f32) (f32.const -1))
+    (global $canvas_heightf              (mut f32) (f32.const -1))
     (global $game_state                  (mut i32) (i32.const  0))
     (global $timestamp_update_call       (mut f32) (f32.const -1))
     (global $timestamp_last_update_call  (mut f32) (f32.const -1))
@@ -120,6 +123,8 @@
                 call $score_inc
                 call $orb_update
                 call $snake_target_length_inc
+                ;; We update the snake again so it's drawn over the old orb
+                call $snake_update
             ))
 
             call $score_draw
@@ -383,6 +388,8 @@
 
         (global.set $canvas_width (local.get $width))
         (global.set $canvas_height (local.get $height))
+        (global.set $canvas_widthf (f32.convert_i32_s (local.get $width)))
+        (global.set $canvas_heightf (f32.convert_i32_s (local.get $height)))
 
         ;; Calculate the number of bytes required to store the canvas RGBA data
         (global.set $memory_region_canvas_bytes_n
@@ -420,12 +427,20 @@
         (global.set $snake_target_length (f32.const 0))
         call $snake_target_length_inc
         (call $snake_buf_head_set
-            (f32.div 
-                (f32.convert_i32_s (global.get $canvas_width))
-                (f32.const 2))
-            (f32.div 
-                (f32.convert_i32_s (global.get $canvas_height))
-                (f32.const 2))
+            ;; +0.5 because we want to center snake on the middle of a pixel
+            ;; to avoid visible aliasing
+            (f32.add
+                (f32.floor
+                    (f32.div
+                        (f32.convert_i32_s (global.get $canvas_width))
+                        (f32.const 2)))
+                (f32.const 0.5))
+            (f32.add
+                (f32.floor
+                    (f32.div
+                        (f32.convert_i32_s (global.get $canvas_height))
+                        (f32.const 2)))
+                (f32.const 0.5))
             (f32.const 0))
         (global.set $snake_unit_heading_x (f32.const 1))
         (global.set $snake_unit_heading_y (f32.const 0))
@@ -441,8 +456,17 @@
 
     (func $snake_update
         (local $length_delta f32)
+        (local $snake_old_head_x f32)
+        (local $snake_old_head_y f32)
         (local $snake_head_x f32)
         (local $snake_head_y f32)
+        (local $snake_lerp_head_x f32)
+        (local $snake_lerp_head_y f32)
+        (local $lerp_dist f32)
+        (local $lerp_t f32)
+
+        (local.set $snake_old_head_x (call $snake_buf_read_head_cx))
+        (local.set $snake_old_head_y (call $snake_buf_read_head_cy))
 
         ;; Calculate the change in movement based on the speed in px/s
         ;; and the time between updates
@@ -458,31 +482,21 @@
         ;; Calculate the current position of the head based on
         ;; the last position and the "change in movement"
         (local.set $snake_head_x
-            (call $mod_f32
-                (f32.add
-                    (call $snake_buf_read_head_cx)
-                    (f32.mul
-                        (global.get $snake_unit_heading_x)
-                        (local.get $length_delta)))
-                (f32.convert_i32_s (global.get $canvas_width))))
+            (f32.add
+                (local.get $snake_old_head_x)
+                (f32.mul
+                    (global.get $snake_unit_heading_x)
+                    (local.get $length_delta))))
         (local.set $snake_head_y
-            (call $mod_f32
-                (f32.add
-                    (call $snake_buf_read_head_cy)
-                    (f32.mul
-                        (global.get $snake_unit_heading_y)
-                        (local.get $length_delta)))
-                (f32.convert_i32_s (global.get $canvas_height))))
+            (f32.add
+                (local.get $snake_old_head_y)
+                (f32.mul
+                    (global.get $snake_unit_heading_y)
+                    (local.get $length_delta))))
 
         (block $while (loop $lp
-            (f32.le
-                (global.get $snake_length)
-                (global.get $snake_target_length))
+            (f32.lt (global.get $snake_length) (global.get $snake_target_length))
             br_if $while
-
-            (global.set $snake_length (f32.sub
-                (global.get $snake_length)
-                (call $snake_buf_read_tail_length_delta)))
 
             ;; Overdraw old tail circle with background color to visually
             ;; remove it from the canvas
@@ -493,6 +507,12 @@
                 (global.get $BACKGROUND_COLOR))
 
             (call $snake_buf_tail_drop)
+
+            (global.set $snake_length (f32.sub
+                (global.get $snake_length)
+                (call $snake_buf_read_tail_length_delta)))
+
+            br $lp
         ))
 
         ;; Redraw the new last tail circle in the snake tail color, to
@@ -508,24 +528,64 @@
         (global.set $snake_length
             (f32.add (global.get $snake_length) (local.get $length_delta)))
 
-        ;; Overdraw the old snake head circle in the snake tail color, to
-        ;; replace the snake head color for the last update call
-        (call $fill_circle_f32
-            (call $snake_buf_read_head_cx)
-            (call $snake_buf_read_head_cy)
-            (global.get $SNAKE_RADIUS)
-            (global.get $SNAKE_TAIL_COLOR))
+        (local.set $lerp_dist (f32.const 0))
+        (loop $lerp_lp
+            (local.set $lerp_t
+                (f32.div (local.get $lerp_dist) (local.get $length_delta)))
+            (local.set $snake_lerp_head_x
+                (call $mod_f32
+                    (f32.add
+                        (f32.mul (local.get $lerp_t) (local.get $snake_head_x))
+                        (f32.mul
+                            (f32.sub (f32.const 1.0) (local.get $lerp_t))
+                            (local.get $snake_old_head_x)))
+                    (global.get $canvas_widthf)))
+            (local.set $snake_lerp_head_y
+                (call $mod_f32
+                    (f32.add
+                        (f32.mul (local.get $lerp_t) (local.get $snake_head_y))
+                        (f32.mul
+                            (f32.sub (f32.const 1.0) (local.get $lerp_t))
+                            (local.get $snake_old_head_y)))
+                    (global.get $canvas_heightf)))
+
+            (call $snake_buf_head_push
+                (local.get $snake_lerp_head_x)
+                (local.get $snake_lerp_head_y)
+                (global.get $SNAKE_LERP_INC))
+            (call $fill_circle_f32
+                (local.get $snake_lerp_head_x)
+                (local.get $snake_lerp_head_y)
+                (global.get $SNAKE_RADIUS)
+                (global.get $SNAKE_TAIL_COLOR))
+
+            (local.set $lerp_dist
+                (f32.add (local.get $lerp_dist) (global.get $SNAKE_LERP_INC)))
+
+            (f32.lt
+                (f32.add (local.get $lerp_dist) (global.get $SNAKE_LERP_INC))
+                (local.get $length_delta))
+            br_if $lerp_lp
+        )
+
+        (local.set $snake_head_x
+            (call $mod_f32
+                (local.get $snake_head_x)
+                (global.get $canvas_widthf)))
+        (local.set $snake_head_y 
+            (call $mod_f32
+                (local.get $snake_head_y)
+                (global.get $canvas_heightf)))
+        (call $snake_buf_head_push
+            (local.get $snake_head_x)
+            (local.get $snake_head_y)
+            (f32.sub (local.get $length_delta) (local.get $lerp_dist)))
         ;; Draw the new snake head in brighter color so collisions are obvious
         (call $fill_circle_f32
             (local.get $snake_head_x)
             (local.get $snake_head_y)
             (global.get $SNAKE_RADIUS)
             (global.get $SNAKE_HEAD_COLOR))
-
-        (call $snake_buf_head_push
-            (local.get $snake_head_x)
-            (local.get $snake_head_y)
-            (local.get $length_delta))
     )
 
     (func $snake_check_collision (result i32)
@@ -622,10 +682,9 @@
                 (global.get $snake_target_length)
                 (f32.mul
                     (f32.const 0.05)
-                    (f32.convert_i32_s
-                        (i32.add
-                            (global.get $canvas_width)
-                            (global.get $canvas_height))))))
+                    (f32.add
+                        (global.get $canvas_widthf)
+                        (global.get $canvas_heightf)))))
     )
 
     (func $orb_update
@@ -684,13 +743,13 @@
     (func $orb_calc_x (result f32)
         (f32.mul
             (global.get $orb_x_as_canvas_width_frac)
-            (f32.convert_i32_u (global.get $canvas_width)))
+            (global.get $canvas_widthf))
     )
 
     (func $orb_calc_y (result f32)
         (f32.mul
             (global.get $orb_y_as_canvas_height_frac)
-            (f32.convert_i32_u (global.get $canvas_height)))
+            (global.get $canvas_heightf))
     )
 
     (func $orb_draw
@@ -808,14 +867,14 @@
         (local.set $font_size (f32.const 16))
 
         (call $text_draw_start
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_width)) (f32.const 2))
-                (f32.div
-                    (f32.mul (local.get $msg_len) (local.get $font_size))
-                    (f32.const 2)))
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
-                (f32.div (local.get $font_size) (f32.const 2)))
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_widthf)
+                    (f32.mul (local.get $msg_len) (local.get $font_size)))
+                (f32.const 0.5))
+            (f32.mul
+                (f32.sub (global.get $canvas_heightf) (local.get $font_size))
+                (f32.const 0.5))
             (local.get $font_size)
             (global.get $TEXT_COLOR))
         global.get $FONT_P     call $text_draw_char
@@ -856,14 +915,16 @@
         (local.set $msg_len   (f32.const 10))
         (local.set $font_size (f32.const 16))
         (call $text_draw_start
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_width)) (f32.const 2))
-                (f32.div
-                    (f32.mul (local.get $msg_len) (local.get $font_size))
-                    (f32.const 2)))
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
-                (f32.mul (local.get $font_size) (f32.const 4)))
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_widthf)
+                    (f32.mul (local.get $msg_len) (local.get $font_size)))
+                (f32.const 0.5))
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_heightf)
+                    (f32.mul (f32.const 8) (local.get $font_size)))
+                (f32.const 0.5))
             (local.get $font_size)
             (global.get $TEXT_COLOR))
         global.get $FONT_G           call $text_draw_char
@@ -880,14 +941,14 @@
         (local.set $msg_len   (f32.const 15))
         (local.set $font_size (f32.const 24))
         (call $text_draw_start
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_width)) (f32.const 2))
-                (f32.div
-                    (f32.mul (local.get $msg_len) (local.get $font_size))
-                    (f32.const 2)))
-            (f32.add
-                (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
-                (f32.mul (local.get $font_size) (f32.const 0)))
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_widthf)
+                    (f32.mul (local.get $msg_len) (local.get $font_size)))
+                (f32.const 0.5))
+            (f32.mul
+                (f32.sub (global.get $canvas_heightf) (local.get $font_size))
+                (f32.const 0.5))
             (local.get $font_size)
             (global.get $TEXT_COLOR))
         global.get $FONT_F           call $text_draw_char
@@ -909,14 +970,16 @@
         (local.set $msg_len   (f32.const 31))
         (local.set $font_size (f32.const 16))
         (call $text_draw_start
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_width)) (f32.const 2))
-                (f32.div
-                    (f32.mul (local.get $msg_len) (local.get $font_size))
-                    (f32.const 2)))
-            (f32.sub
-                (f32.div (f32.convert_i32_s (global.get $canvas_height)) (f32.const 2))
-                (f32.mul (local.get $font_size) (f32.const -4)))
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_widthf)
+                    (f32.mul (local.get $msg_len) (local.get $font_size)))
+                (f32.const 0.5))
+            (f32.mul
+                (f32.add
+                    (global.get $canvas_heightf)
+                    (f32.mul (f32.const 7) (local.get $font_size)))
+                (f32.const 0.5))
             (local.get $font_size)
             (global.get $TEXT_COLOR))
         global.get $FONT_P           call $text_draw_char
