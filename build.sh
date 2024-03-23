@@ -95,3 +95,9 @@ $(pkg-config --with-path="$project_dir" --static --libs glfw3 gl)"
 eval "$compile_cmd"
 echo "[Native] Built native executable."
 
+
+# Github Pages
+# ----------------------------------------------------------------------
+echo "[Github Pages] Copying '$html_file' to '$project_dir/index.html'..."
+cp "$html_file" "$project_dir/index.html"
+echo "[Github Pages] Copied .html file."

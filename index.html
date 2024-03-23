@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WAT the Snake</title>
+    </head>
+    <body style="position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; background-color:#313; margin:0; padding:0">
+        <main>
+            <canvas
+                id="canvas"
+                style="background-color:#000; margin:0; padding:0; image-rendering:pixelated"
+            ></canvas>
+        </main>
+        <script>
+const WASM_BINARY_BASE64 = "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";
+
+const MAX_WIDTH  =  960;
+const MAX_HEIGHT = 1024;
+const PREFER_CANVAS_CTX = "webgl";
+let IS_DEV = undefined;
+//IS_DEV = true;   // Uncomment to explicitly enable dev mode
+//IS_DEV = false;  // Uncomment to explicitly disable dev mode
+// otherwise dev mode will only be enabled if the hostname is localhost
+// or 127.0.0.1.
+const DEV_EVENT_SET_DRAWN_TIMESTAMP = 0;
+const DEV_EVENT_SET_CANVAS_CTX = 1;
+
+let canvas = document.getElementById("canvas");
+
+let wasmInstance,
+    drawFunction,
+    updateGamePromise;
+let devUpdate = () => {};
+
+function main() {
+    const wasm_byte_array = Uint8Array.from(
+            atob(WASM_BINARY_BASE64),
+            c => c.codePointAt(0));
+
+    let pageIsLoaded = false;
+    window.addEventListener("load", () => pageIsLoaded = true);
+
+    const wasmImports = {
+        logFromNBytesOfMemory(nBytes) {
+            const latin1Bytes = new Uint8Array(
+                wasmInstance.exports.memory.buffer,
+                wasmInstance.exports.memoryRegionLogBytesOffset, nBytes
+            );
+            const chars = [];
+            for (let i = 0; i < nBytes; ++i) {
+                chars.push(String.fromCharCode(latin1Bytes[i]));
+            }
+            console.log(chars.join(""));
+        },
+    };
+    WebAssembly.instantiate(
+        wasm_byte_array,
+        {imports: wasmImports},
+    ).then((obj) => {
+        wasmInstance = obj.instance;
+        if (pageIsLoaded) {
+            startGame();
+        } else {
+            window.addEventListener("load", startGame);
+        }
+    });
+}
+
+function startGame() {
+    const keyToCode = {
+        "ArrowUp"   : wasmInstance.exports.ARROW_UP   ,
+        "ArrowLeft" : wasmInstance.exports.ARROW_LEFT ,
+        "ArrowDown" : wasmInstance.exports.ARROW_DOWN ,
+        "ArrowRight": wasmInstance.exports.ARROW_RIGHT,
+    };
+    let mouseIsDown = false;
+    let canvasXOffset = 0;
+    let canvasYOffset = 0;
+
+    function gameLoop() {
+        updateGamePromise = Promise.all([
+            // We run these operation asynchrously in case one of them
+            // execute non-blocking code e.g. GPU operations.
+            // This also gives us the option to run webassembly in a
+            // web-worker in future.
+            new Promise((resolve, reject) => {
+                wasmInstance.exports.update(performance.now());
+                resolve();
+            }),
+            new Promise((resolve, reject) => {
+                drawFunction();
+                devUpdate(DEV_EVENT_SET_DRAWN_TIMESTAMP, performance.now());
+                resolve();
+            }),
+        ]);
+
+        updateGamePromise.then(() => {
+            requestAnimationFrame(gameLoop);
+        });
+    }
+
+    function onResize() {
+        requestAnimationFrame(() => {
+            canvas.width  = Math.min(document.body.clientWidth , MAX_WIDTH );
+            canvas.height = Math.min(document.body.clientHeight, MAX_HEIGHT);
+            canvas.style.position = "absolute";
+            canvasXOffset =
+                Math.floor((window.innerWidth  - canvas.width ) / 2);
+            canvasYOffset =
+                Math.floor((window.innerHeight - canvas.height) / 2);
+            canvas.style.left = `${canvasXOffset}px`;
+            canvas.style.top  = `${canvasYOffset}px`;
+            canvas.style.width  = `${canvas.width }px`;
+            canvas.style.height = `${canvas.height}px`;
+            wasmInstance.exports.resize(canvas.width, canvas.height);
+            wasmInstance.exports.update(performance.now());
+        });
+    }
+
+    window.addEventListener(
+        "keydown", 
+        (e) => wasmInstance.exports.input_key(
+                wasmInstance.exports.INPUT_START,
+                keyToCode[e.key] || e.keyCode),
+    );
+    window.addEventListener(
+        "keyup", 
+        (e) => wasmInstance.exports.input_key(
+                wasmInstance.exports.INPUT_END,
+                keyToCode[e.key] || e.keyCode),
+    );
+    window.addEventListener(
+        "mousedown",
+        function handleMouseDown(e) {
+            mouseIsDown = true;
+            wasmInstance.exports.input_touch(
+                    wasmInstance.exports.INPUT_START,
+                    e.clientX - canvasXOffset,
+                    e.clientY - canvasYOffset);
+        },
+    );
+    window.addEventListener(
+        "mousemove",
+        function handleMouseMove(e) {
+            if (!mouseIsDown) {
+                return;
+            }
+
+            wasmInstance.exports.input_touch(
+                    wasmInstance.exports.INPUT_UPDATE,
+                    e.clientX - canvasXOffset,
+                    e.clientY - canvasYOffset);
+        },
+    );
+    window.addEventListener(
+        "touchmove",
+        function handleTouchMove(e) {
+            const touch = e.touches[0];
+            wasmInstance.exports.input_touch(
+                    wasmInstance.exports.INPUT_UPDATE,
+                    touch.clientX - canvasXOffset,
+                    touch.clientY - canvasYOffset);
+        },
+    );
+    window.addEventListener(
+        "mouseup",
+        function handleMouseUp() { mouseIsDown = false; },
+    );
+    window.addEventListener("resize", onResize);
+
+    setupDevModeIfDev();
+    drawFunction = setupCanvasForDrawing(PREFER_CANVAS_CTX);
+    onResize();
+    requestAnimationFrame(gameLoop);
+}
+
+function setupCanvasForDrawing(canvasCtxType) {
+    let draw = function drawDummy() {};
+
+    switch (canvasCtxType) {
+    case "webgl2":
+    case "webgl":
+        const gl = canvas.getContext(canvasCtxType, {
+            alpha: true,
+            depth: false,
+            stencil: false,
+            desynchronized: true,
+            antialias: false,
+            preserveDrawingBuffer: true,
+        });
+
+        // NOTE: This code is really slow and overcomplicated in comparison
+        //       to the c implementation `src/platform_native__main.c`
+        //       because WebGl does not support a glDrawPixels() equivalent
+        //       because "ohh scary, manual memory addressing" which sucks.
+
+        if (!gl) {
+            if (canvasCtxType === "webgl2") {
+                console.warn(
+                    "WebGL 2 is not supported! " +
+                    "Attempting to falling back on WebGL 1..."
+                );
+
+                return setupCanvasForDrawing("webgl");
+            } else {
+                console.warn(
+                    "WebGL 1 is not supported! " +
+                    "Attempting to falling back on canvas' 2d context..."
+                );
+
+                return setupCanvasForDrawing("2d");
+            }
+        }
+
+        // Create the WebGL program with a vertex and fragment shader
+        const glProgram = gl.createProgram();
+        gl.attachShader(glProgram, createWebGlShader(gl, gl.VERTEX_SHADER, [
+            "attribute vec2 vertCoord;",
+            "varying vec2 texCoord;",
+            "void main() {",
+                // Let WebGL know where the vertex is
+            "    gl_Position = vec4(vertCoord, 0, 1);",
+                // Calculate the texture coordinate that will be used in the
+                // fragments shader.
+            "    texCoord = (vertCoord"
+                + " + 1.0)"  // Center texture
+                + " * 0.5;", // Scale texture x2
+            "}",
+        ].join("\n")));
+        gl.attachShader(glProgram, createWebGlShader(gl, gl.FRAGMENT_SHADER, [
+            // Set floating-point percision for shader to medium.
+            "precision mediump float;",
+            "uniform sampler2D tex;",
+            // The texture coordinate, passed in from the vertex shader.
+            "varying vec2 texCoord;",
+            "void main() {",
+            "    gl_FragColor = texture2D(tex, texCoord);",
+            "}",
+        ].join("\n")));
+        gl.linkProgram(glProgram);
+        if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
+            throw new Error(
+                "Failed to link WegGL program: " +
+                gl.getProgramInfoLog(glProgram)
+            );
+        }
+        gl.useProgram(glProgram);
+
+        // Draw a rectangle from 2 triangles
+        const vertCoordAttributeLocation = gl.getAttribLocation(glProgram, "vertCoord");
+        const vertCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertCoordBuffer);
+        const vertCoords = [
+            // Triangle, diagnonally covering top-left half of screen
+             1,  1,
+            -1,  1,
+            -1, -1,
+            // Triangle, diagnonally covering bottom-right half of screen
+            -1, -1,
+             1, -1,
+             1,  1,
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertCoords), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(vertCoordAttributeLocation);
+        gl.vertexAttribPointer(
+            vertCoordAttributeLocation,
+            2,         // 2 because of the PAIRS of xs and ys in vertCoords
+            gl.FLOAT,  // Vertex shader accepts vec2 of floats
+            false,     // Don't normalize
+            0,         // No stride in vertCoords
+            0,         // No offset in vertCoords
+        )
+
+        // Create a texture to draw the pixels from wasm on.
+        const pixelsTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, pixelsTexture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        let rgbaArray;
+
+        draw = function drawWebGl() {
+            rgbaArray = new Uint8Array(
+                wasmInstance.exports.memory.buffer,
+                wasmInstance.exports.memoryRegionCanvasBytesOffset,
+                wasmInstance.exports.memoryRegionCanvasBytesN,
+            );
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.texImage2D(
+                gl.TEXTURE_2D,
+                0,
+                gl.RGBA,
+                canvas.width, canvas.height,
+                0,
+                gl.RGBA,
+                gl.UNSIGNED_BYTE,
+                rgbaArray,
+            );
+
+            gl.drawArrays(gl.TRIANGLES, 0, vertCoords.length/2);
+        }
+
+        break;
+    case "2d":
+        // Flip y-axis because we default to Web/OpenGl's y-axis' orientation
+        canvas.style.transform = "scaleY(-1)";
+
+        const ctx = canvas.getContext(canvasCtxType, {
+            alpha: false,
+            desynchronized: true,
+            willReadFrequently: false,
+        });
+
+        draw = function drawCanvas2d() {
+            // We create an RGBA byte array from the wasm memory region that we
+            // reserved for the canvas RGBA data in the wat implementation 
+            // and fill the canvas with it.
+            // (See https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
+            // for ImageData stuff.)
+            //
+            // This is unreasonably slow and takes more time than the Webassembly
+            // code (in Firefox, where I'm developing) which means that we
+            // need to add a huge amount of complexity with WebGL to make it
+            // reasonably fast -- to draw pixels you must suffer!... Aren't
+            // web standards great
+            ctx.putImageData(
+                new ImageData(new Uint8ClampedArray(
+                    wasmInstance.exports.memory.buffer,
+                    wasmInstance.exports.memoryRegionCanvasBytesOffset,
+                    wasmInstance.exports.memoryRegionCanvasBytesN,
+                ), canvas.width, canvas.height), 
+                0, 0,
+                0, 0,
+                canvas.width, canvas.height,
+            );
+        }
+        break;
+    default:
+        console.error(`Unsupported canvas context: '${canvasCtxType}'`);
+        return () => {};
+    }
+
+    console.info(`Using '${canvasCtxType}' canvas context.`);
+
+    devUpdate(DEV_EVENT_SET_CANVAS_CTX, canvasCtxType);
+
+    return draw;
+}
+
+/** Changes the canvas context type.
+  * Use for testing in your webbrowser's console. */
+function changeCanvasCtx(ctxType) {
+    console.info("Replacing current canvas with a new one!");
+
+    const oldCanvas = canvas;
+
+    canvas = document.createElement("canvas");
+    canvas.id = "canvas";
+    canvas.width = oldCanvas.width;
+    canvas.height = oldCanvas.height;
+    canvas.style.backgroundColor = "black";
+    oldCanvas.replaceWith(canvas);
+
+    drawFunction = setupCanvasForDrawing(ctxType);
+}
+
+function setupDevModeIfDev() {
+    const infoMsgStart =
+        "Displaying developer information in top-right of screen ";
+    const infoMsgEnd = " Set IS_DEV=false to remove info."
+    if (IS_DEV === true) {
+        console.info(
+            infoMsgStart +
+            "because IS_DEV=true." +
+            infoMsgEnd);
+    } else if (IS_DEV === false) {
+        return;
+    } else if (["127.0.0.1", "localhost"]
+            .includes(window.location.hostname)) {
+        console.info(
+            infoMsgStart +
+            `because hostname=${window.location.hostname}.` +
+            infoMsgEnd
+        );
+    } else if (window.location.href.includes("file://")) {
+        console.info(
+            infoMsgStart +
+            "because this is a local file -- the url starts with 'file://'." +
+            infoMsgEnd
+        );
+    } else {
+        return;
+    }
+
+    const AVG_FPS_DEQUE_SIZE = 100;
+
+    // UI
+    // ----------------------------------------------------------------------
+
+    const infoDiv = document.createElement("div");
+    infoDiv.style.color = "#000";
+    infoDiv.style.backgroundColor = "#FFF8";
+    infoDiv.style.position = "absolute";
+    infoDiv.style.top = "8px";
+    infoDiv.style.right = "8px";
+    infoDiv.style.fontFamily = "sans-serif";
+    infoDiv.style.textAlign = "right";
+    infoDiv.style.padding = "8px";
+
+        // Canvas context type
+        const canvasCtxDiv = document.createElement("div");
+            const canvasCtxLabel = document.createElement("span");
+            const canvasCtxValue = document.createElement("span");
+            canvasCtxLabel.textContent = "Canvas ctx: ";
+            canvasCtxValue.textContent = "unset";
+        canvasCtxDiv.appendChild(canvasCtxLabel);
+        canvasCtxDiv.appendChild(canvasCtxValue);
+
+        // FPS counter
+        const fpsDiv = document.createElement("div");
+            const fpsLabel = document.createElement("span");
+            const fpsValue = document.createElement("span");
+            fpsLabel.textContent = "FPS: ";
+            fpsValue.textContent = "0";
+        fpsDiv.appendChild(fpsLabel);
+        fpsDiv.appendChild(fpsValue);
+
+        // Avg. FPS counter
+        const avgFpsDiv = document.createElement("div");
+            const avgFpsLabel = document.createElement("span");
+            const avgFpsValue = document.createElement("span");
+            avgFpsLabel.textContent = `Avg. FPS (last ${AVG_FPS_DEQUE_SIZE}): `;
+            avgFpsValue.textContent = "0";
+        avgFpsDiv.appendChild(avgFpsLabel);
+        avgFpsDiv.appendChild(avgFpsValue);
+
+    infoDiv.appendChild(canvasCtxDiv);
+    infoDiv.appendChild(fpsDiv);
+    infoDiv.appendChild(avgFpsDiv);
+
+    document.body.appendChild(infoDiv);
+
+    // UI Update Logic
+    // ----------------------------------------------------------------------
+
+    let lastDrawnTimestamp = performance.now();
+    const avgFpsDeque = [];
+
+    devUpdate = function devUpdate(eventType) {
+        switch (eventType) {
+            case DEV_EVENT_SET_DRAWN_TIMESTAMP:
+                const drawnTimestamp = arguments[1];
+
+                const fps = 1000/(drawnTimestamp - lastDrawnTimestamp);
+                fpsValue.textContent = parseFloat(fps).toFixed(2);
+
+                avgFpsDeque.push(fps);
+                if (avgFpsDeque.length > AVG_FPS_DEQUE_SIZE) {
+                    avgFpsDeque.shift();
+                }
+                let avgFps = 0;
+                for (const queueFps of avgFpsDeque) {
+                    avgFps += queueFps/avgFpsDeque.length;
+                }
+
+                avgFpsValue.textContent = parseFloat(avgFps).toFixed(2);
+
+                lastDrawnTimestamp = drawnTimestamp;
+
+                break;
+            case DEV_EVENT_SET_CANVAS_CTX:
+                canvasCtxValue.textContent = arguments[1];
+                break;
+        }
+    }
+}
+
+// Utils
+// ----------------------------------------------------------------------
+
+function createWebGlShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        let typeName;
+        switch (type) {
+            case gl.VERTEX_SHADER:
+                typeName = " vertex";
+                break;
+            case gl.FRAGMENT_SHADER:
+                typeName = " fragment";
+                break;
+            default:
+                typeName = "";
+        } 
+        throw new Error(
+            `Failed to compile WebGL${typeName} shader: ` +
+            gl.getShaderInfoLog(shader)
+        )
+    }
+
+    return shader;
+}
+
+// ----------------------------------------------------------------------
+
+main();
+        </script>
+    </body>
+</html>
