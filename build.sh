@@ -98,6 +98,6 @@ echo "[Native] Built native executable."
 
 # Github Pages
 # ----------------------------------------------------------------------
-echo "[Github Pages] Copying '$html_file' to '$project_dir/index.html'..."
-cp "$html_file" "$project_dir/index.html"
+echo "[Github Pages] Copying '$html_file' to '$project_dir/docs/index.html'..."
+cp "$html_file" "$project_dir/docs/index.html"
 echo "[Github Pages] Copied .html file."
