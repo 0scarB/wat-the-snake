@@ -25,9 +25,9 @@
     ;; Game Logic
     ;; ----------------------------------------------------------------------
 
-    (global $KEY_ACTION_PRESS (export "KEY_ACTION_PRESS") i32 (i32.const 0))
-    (global $KEY_ACTION_UP    (export "KEY_ACTION_UP"  ) i32 (i32.const 1))
-    (global $KEY_ACTION_DOWN  (export "KEY_ACTION_DOWN") i32 (i32.const 2))
+    (global $INPUT_START  (export "INPUT_START" ) i32 (i32.const 0))
+    (global $INPUT_UPDATE (export "INPUT_UPDATE") i32 (i32.const 1))
+    (global $INPUT_END    (export "INPUT_END"   ) i32 (i32.const 2))
 
     ;; We export the character codes (integers) that can be used as inputs to
     ;; change the snake's heading (direction). Letter keys are assigned to their
@@ -137,30 +137,27 @@
         ))
     )
 
-    (func (export "handleKeyAction") (param $action i32) (param $key i32)
+    (func (export "input_key") (param $action i32) (param $key i32)
         (local $latin1_32_byte_range_idx i32)
         (local $arrow_key i32)
         (local $key_down_mask i32)
 
         ;; Special handling of key presses while in the start and end screen
-        (if (i32.eq (global.get $game_state) (global.get $GAME_STATE_START_SCREEN)) (then
-            (call $reset_game)
-
-            (global.set $game_state (global.get $GAME_STATE_PLAYING))
-
-            call $orb_update
-            return
-        ))
-        (if (i32.and
-                (i32.eq (global.get $game_state) (global.get $GAME_STATE_END_SCREEN))
-                (i32.eq (local.get $key) (global.get $CHAR_SPACE))
+        (if (i32.or 
+                (i32.eq
+                    (global.get $GAME_STATE_START_SCREEN)
+                    (global.get $game_state))
+                (i32.and
+                    (i32.eq
+                        (global.get $GAME_STATE_END_SCREEN)
+                        (global.get $game_state))
+                    (i32.eq (local.get $key) (global.get $KEY_SPACE)))
         ) (then
             (call $reset_game)
 
             (global.set $game_state (global.get $GAME_STATE_PLAYING))
 
             call $orb_update
-            return
         ))
 
         ;; == Handle keys during play ==
@@ -201,13 +198,13 @@
         ))
 
         ;; Update the `$keys_are_down_mask` based on the bit mask for the key
-        (if (i32.eq (local.get $action) (global.get $KEY_ACTION_PRESS)) (then
-            ;; If the action is a key press action the we can just directly
+        (if (i32.eq (local.get $action) (global.get $INPUT_UPDATE)) (then
+            ;; If the  is a key press action the we can just directly
             ;; set the aggregate bit mask to that of the individual key
             (global.set $keys_are_down_mask (local.get $key_down_mask))
         ))
-        (if (i32.eq (local.get $action) (global.get $KEY_ACTION_DOWN)) (then
-            ;; If the action is a key down action then we
+        (if (i32.eq (local.get $action) (global.get $INPUT_START)) (then
+            ;; If the  is a key down action then we
             ;; a) set the "left" and "right" bits to 0 if left or right are down
             ;;    OR the "up" and "down" bits to 0 if up or down are down,
             ;;    to make sure that the opposite key's bit is set to 0,
@@ -236,8 +233,8 @@
                     (global.get $keys_are_down_mask)
                     (local.get $key_down_mask)))
         ))
-        (if (i32.eq (local.get $action) (global.get $KEY_ACTION_UP)) (then
-            ;; If the action is a key up action then we set unset the key's
+        (if (i32.eq (local.get $action) (global.get $INPUT_END)) (then
+            ;; If the  is a key up action then we set unset the key's
             ;; bit in the aggregate bit mask
             (global.set $keys_are_down_mask
                 (i32.and
@@ -321,6 +318,64 @@
             (global.set $snake_unit_heading_y (f32.const  0))
             return
         ))
+    )
+
+    (func (export "input_touch")
+            (param $action i32) (param $x f32) (param $y f32)
+        (local $dx f32)
+        (local $dy f32)
+        (local $abs_dx f32)
+        (local $abs_dy f32)
+        (local $denom f32)
+
+        ;; Special handling of touch down while in the start and end screen
+        (if (i32.and
+                (i32.eq (global.get $INPUT_START) (local.get $action))
+                (i32.or
+                    (i32.eq
+                        (global.get $GAME_STATE_START_SCREEN)
+                        (global.get $game_state))
+                    (i32.eq
+                        (global.get $GAME_STATE_END_SCREEN)
+                        (global.get $game_state)))
+        ) (then
+            (call $reset_game)
+
+            (global.set $game_state (global.get $GAME_STATE_PLAYING))
+
+            call $orb_update
+            return
+        ))
+
+        (local.set $dx (f32.sub (local.get $x) (call $snake_buf_read_head_cx)))
+        (local.set $dy (f32.sub (local.get $y) (call $snake_buf_read_head_cy)))
+        (local.set $abs_dx (f32.abs (local.get $dx)))
+        (local.set $abs_dy (f32.abs (local.get $dy)))
+        (local.set $denom (f32.add (local.get $abs_dx) (local.get $abs_dy)))
+
+        ;; 1. Calculate the unit heading based by deviding the change in
+        ;;    x `$dx` and y `$dy` by a common denominator `$denom`.
+        ;; 2. Gradually shrink `$denom` until the square root of the unit
+        ;;    heading greater than or equal to 1.
+        (loop $lp
+            (global.set $snake_unit_heading_x
+                (f32.div (local.get $dx) (local.get $denom)))
+            (global.set $snake_unit_heading_y
+                (f32.div (local.get $dy) (local.get $denom)))
+
+            (local.set $denom (f32.mul (local.get $denom) (f32.const 0.99)))
+
+            (f32.lt
+                (f32.add
+                    (f32.mul
+                        (global.get $snake_unit_heading_x)
+                        (global.get $snake_unit_heading_x))
+                    (f32.mul
+                        (global.get $snake_unit_heading_y)
+                        (global.get $snake_unit_heading_y)))
+                (f32.const 1.0))
+            br_if $lp
+        )
     )
 
     (func $resize_canvas (export "resize") (param $width i32) (param $height i32)
@@ -851,7 +906,7 @@
         global.get $score_10s_digit  call $text_draw_digit
         global.get $score_1s_digit   call $text_draw_digit
 
-        (local.set $msg_len   (f32.const 22))
+        (local.set $msg_len   (f32.const 31))
         (local.set $font_size (f32.const 16))
         (call $text_draw_start
             (f32.sub
@@ -875,6 +930,15 @@
         global.get $FONT_A           call $text_draw_char
         global.get $FONT_C           call $text_draw_char
         global.get $FONT_E           call $text_draw_char
+        global.get $FONT_SPACE       call $text_draw_char
+        global.get $FONT_O           call $text_draw_char
+        global.get $FONT_R           call $text_draw_char
+        global.get $FONT_SPACE       call $text_draw_char
+        global.get $FONT_T           call $text_draw_char
+        global.get $FONT_O           call $text_draw_char
+        global.get $FONT_U           call $text_draw_char
+        global.get $FONT_C           call $text_draw_char
+        global.get $FONT_H           call $text_draw_char
         global.get $FONT_SPACE       call $text_draw_char
         global.get $FONT_T           call $text_draw_char
         global.get $FONT_O           call $text_draw_char

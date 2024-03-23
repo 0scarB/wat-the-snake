@@ -35,9 +35,9 @@ typedef struct w2c_snake {
   u32 w2c_memoryRegionCanvasBytesOffset;
   u32 w2c_memoryRegionCanvasBytesN;
   u32 w2c_g6;
-  u32 w2c_KEY_ACTION_PRESS;
-  u32 w2c_KEY_ACTION_UP;
-  u32 w2c_KEY_ACTION_DOWN;
+  u32 w2c_INPUT_START;
+  u32 w2c_INPUT_UPDATE;
+  u32 w2c_INPUT_END;
   u32 w2c_KEY_SPACE;
   u32 w2c_KEY_W;
   u32 w2c_KEY_w;
@@ -197,14 +197,14 @@ u32* w2c_snake_memoryRegionCanvasBytesOffset(w2c_snake* instance);
 /* export: 'memoryRegionCanvasBytesN' */
 u32* w2c_snake_memoryRegionCanvasBytesN(w2c_snake* instance);
 
-/* export: 'KEY_ACTION_PRESS' */
-u32* w2c_snake_KEY_ACTION_PRESS(w2c_snake* instance);
+/* export: 'INPUT_START' */
+u32* w2c_snake_INPUT_START(w2c_snake* instance);
 
-/* export: 'KEY_ACTION_UP' */
-u32* w2c_snake_KEY_ACTION_UP(w2c_snake* instance);
+/* export: 'INPUT_UPDATE' */
+u32* w2c_snake_INPUT_UPDATE(w2c_snake* instance);
 
-/* export: 'KEY_ACTION_DOWN' */
-u32* w2c_snake_KEY_ACTION_DOWN(w2c_snake* instance);
+/* export: 'INPUT_END' */
+u32* w2c_snake_INPUT_END(w2c_snake* instance);
 
 /* export: 'KEY_SPACE' */
 u32* w2c_snake_KEY_SPACE(w2c_snake* instance);
@@ -248,8 +248,11 @@ u32* w2c_snake_ARROW_RIGHT(w2c_snake* instance);
 /* export: 'update' */
 void w2c_snake_update(w2c_snake*, f32);
 
-/* export: 'handleKeyAction' */
-void w2c_snake_handleKeyAction(w2c_snake*, u32, u32);
+/* export: 'input_key' */
+void w2c_snake_input_key(w2c_snake*, u32, u32);
+
+/* export: 'input_touch' */
+void w2c_snake_input_touch(w2c_snake*, u32, f32, f32);
 
 /* export: 'resize' */
 void w2c_snake_resize(w2c_snake*, u32, u32);

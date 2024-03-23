@@ -20,6 +20,7 @@ int canvas_x_offset = 0;
 int canvas_y_offset = 0;
 float canvas_scale_x = 1.0;
 float canvas_scale_y = 1.0;
+bool mouse_is_down = false;
 
 static void glfw_error_callback(
         int error,
@@ -32,13 +33,13 @@ static void handle_key_action(
         GLFWwindow* window, 
         int key, int scancode, int action, int mods
 ) {
-    u32 wasm_action;
+    u32 input_type;
     switch (action) {
         case GLFW_PRESS:
-            wasm_action = *w2c_snake_KEY_ACTION_DOWN(&wasm_module);
+            input_type = *w2c_snake_INPUT_START(&wasm_module);
             break;
         case GLFW_RELEASE:
-            wasm_action = *w2c_snake_KEY_ACTION_UP(&wasm_module);
+            input_type = *w2c_snake_INPUT_END(&wasm_module);
             break;
         default:
             return;
@@ -60,7 +61,48 @@ static void handle_key_action(
             break;
     }
 
-    w2c_snake_handleKeyAction(&wasm_module, wasm_action, wasm_key);
+    w2c_snake_input_key(&wasm_module, input_type, wasm_key);
+}
+
+static void handle_mouse_button(
+        GLFWwindow* window, int button, int action, int mods
+) {
+    if (button != GLFW_MOUSE_BUTTON_LEFT) {
+        return;
+    }
+
+    switch (action) {
+        case GLFW_PRESS:
+            mouse_is_down = true;
+            break;
+        case GLFW_RELEASE:
+            mouse_is_down = false;
+            break;
+    }
+
+    if (!mouse_is_down) {
+        return;
+    }
+
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    w2c_snake_input_touch(
+            &wasm_module,
+            *w2c_snake_INPUT_START(&wasm_module),
+            (x/canvas_scale_x) - canvas_x_offset,
+            (y/canvas_scale_y) - canvas_y_offset);
+}
+
+static void handle_cursor_position(GLFWwindow* window, double x, double y) {
+    if (!mouse_is_down) {
+        return;
+    }
+
+    w2c_snake_input_touch(
+            &wasm_module,
+            *w2c_snake_INPUT_UPDATE(&wasm_module),
+            (x/canvas_scale_x) - canvas_x_offset,
+            (y/canvas_scale_y) - canvas_y_offset);
 }
 
 static void resize(GLFWwindow* window, int width, int height) {
@@ -111,6 +153,8 @@ int main(void) {
     }
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, handle_key_action);
+    glfwSetMouseButtonCallback(window, handle_mouse_button);
+    glfwSetCursorPosCallback(window, handle_cursor_position);
     glfwSetWindowSizeCallback(window, resize);
 
     // Game loop

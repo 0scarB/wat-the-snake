@@ -3,15 +3,17 @@
     <head>
         <title>WAT the Snake</title>
     </head>
-    <body style="width:100vw; height:100vh; overflow: hidden; background-color: #313; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center">
-        <canvas
-            id="canvas"
-            style="background-color: #000; margin: 0; padding: 0; image-rendering: pixelated"
-        ></canvas>
+    <body style="position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; background-color:#313; margin:0; padding:0">
+        <main>
+            <canvas
+                id="canvas"
+                style="background-color:#000; margin:0; padding:0; image-rendering:pixelated"
+            ></canvas>
+        </main>
         <script>
 const WASM_BINARY_BASE64 = /*embed_wasm_base64*/;
 
-const MAX_WIDTH = 960;
+const MAX_WIDTH  =  960;
 const MAX_HEIGHT = 1024;
 const PREFER_CANVAS_CTX = "webgl";
 let IS_DEV = undefined;
@@ -64,13 +66,16 @@ function main() {
 }
 
 function startGame() {
-    setupDevModeIfDev();
+    const keyToCode = {
+        "ArrowUp"   : wasmInstance.exports.ARROW_UP   ,
+        "ArrowLeft" : wasmInstance.exports.ARROW_LEFT ,
+        "ArrowDown" : wasmInstance.exports.ARROW_DOWN ,
+        "ArrowRight": wasmInstance.exports.ARROW_RIGHT,
+    };
+    let mouseIsDown = false;
+    let canvasXOffset = 0;
+    let canvasYOffset = 0;
 
-    drawFunction = setupCanvasForDrawing(PREFER_CANVAS_CTX);
-
-    resize();
-
-    let t0 = t1 = performance.now();
     function gameLoop() {
         updateGamePromise = Promise.all([
             // We run these operation asynchrously in case one of them
@@ -93,40 +98,83 @@ function startGame() {
         });
     }
 
-    const keyToCode = {
-        "ArrowUp"   : wasmInstance.exports.ARROW_UP   ,
-        "ArrowLeft" : wasmInstance.exports.ARROW_LEFT ,
-        "ArrowDown" : wasmInstance.exports.ARROW_DOWN ,
-        "ArrowRight": wasmInstance.exports.ARROW_RIGHT,
-    };
+    function onResize() {
+        requestAnimationFrame(() => {
+            canvas.width  = Math.min(document.body.clientWidth , MAX_WIDTH );
+            canvas.height = Math.min(document.body.clientHeight, MAX_HEIGHT);
+            canvas.style.position = "absolute";
+            canvasXOffset =
+                Math.floor((window.innerWidth  - canvas.width ) / 2);
+            canvasYOffset =
+                Math.floor((window.innerHeight - canvas.height) / 2);
+            canvas.style.left = `${canvasXOffset}px`;
+            canvas.style.top  = `${canvasYOffset}px`;
+            canvas.style.width  = `${canvas.width }px`;
+            canvas.style.height = `${canvas.height}px`;
+            wasmInstance.exports.resize(canvas.width, canvas.height);
+            wasmInstance.exports.update(performance.now());
+        });
+    }
+
     window.addEventListener(
         "keydown", 
-        (e) => wasmInstance.exports.handleKeyAction(
-                wasmInstance.exports.KEY_ACTION_DOWN,
+        (e) => wasmInstance.exports.input_key(
+                wasmInstance.exports.INPUT_START,
                 keyToCode[e.key] || e.keyCode),
     );
     window.addEventListener(
         "keyup", 
-        (e) => wasmInstance.exports.handleKeyAction(
-                wasmInstance.exports.KEY_ACTION_UP,
+        (e) => wasmInstance.exports.input_key(
+                wasmInstance.exports.INPUT_END,
                 keyToCode[e.key] || e.keyCode),
     );
-    window.addEventListener("resize", resize);
+    window.addEventListener(
+        "mousedown",
+        function handleMouseDown(e) {
+            mouseIsDown = true;
+            wasmInstance.exports.input_touch(
+                    wasmInstance.exports.INPUT_START,
+                    e.clientX - canvasXOffset,
+                    e.clientY - canvasYOffset);
+        },
+    );
+    window.addEventListener(
+        "mousemove",
+        function handleMouseMove(e) {
+            if (!mouseIsDown) {
+                return;
+            }
 
+            wasmInstance.exports.input_touch(
+                    wasmInstance.exports.INPUT_UPDATE,
+                    e.clientX - canvasXOffset,
+                    e.clientY - canvasYOffset);
+        },
+    );
+    window.addEventListener(
+        "touchmove",
+        function handleTouchMove(e) {
+            const touch = e.touches[0];
+            wasmInstance.exports.input_touch(
+                    wasmInstance.exports.INPUT_UPDATE,
+                    touch.clientX - canvasXOffset,
+                    touch.clientY - canvasYOffset);
+        },
+    );
+    window.addEventListener(
+        "mouseup",
+        function handleMouseUp() { mouseIsDown = false; },
+    );
+    window.addEventListener("resize", onResize);
+
+    setupDevModeIfDev();
+    drawFunction = setupCanvasForDrawing(PREFER_CANVAS_CTX);
+    onResize();
     requestAnimationFrame(gameLoop);
 }
 
-function resize() {
-    requestAnimationFrame(() => {
-        canvas.width = Math.min(window.innerWidth, MAX_WIDTH);
-        canvas.height = Math.min(window.innerHeight, MAX_HEIGHT);
-        wasmInstance.exports.resize(canvas.width, canvas.height);
-        wasmInstance.exports.update(performance.now());
-    });
-}
-
 function setupCanvasForDrawing(canvasCtxType) {
-    let draw = function () {};
+    let draw = function drawDummy() {};
 
     switch (canvasCtxType) {
     case "webgl2":
@@ -338,7 +386,7 @@ function setupDevModeIfDev() {
     } else if (window.location.href.includes("file://")) {
         console.info(
             infoMsgStart +
-            "because the this is a local file -- the url starts with 'file://'." +
+            "because this is a local file -- the url starts with 'file://'." +
             infoMsgEnd
         );
     } else {
