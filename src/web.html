@@ -10,6 +10,7 @@
                 style="background-color:#000; margin:0; padding:0; image-rendering:pixelated"
             ></canvas>
         </main>
+        <div id="pxPerMmTest" style="width:1mm; height:0"></div>
         <script>
 const WASM_BINARY_BASE64 = /*embed_wasm_base64*/;
 
@@ -72,6 +73,9 @@ function startGame() {
         "ArrowDown" : wasmInstance.exports.ARROW_DOWN ,
         "ArrowRight": wasmInstance.exports.ARROW_RIGHT,
     };
+    const pxPerMm = calcPxPerMm();
+    console.info(`px/mm=${pxPerMm}`);
+
     let mouseIsDown = false;
     let canvasXOffset = 0;
     let canvasYOffset = 0;
@@ -100,17 +104,24 @@ function startGame() {
 
     function onResize() {
         requestAnimationFrame(() => {
-            canvas.width  = Math.min(document.body.clientWidth , MAX_WIDTH );
-            canvas.height = Math.min(document.body.clientHeight, MAX_HEIGHT);
+            const zoomInFac = Math.ceil(16*pxPerMm/4)/16;
+            console.info(`zoom-in factor=${zoomInFac}`);
+
+            const screenWidth  =
+                Math.min(document.body.clientWidth , MAX_WIDTH *zoomInFac);
+            const screenHeight =
+                Math.min(document.body.clientHeight, MAX_HEIGHT*zoomInFac);
+            canvas.width  = Math.floor(screenWidth /zoomInFac);
+            canvas.height = Math.floor(screenHeight/zoomInFac);
             canvas.style.position = "absolute";
             canvasXOffset =
-                Math.floor((window.innerWidth  - canvas.width ) / 2);
+                Math.floor((window.innerWidth  - screenWidth ) / 2);
             canvasYOffset =
-                Math.floor((window.innerHeight - canvas.height) / 2);
+                Math.floor((window.innerHeight - screenHeight) / 2);
             canvas.style.left = `${canvasXOffset}px`;
             canvas.style.top  = `${canvasYOffset}px`;
-            canvas.style.width  = `${canvas.width }px`;
-            canvas.style.height = `${canvas.height}px`;
+            canvas.style.width  = `${screenWidth }px`;
+            canvas.style.height = `${screenHeight}px`;
             wasmInstance.exports.resize(canvas.width, canvas.height);
             wasmInstance.exports.update(performance.now());
         });
@@ -502,6 +513,10 @@ function createWebGlShader(gl, type, source) {
     }
 
     return shader;
+}
+
+function calcPxPerMm() {
+    return document.getElementById("pxPerMmTest").clientWidth;
 }
 
 // ----------------------------------------------------------------------
