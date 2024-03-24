@@ -1,16 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" style="width:100%; height:100%; margin:0; padding:0">
     <head>
         <title>WAT the Snake</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta
+            name="description"
+            content="A cross-platform snake game, written in WebAssembly.">
+        <meta charset="UTF-8">
+        <!-- SEO Garbage Start -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline'">
+        <meta name="theme-color" content="#313">
     </head>
-    <body style="position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; background-color:#313; margin:0; padding:0">
-        <main>
+    <body style="width:100%; height:100%; overflow:hidden; background-color:#313; margin:0; padding:0">
+        <main style="width: 100%; height:100%">
+            <!-- Google wants me to have a title :( -->
+            <h1 style="position:absolute; top:0; left:0; width:100%; height:100%; color:#313; text-align:center">
+                Wat The Snake
+            </h1>
+        <!-- SEO Garbage End -->
             <canvas
                 id="canvas"
-                style="background-color:#000; margin:0; padding:0; image-rendering:pixelated"
-            ></canvas>
+                width="960" height="1024"
+                style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#000; margin:0; padding:0; image-rendering:pixelated"
+            >Loading Game...</canvas>
         </main>
-        <div id="pxPerMmTest" style="width:1mm; height:0"></div>
         <script>
 const WASM_BINARY_BASE64 = /*embed_wasm_base64*/;
 
@@ -73,9 +88,6 @@ function startGame() {
         "ArrowDown" : wasmInstance.exports.ARROW_DOWN ,
         "ArrowRight": wasmInstance.exports.ARROW_RIGHT,
     };
-    const pxPerMm = calcPxPerMm();
-    console.info(`px/mm=${pxPerMm}`);
-
     let mouseIsDown = false;
     let canvasXOffset = 0;
     let canvasYOffset = 0;
@@ -104,24 +116,17 @@ function startGame() {
 
     function onResize() {
         requestAnimationFrame(() => {
-            const zoomInFac = Math.ceil(16*pxPerMm/4)/16;
-            console.info(`zoom-in factor=${zoomInFac}`);
-
-            const screenWidth  =
-                Math.min(document.body.clientWidth , MAX_WIDTH *zoomInFac);
-            const screenHeight =
-                Math.min(document.body.clientHeight, MAX_HEIGHT*zoomInFac);
-            canvas.width  = Math.floor(screenWidth /zoomInFac);
-            canvas.height = Math.floor(screenHeight/zoomInFac);
+            canvas.width  = Math.min(document.body.clientWidth , MAX_WIDTH);
+            canvas.height = Math.min(document.body.clientHeight, MAX_HEIGHT);
             canvas.style.position = "absolute";
             canvasXOffset =
-                Math.floor((window.innerWidth  - screenWidth ) / 2);
+                Math.floor((window.innerWidth  - canvas.width ) / 2);
             canvasYOffset =
-                Math.floor((window.innerHeight - screenHeight) / 2);
+                Math.floor((window.innerHeight - canvas.height) / 2);
             canvas.style.left = `${canvasXOffset}px`;
             canvas.style.top  = `${canvasYOffset}px`;
-            canvas.style.width  = `${screenWidth }px`;
-            canvas.style.height = `${screenHeight}px`;
+            canvas.style.width  = `${canvas.width }px`;
+            canvas.style.height = `${canvas.height}px`;
             wasmInstance.exports.resize(canvas.width, canvas.height);
             wasmInstance.exports.update(performance.now());
         });
@@ -513,10 +518,6 @@ function createWebGlShader(gl, type, source) {
     }
 
     return shader;
-}
-
-function calcPxPerMm() {
-    return document.getElementById("pxPerMmTest").clientWidth;
 }
 
 // ----------------------------------------------------------------------
