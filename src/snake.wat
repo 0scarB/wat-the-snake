@@ -863,9 +863,8 @@
         (local $msg_len f32)
         (local $font_size f32)
 
-        (local.set $msg_len   (f32.const 29))
+        (local.set $msg_len   (f32.const 12))
         (local.set $font_size (f32.const 16))
-
         (call $text_draw_start
             (f32.mul
                 (f32.sub
@@ -873,7 +872,9 @@
                     (f32.mul (local.get $msg_len) (local.get $font_size)))
                 (f32.const 0.5))
             (f32.mul
-                (f32.sub (global.get $canvas_heightf) (local.get $font_size))
+                (f32.sub
+                    (global.get $canvas_heightf)
+                    (f32.mul (f32.const 4) (local.get $font_size)))
                 (f32.const 0.5))
             (local.get $font_size)
             (global.get $TEXT_COLOR))
@@ -889,6 +890,21 @@
         global.get $FONT_E     call $text_draw_char
         global.get $FONT_Y     call $text_draw_char
         global.get $FONT_SPACE call $text_draw_char
+
+        (local.set $msg_len   (f32.const 17))
+        (call $text_draw_start
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_widthf)
+                    (f32.mul (local.get $msg_len) (local.get $font_size)))
+                (f32.const 0.5))
+            (f32.mul
+                (f32.add
+                    (global.get $canvas_heightf)
+                    (f32.mul (f32.const 2) (local.get $font_size)))
+                (f32.const 0.5))
+            (local.get $font_size)
+            (global.get $TEXT_COLOR))
         global.get $FONT_O     call $text_draw_char
         global.get $FONT_R     call $text_draw_char
         global.get $FONT_SPACE call $text_draw_char
@@ -967,7 +983,7 @@
         global.get $score_10s_digit  call $text_draw_digit
         global.get $score_1s_digit   call $text_draw_digit
 
-        (local.set $msg_len   (f32.const 31))
+        (local.set $msg_len   (f32.const 11))
         (local.set $font_size (f32.const 16))
         (call $text_draw_start
             (f32.mul
@@ -993,6 +1009,21 @@
         global.get $FONT_A           call $text_draw_char
         global.get $FONT_C           call $text_draw_char
         global.get $FONT_E           call $text_draw_char
+
+        (local.set $msg_len   (f32.const 20))
+        (call $text_draw_start
+            (f32.mul
+                (f32.sub
+                    (global.get $canvas_widthf)
+                    (f32.mul (local.get $msg_len) (local.get $font_size)))
+                (f32.const 0.5))
+            (f32.mul
+                (f32.add
+                    (global.get $canvas_heightf)
+                    (f32.mul (f32.const 11) (local.get $font_size)))
+                (f32.const 0.5))
+            (local.get $font_size)
+            (global.get $TEXT_COLOR))
         global.get $FONT_SPACE       call $text_draw_char
         global.get $FONT_O           call $text_draw_char
         global.get $FONT_R           call $text_draw_char
