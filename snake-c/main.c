@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdio.h>
-#include <GLFW/glfw3.h>
 #include "snake.h"
+#include <GLFW/glfw3.h>
 
 #define MAX_CANVAS_WIDTH 960
 #define MAX_CANVAS_HEIGHT 1024

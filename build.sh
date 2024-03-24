@@ -81,19 +81,38 @@ to c-files '$c_dir/snake.c' and '$c_dir/snake.h'"
 _wasm2c --enable-exceptions './snake.wasm' -o "$c_dir/snake.c"
 echo "[Native] Transpiled WASM-file."
 
-echo "[Native] Building executable with GLFW and OpenGl from c-files..."
+echo "[Native / Linux] Building executable with GLFW and OpenGl from c-files..."
 compile_cmd="cc \
 -O3 \
 $(pkg-config --with-path="$project_dir" --cflags glfw3 gl) \
 -I$project_dir/wabt/wasm2c \
 -I$c_dir \
--o $native_exe \
-$c_dir/main.c $c_dir/snake.c \
+-o 'snake-x86-64-linux.exe' \
 $project_dir/wabt/wasm2c/wasm-rt-impl.c \
+$c_dir/snake.c \
+$c_dir/main.c \
 $(pkg-config --with-path="$project_dir" --static --libs glfw3 gl)"
 #echo "$compile_cmd"
 eval "$compile_cmd"
-echo "[Native] Built native executable."
+echo "[Native / Linux] Built native executable."
+
+echo "[Native / Windows] Building executable with GLFW and OpenGl from c-files..."
+compile_cmd="x86_64-w64-mingw32-gcc \
+-O3 \
+-o 'snake-x86-64-win.exe' \
+$project_dir/wabt/wasm2c/wasm-rt-impl.c \
+$c_dir/snake.c \
+$c_dir/main.c \
+-I$c_dir \
+-I$project_dir/wabt/wasm2c \
+-I$project_dir/glfw-win64/include \
+./glfw-win64/lib-mingw-w64/libglfw3.a \
+-lgdi32 \
+-lopengl32 \
+"
+#echo "$compile_cmd"
+eval "$compile_cmd"
+echo "[Native / Windows] Built native executable."
 
 
 # Github Pages

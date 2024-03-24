@@ -1,3 +1,4 @@
 wabt-build/
 glfw-build/
+glfw-win64/
 .gdb_history
