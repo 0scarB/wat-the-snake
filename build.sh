@@ -87,7 +87,7 @@ compile_cmd="cc \
 $(pkg-config --with-path="$project_dir" --cflags glfw3 gl) \
 -I$project_dir/wabt/wasm2c \
 -I$c_dir \
--o 'snake-x86-64-linux.exe' \
+-o 'snake-x86-64-linux' \
 $project_dir/wabt/wasm2c/wasm-rt-impl.c \
 $c_dir/snake.c \
 $c_dir/main.c \
@@ -117,6 +117,9 @@ echo "[Native / Windows] Built native executable."
 
 # Github Pages
 # ----------------------------------------------------------------------
-echo "[Github Pages] Copying '$html_file' to '$project_dir/docs/index.html'..."
+echo "[Github Pages] Copying files to '$project_dir/docs/' and taring linux executable..."
+tar -cf "$project_dir/snake-x86-64-linux.tar" "$project_dir/snake-x86-64-linux"
 cp "$html_file" "$project_dir/docs/index.html"
-echo "[Github Pages] Copied .html file."
+cp "$project_dir/snake-x86-64-linux.tar" "$project_dir/docs/"
+cp "$project_dir/snake-x86-64-win.exe" "$project_dir/docs/"
+echo "[Github Pages] Copied files."
